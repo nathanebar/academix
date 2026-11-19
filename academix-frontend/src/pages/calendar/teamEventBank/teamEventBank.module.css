@@ -1,0 +1,308 @@
+.monthTaskContainer:hover {
+  border-color: #40a9ff; /* שינוי צבע גבול לתכלת (או צבע מותאם) */
+  background-color: #e6f7ff; /* רקע מעט כחול-לבן */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12); /* הצללה קלה שמרמזת על אינטראקציה */
+  cursor: pointer; /* משדרת “אפשר ללחוץ” */
+}
+
+/* (אופציונלי) אפקט Focus – למשתמשים שמנווטים במקלדת */
+.monthTaskContainer:focus-visible {
+  outline: none;
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.taskDiv {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  direction: rtl;
+}
+
+.monthTaskCircle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  font-size: large;
+  font-weight: bold;
+}
+
+.twoWeeksTaskContainer {
+  width: 100%;
+  height: 8vh;
+  border-radius: 15px;
+  background: #ffffff;
+  border: 2px solid #f4f4f4;
+  margin-bottom: 7px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  direction: rtl;
+  cursor: pointer;
+}
+
+.twoWeeksTaskDiv {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 2vh;
+}
+
+.twoWeeksTaskCircle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.twoWeeksTaskProgress {
+  font-size: 12px;
+  height: 2.8vh;
+  /* width: 6vw; */
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+/* Week View */
+.weekTaskContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  overflow: hidden;
+  direction: rtl;
+  cursor: pointer;
+  /* align-items: center; */
+}
+
+.weeksTaskLine {
+  height: 0.8vh;
+  border-radius: 0 0 20px 20px;
+  z-index: 99;
+}
+
+.weeksTaskHeader {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 15px;
+  color: black;
+  padding: 8px;
+  width: 100%;
+  font-weight: 600;
+}
+
+.weeksTaskBody {
+  color: gray;
+  white-space: normal;
+  word-break: break-word;
+  font-size: 13px;
+  max-height: 55%;
+  width: 100%;
+}
+
+.weeksTaskProgress {
+  font-size: 12px;
+  min-height: 2.8vh;
+  /* width: 6vw; */
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  margin-top: auto;
+}
+
+/* Day View */
+.dayTaskContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  width: 100%;
+  color: black;
+  direction: rtl;
+  cursor: pointer;
+  vertical-align: top;
+}
+.dayTaskContainer:hover {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+
+.dayTaskContainer:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.dayTaskLine {
+  width: 7px;
+  height: 100%;
+  margin: -5px;
+  padding-right: 5px;
+  margin-right: 0px;
+  border-radius: 8px 0 0 8px;
+  z-index: 99;
+  transform-origin: center;
+}
+.dayTaskProgressDiv {
+  width: 15%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+.dayTaskProgress {
+  font-size: 12px;
+  height: 2.8vh;
+  /* width: 6vw; */
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.eventClass:hover {
+  background: transparent !important;
+}
+
+.wrapper {
+  direction: rtl;
+  margin: 1rem 0;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.message {
+  padding: 30px 0;
+  font-size: 1.5625rem;
+  color: #000000;
+}
+.add_team_event_button {
+  color: white;
+  background-color: black;
+  width: 2.5rem;
+  height: 2.5rem;
+  top: 1vh;
+}
+.arrowsInput {
+  display: none;
+}
+.tempTeamEvent {
+  width: 15vw;
+  min-height: 4vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1vw;
+  cursor: pointer;
+  border-radius: 30px 0 0 30px;
+  font-size: 1.3rem;
+}
+.constantTeamEvent {
+  width: 15vw;
+  min-height: 4vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1vw;
+  cursor: pointer;
+  border-radius: 30px 0 0 30px;
+  font-size: 1.3rem;
+}
+.icons_container {
+  display: flex;
+  gap: 1vw;
+}
+.color-picker-container {
+  display: flex;
+  justify-content: center;
+}
+
+.color-preview {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.color-preview:hover {
+  transform: scale(1.1);
+}
+
+.color-picker-tooltip {
+  padding: 10px;
+}
+
+.color-picker-title {
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.colors-container {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  flex-direction: row-reverse;
+  justify-content: center;
+}
+
+.color-option {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.color-option:hover {
+  transform: scale(1.2);
+}
+
+.color-option,
+.selected {
+  border-color: white;
+  transform: scale(1.2);
+}
+.team_events {
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+  height: 20vh;
+  width: 18vw;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.empty {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}

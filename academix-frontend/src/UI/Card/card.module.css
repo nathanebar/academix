@@ -1,0 +1,9 @@
+.container {
+  border-radius: 20px;
+  background-color: white;
+}
+.title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #6e7072;
+}

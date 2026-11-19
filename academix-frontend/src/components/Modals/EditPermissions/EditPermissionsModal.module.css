@@ -1,0 +1,42 @@
+.firstDiv {
+  height: 32.13vh;
+}
+.editDiv {
+  height: 70%;
+}
+
+.setRolesDiv {
+  display: flex;
+  justify-content: space-between;
+}
+.addButton {
+  width: 5.5vw;
+  padding: 3.3vh;
+  opacity: 1;
+  border-radius: 2.6vw;
+  padding: 1vw;
+  background-color: rgba(43, 47, 62, 1);
+  color: white;
+  font-weight: 500;
+  font-size: 15px;
+}
+.secondDiv {
+  margin-top: 5vh;
+  height: 306.15px;
+}
+
+.profileImg{
+  height: 2.5rem;
+  width: 2.5rem;
+  background-color: black;
+  border-radius: 50%;
+  background-position: center;
+  background-size: cover;
+}
+
+.imgDiv{
+  margin-top:2.5vh ;
+  width: 50%;
+  display: flex;
+  align-items: center;
+}

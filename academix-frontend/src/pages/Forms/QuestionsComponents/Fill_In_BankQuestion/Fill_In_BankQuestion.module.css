@@ -1,0 +1,96 @@
+/* Fill_In_BankQuestion.module.css */
+.card {
+  background: #ffffff;
+  border: 1px solid #ece8df;
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: 0 4px 18px rgba(35, 43, 58, 0.05);
+  direction: rtl;
+}
+
+.instruction {
+  font-size: 16px;
+  font-weight: 700;
+  color: #232b3a;
+  margin-bottom: 12px;
+}
+
+.sentence {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  direction: rtl;
+}
+
+.part {
+  font-size: 16px;
+  color: #232b3a;
+}
+
+.missingWord {
+  background: #2c303a;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 6px 16px;
+  border-radius: 10px;
+  min-width: 90px;
+  text-align: center;
+  transition: background 0.2s;
+}
+
+.missingWordClickable {
+  cursor: pointer;
+}
+
+.missingWordClickable:hover {
+  background: #3a3f4b;
+}
+
+.bankTitle {
+  font-size: 14px;
+  font-weight: 800;
+  color: #5b5f66;
+  margin: 16px 0 10px;
+}
+
+.bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip {
+  border: 1.5px solid #ece8df;
+  background: #faf9f6;
+  color: #232b3a;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chip:hover:not(:disabled) {
+  border-color: #f2ddb0;
+  background: #fffaf0;
+  transform: translateY(-1px);
+}
+
+.chip:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.chip:not(:disabled) {
+  opacity: 1;
+}
+
+.chipChosen {
+  border-color: #2ec4a0;
+  background: #e6f7f1;
+  color: #1f8a70;
+  opacity: 1 !important;
+}

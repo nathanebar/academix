@@ -1,0 +1,60 @@
+.container {
+    display: flex;
+    justify-content: flex-start;
+    width: 95vw;
+    overflow-x: auto;
+    overflow-y: hidden;
+    height: 65vh;
+    gap: 20px;
+    padding: 10px;
+}
+
+.allBatches {
+    margin: 0;
+    margin-bottom: 15px;
+    margin-right: 10px;
+    width: 8vw;
+    cursor: pointer;
+    font-weight: 400;
+    text-decoration: underline;
+}
+
+.cardContainer {
+    display: flex;
+    flex-direction: column;
+    max-height: 43vh;
+    padding-bottom: 15px;
+    align-items: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+   
+}
+
+.cardFooterBtn {
+    display: flex;
+    align-items: flex-end;
+    height: 6vh;
+    margin-right: 1.5vw;
+    padding-bottom: 10px;
+}
+
+.addCoursDiv {
+    height: 7vh;
+    width: 16vw;
+    background-color: #E6E1D8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    margin-top: 35px;
+}
+
+.addCoursBtn {
+    width: 14vw;
+    height: 4vh;
+    border-radius: 25px;
+    direction: ltr;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+}

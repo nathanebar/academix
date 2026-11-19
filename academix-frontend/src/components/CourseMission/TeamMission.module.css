@@ -1,0 +1,71 @@
+.card {
+  direction: rtl;
+  background: #fff;
+  height: 15vh;
+  border-radius: 30px;
+  box-shadow: 0 2px 6px rgb(0, 0, 0, 0.1);
+  padding: 12px;
+  padding-right: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.haveAxes {
+  direction: rtl;
+  background: #fff;
+  /* height: 44vh; */
+  border-radius: 30px;
+  box-shadow: 0 2px 6px rgb(0, 0, 0, 0.1);
+  padding: 12px;
+  padding-right: 12px;
+  grid-row: 1;
+}
+
+.propsStyle {
+  width: 26%;
+  max-height: 60vh;
+  border-radius: 30px;
+  background-color: white;
+  box-shadow: 0 2px 6px rgb(0, 0, 0, 0.1);
+  padding: 12px;
+}
+
+.title {
+  margin: 0;
+  font-weight: bold;
+  margin-bottom: 8px;
+  padding-top: 8px;
+  padding-right: 8px;
+  font-size: 16px;
+  color: #6e7072;
+}
+
+.sub_title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  padding-left: 5px;
+  font-size: 12px;
+  color: #6e7072;
+}
+
+.axesContainer {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  max-height: 10vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  direction: ltr;
+  text-wrap: wrap;
+  padding-right: 5px;
+  gap: 8px;
+}
+
+.addAxesDiv {
+  direction: ltr;
+  width: 100%;
+  padding-top: 4px;
+}

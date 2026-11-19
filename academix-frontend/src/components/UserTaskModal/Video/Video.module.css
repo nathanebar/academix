@@ -1,0 +1,160 @@
+.container {
+  width: 36vw;
+  height: 390px;
+  /* background-color: white;  */
+  /* padding: 8px; */
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  border-radius: 30px;
+  direction: ltr;
+  /* margin-top: 1vh; */
+}
+
+.title {
+  width: 100%;
+  height: 3.5vh;
+  display: flex;
+  align-items: start;
+  justify-content: end;
+  margin-right: 0.8vw;
+  margin-right: 0.8vw;
+  font-size: 1.1rem;
+  font-weight: 500;
+  direction: rtl;
+  justify-content: start;
+}
+.wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  /* margin-right: 0.5vw; */
+  outline: none;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+}
+
+.controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.controls.visible {
+  opacity: 1;
+}
+
+.controls.hidden {
+  opacity: 0;
+}
+
+.controlButton {
+  background: rgba(255, 242, 242, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.controlButton:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.icon {
+  font-size: 1.5rem;
+}
+
+.timeDisplay {
+  color: white;
+  font-size: 12px;
+  min-width: 60px;
+  text-align: center;
+}
+
+.progressBar {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.progressBar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+}
+
+.volumeSlider {
+  width: 80px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+}
+
+.playOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  z-index: 5;
+}
+
+.playOverlay:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.downloadButton {
+  background: rgba(0, 123, 255, 0.2);
+}
+
+.downloadButton:hover {
+  background: rgba(0, 123, 255, 0.4);
+}

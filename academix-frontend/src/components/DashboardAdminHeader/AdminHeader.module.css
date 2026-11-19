@@ -1,0 +1,85 @@
+ .container {
+  direction: rtl;
+  height: 10vh;
+  width: 95vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+
+.menu-container {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  text-align: center;
+  padding-bottom: 5px;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  min-width: 0;
+  max-width: 80%;
+}
+
+.menu-container::-webkit-scrollbar {
+  height: 5px;
+}
+
+.menu-container::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 3px;
+}
+
+.moreIcon {
+  font-size: large;
+  color: #f8f9fa;
+  font-size: large;
+}
+
+.btns {
+  height: 4vh;
+  min-width: 7vw;
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+  font-size: medium;
+  justify-content: space-evenly;
+  white-space: nowrap;
+}
+
+.btns:hover {
+  color: black !important;
+  border-radius: 20px !important;
+}
+
+.active-btn {
+  background-color: white !important;
+  color: black !important;
+  border-radius: 20px !important;
+}
+
+.inputsClass {
+  display: flex;
+  width: 15%;
+  justify-content: flex-end;
+}
+
+.domainInputWarp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  width: 15vw;
+}
+.domainInput {
+  width: 9vw;
+  height: 4vh;
+  border-radius: 20px;
+}
+
+.search-input {
+  height: 4vh;
+  width: 18vw;
+  background-color: #f4f1eb;
+  border-radius: 50px;
+}

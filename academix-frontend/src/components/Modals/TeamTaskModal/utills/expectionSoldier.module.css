@@ -1,0 +1,96 @@
+.exceptionsDiv {
+  width: 100%;
+
+  border-radius: 30px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.exceptionsTitle {
+  width: 90%;
+  height: 3.6vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: gray;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.exceptionsContent {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  height: 10vh;
+}
+
+.orangeDiv {
+  width: 25%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.redDiv {
+  width: 35%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.green {
+  height: 105px;
+  width: 105px;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    #2bd439 0%,
+    #61d13f 51.5%,
+    #f4ffec 80%,
+    #ffffff 100%
+  );
+  border-radius: 50%;
+  margin-bottom: 1vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.red {
+  height: 130px;
+  width: 130px;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    #fc523e 0%,
+    #fb6350 53.33%,
+    #f5d7cf 91.5%,
+    #ffffff 100%
+  );
+  border-radius: 50%;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pinkDetailes {
+  color: white;
+  height: 40px;
+  width: 80px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.redDetailes {
+  color: white;
+  height: 100px;
+  width: 100px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}

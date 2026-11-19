@@ -1,0 +1,114 @@
+.card {
+  background: #ffffff;
+  border: 1px solid #ece8df;
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: 0 4px 18px rgba(35, 43, 58, 0.05);
+  direction: rtl;
+}
+
+.question {
+  font-size: 16px;
+  font-weight: 700;
+  color: #232b3a;
+  margin-bottom: 14px;
+}
+
+/* ----- Table : lignes = questions, colonnes = pool ----- */
+.tableWrap {
+  overflow-x: auto;
+  direction: rtl;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ece8df;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+/* en-tête */
+.thQuestion {
+  background: #faf9f6;
+  font-weight: 800;
+  font-size: 13px;
+  color: #5b5f66;
+  text-align: right !important;
+  min-width: 180px;
+}
+
+.thOption {
+  background: #fffaf0;
+  font-weight: 700;
+  font-size: 13px;
+  color: #c77f00;
+  min-width: 90px;
+}
+
+/* cellule question */
+.tdQuestion {
+  text-align: right !important;
+  font-weight: 600;
+  font-size: 14px;
+  color: #232b3a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 180px;
+}
+
+.rowIndex {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #c77f00;
+  color: #fff;
+  font-weight: 800;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* cellule de réponse (checkbox) */
+.tdOption {
+  text-align: center;
+}
+
+.checkCell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.checkCell input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #c77f00;
+  cursor: pointer;
+}
+
+.checkCellSelected {
+  background: #e6f7f1;
+  box-shadow: 0 0 0 2px #2ec4a0 inset;
+}
+
+.checkCell:hover:not(:has(input:disabled)) {
+  background: #fff1d6;
+}
+
+.checkCell input:disabled {
+  cursor: default;
+}

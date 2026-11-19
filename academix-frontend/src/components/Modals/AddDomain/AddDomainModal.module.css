@@ -1,0 +1,75 @@
+.mainContainer {
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 3vh;
+  padding-top: 2vh;
+}
+
+.confirmButton {
+  margin-top: 3vh;
+  width: 6.1vw;
+  padding: 3.3vh;
+  opacity: 1;
+  border-radius: 2.6vw;
+  padding: 1vw;
+  background-color: rgba(43, 47, 62, 1);
+  color: white;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.options {
+  height: 8vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.title {
+  margin-right: 10px;
+  font-weight: 600;
+}
+
+.managersContainer {
+  min-height: 4vh;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: rgba(244, 241, 235, 1);
+  border-radius: 8px;
+}
+
+.managersList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.managerTag,
+.selectedManagerTag {
+  display: flex;
+  align-items: center;
+  padding: 4px 12px;
+  font-size: 14px;
+  border-radius: 16px;
+  background-color: #e6f4ff;
+  border-color: #91caff;
+  color: #1677ff;
+}
+
+.noManagers {
+  color: rgba(94, 99, 102, 0.7);
+  font-style: italic;
+  font-size: 14px;
+}
+
+.selectedManagerContainer {
+  padding: 8px 12px;
+  background-color: rgba(244, 241, 235, 1);
+  border-radius: 8px;
+  display: inline-block;
+}

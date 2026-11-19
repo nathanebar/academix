@@ -1,0 +1,562 @@
+/* Notebook.module.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  direction: rtl;
+}
+
+.headerRow {
+  direction: rtl;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+/* ===== סידור כללי ===== */
+.content {
+  display: flex;
+  gap: 16px;
+  min-height: 0;
+  flex: 1;
+}
+
+/* ===== סרגל צד ימני: תקיות ===== */
+.foldersPanel {
+  width: 280px;
+  flex-shrink: 0;
+  border-left: 1px solid #e8e8e8;
+  padding-left: 8px;
+  overflow-y: auto;
+}
+
+.foldersTitle {
+  display: block;
+  margin: 8px 0;
+}
+
+.spinWrapper {
+  text-align: center;
+  padding: 24px;
+}
+
+.spinWrapperCenter {
+  text-align: center;
+  padding: 40px;
+}
+
+.emptyWrapper {
+  margin-top: 40px;
+}
+
+/* ===== תקייה בודדת ===== */
+.folderItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.folderItem:hover {
+  background: #f7f3f8;
+}
+
+.folderItemSelected {
+  background: #ede4ee; /* סגול בהיר של סלאק */
+}
+
+/* האליפסה */
+.ellipse {
+  width: 36px;
+  height: 30px;
+  border-radius: 50% / 50%; /* צורת אליפסה */
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.ellipseSelected {
+  background: #611f69; /* הסגול של סלאק */
+}
+
+.ellipseIcon {
+  font-size: 16px;
+  color: #8c8c8c;
+  transition: color 0.2s;
+}
+
+.ellipseIconSelected {
+  color: #ffffff;
+}
+
+.folderName {
+  color: #333333;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.folderNameSelected {
+  color: #611f69;
+  font-weight: 600;
+}
+
+.folderChildren {
+  padding-inline-start: 24px;
+}
+
+/* ===== השטח המרכזי: פתקים ===== */
+.notesPanel {
+  flex: 1;
+  overflow-y: auto;
+  padding-inline-end: 8px;
+  min-width: 0;
+   overflow-anchor: auto;
+}
+
+.notesHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 4px;
+  margin-bottom: 12px;
+
+}
+.notesHeaderInfo {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.notesHeaderInfo .ant-typography {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.notesCount {
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.notesGrid {
+  width: 240px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.notesContainer{
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+  min-height: 0;
+}
+
+/* כרטיסית פתק */
+.noteCard {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+  background: #ffffff;
+  width: 100%;
+  height: auto;
+  min-height: 90px;
+}
+
+.noteCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.noteCardSelected {
+  border-color: #611f69;
+  box-shadow: 0 0 0 2px rgba(97, 31, 105, 0.2);
+  background: #faf8fb;
+}
+
+.noteCardSelected .noteCardTopBar {
+  background: #611f69;
+  opacity: 1;
+}
+
+.noteCardTopBar {
+  height: 4px;
+  background: #611f69;
+  opacity: 0.85;
+}
+
+.noteCardBody {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+}
+
+.noteCardIcon {
+  color: #611f69;
+  margin-top: 2px;
+}
+
+.noteCardTitle {
+  flex: 1;
+  min-width: 0;
+}
+
+.noteCardFooter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px 10px;
+  border-top: 1px solid #f5f5f5;
+  margin-top: 2px;
+  padding-top: 8px;
+}
+
+.noteCardDateIcon {
+  color: #8c8c8c;
+  font-size: 12px;
+}
+
+.noteCardDate {
+  font-size: 12px;
+  direction: ltr; /* תאריך+שעה בפורמט עברי עדיף LTR כדי שיהיה קריא */
+  unicode-bidi: embed;
+}
+.deleteWrapper {
+  margin-inline-start: auto;
+  display: flex;
+  align-items: center;
+}
+
+.deleteIcon {
+  color: #999;
+  cursor: pointer;
+  transition: color 0.2s;
+  font-size: 16px;
+}
+
+.deleteIcon:hover {
+  color: #ff4d4f;
+}
+
+.notesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.notesHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.noteEditorWrapper {
+    /* flex: 1; */
+  /* min-width: 0; */
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* gap: 12px; */
+  /* overflow-y: auto; */
+  /* background: #ffffff; */
+  /* border-radius: 12px; */
+  /* padding: 16px; */
+  /* width: 70%; */
+}
+
+/* התאמה למסכים קטנים */
+@media (max-width: 768px) {
+  .notesContainer {
+    flex-direction: column;
+  }
+
+  .noteEditorWrapper {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    border-right: none;
+    padding-right: 0;
+    margin-top: 16px;
+  }
+}
+/* ===== כפתור "פתק חדש" ===== */
+.newNoteButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 10px;
+  background: #611f69;
+  border-color: #611f69;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 6px 16px;
+  height: 38px;
+  box-shadow: 0 2px 6px rgba(97, 31, 105, 0.25);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.newNoteButton:hover,
+.newNoteButton:focus {
+  background: #7c2b86;
+  border-color: #7c2b86;
+  box-shadow: 0 4px 12px rgba(97, 31, 105, 0.35);
+  transform: translateY(-1px);
+}
+
+.newNoteButton:active {
+  background: #4a1550;
+  border-color: #4a1550;
+  box-shadow: 0 2px 4px rgba(97, 31, 105, 0.2);
+  transform: translateY(0);
+}
+
+.newNoteButton .anticon {
+  font-size: 16px;
+}
+
+.noteCardFooter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px 10px;
+  border-top: 1px solid #f5f5f5;
+}
+
+.noteCardDeleteWrapper {
+  margin-inline-start: auto;
+  display: flex;
+  align-items: center;
+}
+
+.noteCardDeleteIcon {
+  color: #bbb;
+  cursor: pointer;
+  transition: color 0.2s;
+  font-size: 14px;
+}
+
+.noteCardDeleteIcon:hover {
+  color: #ff4d4f;
+}
+
+
+
+
+.threadPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 0;
+  width: 100%;
+}
+
+.threadItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.threadCard {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-top: 3px solid #611f69;
+}
+
+.threadCard:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.threadCardSelected {
+  border-color: #611f69;
+  box-shadow: 0 0 0 2px rgba(97,31,105,0.2);
+  background: #faf8fb;
+}
+
+.threadCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.threadCardIcon {
+  color: #611f69;
+}
+
+.threadCardTitle {
+  flex: 1;
+  min-width: 0;
+}
+
+.threadCardDeleteIcon {
+  color: #bbb;
+  cursor: pointer;
+}
+
+.threadCardDeleteIcon:hover {
+  color: #ff4d4f;
+}
+
+.threadReplies {
+   width: 100%;
+  margin-inline-start: 0;
+  padding-inline-start: 16px;
+  border-inline-start: 2px solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+    overflow-anchor: auto;
+}
+.threadReplyItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.threadReplyCard {
+  background: #fafafa;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.threadReplyCard:hover {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.threadReplyCardOpen {
+  background: #ffffff;
+  border-color: #611f69;
+  box-shadow: 0 0 0 2px rgba(97, 31, 105, 0.15);
+}
+
+.threadReplyEditorWrapper {
+  margin-inline-start: 16px;
+  border-inline-start: 2px solid #e8e8e8;
+  padding-inline-start: 12px;
+}
+
+.threadReplyContent {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.threadReplyIcon {
+  color: #611f69;
+  font-size: 13px;
+}
+
+.threadReplyTitle {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+}
+
+.threadReplyFooter {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-top: 4px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.threadReplyDateIcon {
+  font-size: 11px;
+  color: #8c8c8c;
+}
+
+.threadReplyDate {
+  font-size: 11px;
+  direction: ltr;
+  unicode-bidi: embed;
+}
+
+.newReplyEditorActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.cancelNewReplyButton {
+  color: #ff4d4f;
+  border: 1px solid #ff4d4f;
+  background: #fff;
+  border-radius: 6px;
+  padding: 4px 16px;
+  font-weight: 500;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.cancelNewReplyButton:hover {
+  background: #fff1f0;
+  border-color: #ff4d4f;
+  color: #d9363e;
+}
+
+.noteCardFooter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px 10px;
+  border-top: 1px solid #f5f5f5;
+  flex-wrap: wrap; /* לשטח צפוף */
+}
+
+.noteCardCreator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #f9f5fb;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  color: #611f69;
+  margin-inline-start: 4px;
+}
+
+.noteCardCreator .anticon {
+  font-size: 11px;
+}
+
+.noteCardCreatorName {
+  font-size: 12px;
+  color: #611f69;
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.noteCardDeleteWrapper {
+  margin-inline-start: auto;
+}

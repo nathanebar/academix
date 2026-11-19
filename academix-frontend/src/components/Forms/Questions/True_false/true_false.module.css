@@ -1,0 +1,47 @@
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  width: 93%;
+  direction: rtl;
+}
+
+.previewLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #a3a6a8;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 999px;
+  width: 120px;
+  height: 38px;
+  font-weight: 700;
+  font-size: 14px;
+  border: 1.5px solid;
+  cursor: default;
+  user-select: none;
+}
+
+.button.false {
+  background: #fdeaea;
+  border-color: #f2b8b8;
+  color: #c0392b;
+}
+
+.button.true {
+  background: #e6f7f1;
+  border-color: #9fdcc8;
+  color: #1f8a70;
+}

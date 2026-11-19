@@ -1,0 +1,72 @@
+/* AmericanQuestion.module.css */
+.card {
+  background: #ffffff;
+  border: 1px solid #ece8df;
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: 0 4px 18px rgba(35, 43, 58, 0.05);
+  direction: rtl;
+}
+
+.question {
+  font-size: 16px;
+  font-weight: 700;
+  color: #232b3a;
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin: 0 !important;
+  padding: 10px 14px;
+  border: 1.5px solid #ece8df;
+  border-radius: 12px;
+  background: #faf9f6;
+  transition: all 0.18s ease;
+}
+
+.radio:hover:not(.ant-radio-wrapper-disabled) {
+  border-color: #f2ddb0;
+  background: #fffdf6;
+}
+
+.radio :global(.ant-radio-inner) {
+  border-color: #d4dade;
+  width: 18px;
+  height: 18px;
+}
+
+.radio :global(.ant-radio-checked .ant-radio-inner) {
+  border-color: #c77f00;
+  background: #c77f00;
+}
+
+.optionLetter {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #f4f1eb;
+  color: #6e7072;
+  font-weight: 800;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.optionText {
+  font-size: 14px;
+  color: #232b3a;
+}

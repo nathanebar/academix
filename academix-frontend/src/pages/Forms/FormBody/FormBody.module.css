@@ -1,0 +1,223 @@
+.header_new {
+  width: 58.5%;
+  margin: 0 auto;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 10vh;
+  box-sizing: border-box;
+  border: 1px solid #e8e8e8;
+}
+
+.header_right {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 12px;
+}
+
+.header_left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+/* פרטי הטופס */
+.form_info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.form_title {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #1a1a2e;
+  margin: 0;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.form_description {
+  font-size: 0.85rem;
+  color: #6b7280;
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* בדג' ציון */
+.grade_badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 1px solid #86efac;
+  border-radius: 12px;
+  min-width: 80px;
+  box-shadow: 0 2px 4px rgba(34, 197, 94, 0.1);
+}
+
+.grade_label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #166534;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+.grade_value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #15803d;
+  line-height: 1;
+}
+
+/* בדג' תאריך */
+.date_badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+.date_icon {
+  font-size: 1rem;
+  color: #9ca3af;
+}
+
+.date_text {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+/* =========================================
+   Container שאלות
+   ========================================= */
+.questions_container {
+  width: 58.5%;
+
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* =========================================
+   רספונסיביות
+   ========================================= */
+@media (max-width: 1200px) {
+  .header,
+  .header_new,
+  .questions_container {
+    width: 85%;
+  }
+}
+
+@media (max-width: 768px) {
+  .header,
+  .header_new,
+  .questions_container {
+    width: 95%;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 16px;
+    min-height: auto;
+    padding: 16px;
+  }
+
+  .right_side,
+  .left_side,
+  .header_right,
+  .header_left {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .form_name,
+  .form_title {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+}
+
+/* תג קטן של שם הנבחן */
+.member_tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: #f0f1f3;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.member_icon {
+  font-size: 0.7rem;
+}
+
+.back_button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.show_div {
+  display: flex;
+  height: 100%;
+  width: 75%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.missionButton {
+  margin-right: 1vw;
+  /* width: 5vw; */
+  height: 3.5vh;
+  border-radius: 20px;
+  font-weight: 600;
+  color: gray;
+  background: #f4f1eb;
+  border: 1px solid #ced4da;
+  margin: 10px;
+}
+.missionButton:hover {
+  transform: scale(1.05);
+  color: gray !important;
+  background: #f4f1eb !important;
+  border: 1px solid #ced4da !important;
+}

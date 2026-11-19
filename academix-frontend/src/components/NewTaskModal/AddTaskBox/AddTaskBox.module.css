@@ -1,0 +1,38 @@
+
+.wrapper, .Editwrapper{
+    min-height: 3vh;
+    max-height: 3vh;
+    width: 12vw;
+    border-radius: 30px;
+    background-color: white;
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.Editwrapper:hover{
+    border: 1px solid rgb(91, 138, 192);
+    background-color: rgb(235, 243, 245);
+}
+
+.text{
+    font-size: larger;
+    margin-right: 1vw;
+}
+.logo{
+    margin-left: 1vw;
+
+
+}
+
+.disabled:hover {
+  background-color: #f5f5f5 !important;
+}
+
+.lockIcon {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 12px;
+}

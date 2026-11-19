@@ -1,0 +1,60 @@
+.mainDiv {
+  width: 100%;
+  background-color: white;
+  height: 35vh;
+  margin-top: 2vh;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.centerDiv {
+  width: 95%;
+  height: 95%;
+}
+
+.questionDiv {
+  width: 100%;
+  height: 5vh;
+  background-color: rgba(244, 241, 235, 1);
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  font-weight: 600;
+  text-align: 2px;
+  margin-top: 1vh;
+      text-indent: 1rem;
+}
+
+.answersDiv {
+  width: 100%;
+  margin-top: 3vh;
+  min-height: 5vh;
+  max-height: 22vh;
+  overflow-y: auto;
+  display: flex;
+  gap: 24px;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 1vh;
+}
+
+.personDiv {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.textDiv {
+  width: 80%;
+  height: 4vh;
+  margin-right: 1vw;
+  background-color: rgba(244, 241, 235, 1);
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  font-weight: 500;
+  padding-right: 1vw;
+}

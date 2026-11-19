@@ -1,0 +1,28 @@
+.wrapper{
+    min-height: 4vh;
+    width: 33vw;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    background-color: white;
+    margin-top: 1vh;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header{
+    width: 3vw;
+    font-size: larger;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+}
+
+.text{
+    color: #939699
+}
+
+.select{
+    min-width: 10vw;
+}

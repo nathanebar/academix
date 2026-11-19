@@ -1,0 +1,224 @@
+/* components/QueryBuilder/QueryBuilder.module.css */
+
+.queryBuilder {
+  background: #fafafa;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 1000px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.headerActions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.badge {
+  background: #52c41a;
+  color: white;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Root Container */
+.rootContainer {
+  background: white;
+  border: 2px solid #1890ff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.rootContainer[data-logic="OR"] {
+  border-color: #722ed1;
+}
+
+.rootHeader {
+  background: #e6f7ff;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #91d5ff;
+}
+
+.rootContainer[data-logic="OR"] .rootHeader {
+  background: #f9f0ff;
+  border-bottom-color: #d3adf7;
+}
+
+.rootContent {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Logic Toggle */
+.logicToggle {
+  direction: ltr;
+  display: flex;
+}
+
+.logicBtn {
+  padding: 6px 16px;
+  border: 1px solid #d9d9d9;
+  background: white;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s;
+  color: #333;
+}
+
+.logicBtn:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.logicBtn:last-child {
+  border-radius: 0 4px 4px 0;
+  border-left: none;
+}
+
+.logicBtn.active {
+  background: #1890ff;
+  color: white;
+  border-color: #1890ff;
+}
+
+.rootContainer[data-logic="OR"] .logicBtn.active,
+.groupContainer[data-logic="OR"] .logicBtn.active {
+  background: #722ed1;
+  border-color: #722ed1;
+}
+
+/* Condition */
+.conditionWrapper {
+  background: #fafafa;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.conditionRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.fieldSelect {
+  width: 100px;
+}
+
+.operatorSelect {
+  width: 80px;
+}
+
+.valueWrapper {
+  flex: 1;
+  min-width: 150px;
+}
+
+.searchInput {
+  /* width: 100%; */
+  padding: 6px 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #40a9ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.valueSelect {
+  width: 100%;
+}
+
+.andBtn {
+  font-weight: bold;
+  color: #1890ff;
+}
+
+.andBtn:hover {
+  color: #40a9ff;
+  background: #e6f7ff;
+}
+
+.orBtn {
+  font-weight: bold;
+  color: #722ed1;
+}
+
+.orBtn:hover {
+  color: #9254de;
+  background: #f9f0ff;
+}
+
+/* Group */
+.groupContainer {
+  background: white;
+  border: 2px dashed #1890ff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.groupContainer[data-logic="OR"] {
+  border-color: #722ed1;
+}
+
+.groupHeader {
+  background: #f0f5ff;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.groupContainer[data-logic="OR"] .groupHeader {
+  background: #f9f0ff;
+}
+
+.groupHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.groupContent {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.addInGroupBtn {
+  text-align: right;
+  color: #1890ff;
+  padding-right: 0;
+}
+
+.addBtn {
+  width: 100%;
+  height: 40px;
+}

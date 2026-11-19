@@ -1,0 +1,77 @@
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2d3748;
+    margin: 10px;
+}
+
+.inputBtnDiv {
+    display: flex;
+    width: 60%;
+    justify-content: end;
+    align-items: center;
+}
+
+.btnClass {
+    border-radius: 20px;
+    color: white;
+    background-color: black;
+}
+
+.inputClass {
+    height: 3.5vh;
+    border-radius: 30px;
+    width: 25%;
+    direction: ltr;
+}
+
+.feedbacksWarp {
+    direction: rtl;
+    padding-right: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1vw;
+    justify-content: flex-start;
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+
+.tagsDiv {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tagClass {
+    border-radius: 30px;
+    font-size: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 6px 12px;
+    min-width: 80px;
+    max-width: 200px;
+    color: #6e7072;
+    font-weight: 400;
+    cursor: pointer;
+}
+.selectFilterDiv{
+    padding-left: 15px;
+    display: flex;
+    justify-content: space-between;
+    width: 35%;
+}
+.paginationsDiv{
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    gap: 10px;
+}

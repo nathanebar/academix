@@ -1,0 +1,82 @@
+.mainContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.options {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  direction: ltr;
+}
+
+.axes {
+  max-height: 10vh;
+  overflow-y: auto;
+  gap: 0.5vh;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 2vh;
+}
+
+.axesNames {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  min-width: 3vw;
+  /* height: 3vh; */
+  cursor: pointer;
+  /* font-size: small; */
+  font-weight: 500;
+font-size: 12px;
+
+}
+/* .axesNames:hover {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+cursor: pointer;
+} */
+
+.axesNames:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.missions {
+  /* max-height: 28vh; */
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* margin-top: 2vh; */
+  width: 100%;
+  padding-left: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e6e1d8;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #dad5ce;
+}
+
+.titlesDiv{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.clearButton{
+  height: 2vh;
+  border-radius:20px ;
+  background-color: rgba(218,212,202,1);
+  color: black;
+}
+.clearButton:hover{
+  transform: scale(1.1);
+}

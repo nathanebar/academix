@@ -1,0 +1,70 @@
+
+const { AxisTemplate } = require("../../models");
+const logger = require("../utils/logger");
+
+exports.getByAxisId = async (req, res) => {
+    try {
+        const AxisTemplateById = await AxisTemplate.findAll({
+            where: {
+                axisId: req.query.axisId
+            }
+        });
+        res.json(AxisTemplateById);
+
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
+
+exports.getById = async (req, res) => {
+    try {
+        const AxisTemplate = await AxisTemplate.findByPk(req.params.id);
+        if (!AxisTemplate) return res.status(404).json({ error: "AxisTemplate not found" });
+        res.json(AxisTemplate);
+    } catch (err) {
+        res.status(500).json({ error: "Failed to fetch AxisTemplate" });
+    }
+};
+
+exports.create = async (req, res) => {
+
+
+
+    try {
+        const newAxisTemplate = await AxisTemplate.create(req.body,);
+        logger.info('AxisTemplate created', {
+            axisTemplateId: newAxisTemplate.id,
+            axisId: req.body.axisId,
+            userId: req.headers['x-user-id']
+        });
+        res.status(200).json(newAxisTemplate);
+    } catch (err) {
+        console.log(err);
+
+        res.status(400).json({ error: "Failed to create AxisTemplate" });
+    }
+};
+exports.update = async (req, res) => {
+  try {
+    // 👈 שנה את המשתנה - update מחזיר מערך [count]
+    const [updatedCount] = await AxisTemplate.update(
+      { ...req.body },
+      {
+        where: {
+          axisId: req.body.axisId
+        }
+      }
+    );
+
+    logger.info('AxisTemplate updated', {
+      axisId: req.body.axisId,
+      updatedRows: updatedCount,  // ✅ עכשיו מוגדר
+      userId: req.headers['x-user-id']
+    });
+
+    res.status(200).json({ updatedCount });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ error: "Failed to update AxisTemplate" });
+  }
+};

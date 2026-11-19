@@ -1,0 +1,513 @@
+.modal {
+  display: block !important;
+}
+
+.modal > * > * {
+  background-color: #f4f1eb !important;
+  padding: 0 !important;
+}
+
+.modal > * > * > button:hover {
+  background-color: #f4f1eb !important;
+}
+
+.modal > * > * > button > span {
+  font-size: 1.5rem !important;
+  color: black !important;
+}
+
+.modal > * > * > * {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.modal_mission_view {
+  width: 100%;
+  height: 75vh;
+
+  border-radius: 10px 0 0 10px;
+  border-right: none;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-evenly;
+  /* background-color: rgb(149, 200, 19); */
+}
+
+.add_parts {
+  width: 20%;
+  height: 75%;
+  border-radius: 10px;
+  margin-top: 6vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  margin-left: 30px;
+  gap: 10px;
+  /* background-color: red; */
+}
+
+.inputs_wrapper {
+  width: 70%;
+  height: 90%;
+  border-radius: 10px;
+  margin-top: 1vh;
+  /* border: 2px solid red; */
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  /* background-color: red; */
+}
+
+.task_group_name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1vh;
+}
+
+.task_name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #7a7171;
+  margin-bottom: 2vh;
+}
+
+.task_descripation {
+  margin-bottom: 2vh;
+}
+
+.relevant_missions {
+  /* background-color: rgb(86, 30, 215); */
+  max-height: 700px;
+  overflow-y: auto;
+  direction: ltr !important;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  /* row-gap: 1vh; */
+  /* align-items: end; */
+}
+.relevant_missions2 {
+  display: flex;
+  width: 100%;
+  direction: rtl;
+}
+.files_response_content {
+  display: flex;
+  direction: rtl;
+  flex-direction: column;
+  width: 100%;
+}
+
+.fileContainer {
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  gap: 20px;
+  height: 100%;
+}
+.files_content {
+  margin-bottom: 10px;
+  direction: rtl;
+}
+.link_content {
+  direction: rtl;
+  margin-bottom: 10px;
+}
+.form_content {
+  margin-bottom: 10px;
+  direction: rtl;
+}
+
+.input_wrapper {
+  margin-top: 1vh;
+  background: white;
+  padding-left: 1rem;
+  padding-right: 1.25rem;
+  height: 4vh;
+  width: 34vw;
+  border-radius: 20px;
+  border: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.input_wrapper:hover {
+  background: #f3f4f6;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logos_wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.default_content {
+  width: 100%;
+  justify-content: start;
+  direction: rtl;
+}
+
+.audioContainer {
+  direction: ltr;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  /* border-bottom: 1px solid #000; */
+  height: 1px;
+}
+
+.divider::before {
+  margin-right: 10px;
+  background: linear-gradient(to right, transparent, black);
+  
+}
+.divider::after {
+  margin-left: 10px;
+  background: linear-gradient(to left, transparent, black);
+}
+
+/* .submitBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 10%;
+  padding: 10px 16px;
+  margin-top: 12px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  direction: rtl;
+  display: flex;
+} */
+
+.submitBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.submitBtn:active {
+  transform: translateY(0);
+}
+
+/* ==================== SUBMIT SECTION ==================== */
+.submitSection {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  direction: rtl;
+  margin-top: 12px;
+  gap: 15px;
+}
+
+/* ==================== SUBMIT BUTTON (ירוק) ==================== */
+.submitBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 15%;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.submitBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submitBtn:disabled {
+  background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* ==================== SUBMITTED CONTAINER ==================== */
+.submittedContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 12px;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border: 1px solid #a7f3d0;
+  border-radius: 10px;
+}
+
+.submittedBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  color: #059669;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.submittedBadge .anticon {
+  font-size: 16px;
+}
+
+.submittedDate {
+  margin-right: auto;
+  font-size: 11px;
+  color: #6b7280;
+  font-weight: 400;
+}
+
+/* ==================== CANCEL BUTTON (אדום) ==================== */
+.cancelBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #ffffff;
+  color: #ef4444;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.cancelBtn:hover:not(:disabled) {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  transform: scale(1.05);
+}
+
+.cancelBtn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.cancelBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ==================== ICON IN BUTTON ==================== */
+.submitBtn .anticon,
+.cancelBtn .anticon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  border: 1px solid;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.statusDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+/* Hover effect */
+.statusBadge:hover {
+  transform: scale(1.02);
+}
+
+.tagsSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tagsContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.tagsContainer :global(.ant-tag) {
+  border-radius: 20px !important;
+  padding: 4px 12px !important;
+  margin: 0 !important;
+  font-size: 12px;
+}
+
+.tagsLabel,
+.checklistLabel,
+.filesUploadedLabel,
+.linksLabel,
+.addFilesLabel,
+.filesLabel,
+.formLabel,
+.patbassLabel  {
+  font-size: 0.93rem;
+  font-weight: 600;
+  color: #9ea3a8;
+  margin-bottom: 8px;
+  text-align: right;
+  direction: rtl;
+}
+
+.link_content,
+.form_content,
+.files_content,
+.files_response_content {
+  margin-bottom: 24px; 
+}
+
+.frozen {
+  pointer-events: none !important;
+  user-select: none !important;
+}
+
+.frozen > * {
+  pointer-events: none !important;
+}
+
+.frozen-overlay {
+  pointer-events: none !important;
+  opacity: 0.6;
+  filter: grayscale(30%);
+  user-select: none;
+}
+
+.link_content.frozen,
+.form_content.frozen,
+.files_content.frozen,
+.files_response_content.frozen {
+  pointer-events: none !important;
+  opacity: 0.6;
+}
+
+.link_content.frozen a,
+.form_content.frozen .input_wrapper {
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+.submitSection {
+  position: relative;
+  z-index: 20;
+}
+
+.cancelBtn {
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  z-index: 25;
+  position: relative;
+}
+
+.cancelBtn:hover:not(:disabled) {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  transform: scale(1.05);
+}
+
+.checklistItem.frozen {
+  cursor: not-allowed !important;
+}
+
+.checklistItem.frozen .ant-checkbox-wrapper {
+  pointer-events: none !important;
+}
+
+.task_name,
+.task_descripation {
+  user-select: text;
+  cursor: text;
+}
+
+.viewModeContainer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+}
+
+.viewModeContainer.studentView {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 1px solid #fcd34d;
+}
+
+.viewModeContainer.highView {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border: 1px solid #a7f3d0;
+}
+
+.viewModeLabel {
+  font-weight: 600;
+  margin-left: 0%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.viewModeLabel.student {
+  color: #d97706;
+}
+
+.viewModeLabel.high {
+  color: #059669;
+}
+
+/* Override ant switch styles */
+.viewModeContainer :global(.ant-switch) {
+  min-width: 70px;
+}
+
+.viewModeContainer :global(.ant-switch-inner) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}

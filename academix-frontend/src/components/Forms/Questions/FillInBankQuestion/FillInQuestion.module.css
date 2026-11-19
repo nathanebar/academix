@@ -1,0 +1,102 @@
+.rules-panel {
+  width: 93%;
+  margin-top: 13px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  background: #fffaf0;
+  border: 1px solid #f2ddb0;
+  border-radius: 12px;
+  direction: rtl;
+}
+
+.rules-icon {
+  color: #c77f00;
+  font-size: 16px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.rules-text {
+  direction: rtl;
+  text-align: start;
+  color: #6e7072;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.8;
+}
+
+.rules-text strong {
+  color: #c77f00;
+}
+
+/* ----- Banque de mots ----- */
+.bank {
+  width: 93%;
+  margin-top: 12px;
+  padding: 14px;
+  background: #faf9f6;
+  border: 1px dashed #e7e2d6;
+  border-radius: 14px;
+  direction: rtl;
+}
+
+.bank-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #5b5f66;
+  margin-bottom: 10px;
+}
+
+.bank-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bank-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.row-index {
+  min-width: 22px;
+  font-weight: 700;
+  font-size: 13px;
+  color: #a3a6a8;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.input-flex {
+  flex: 1;
+  min-width: 0;
+}
+
+.remove-btn {
+  color: #c6c9d1;
+  font-size: 14px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s ease;
+}
+
+.remove-btn:hover {
+  color: #c0392b;
+}
+
+.add-row {
+  display: flex;
+  align-items: center;
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px dashed #e7e2d6;
+}
+
+.add-row .input-flex {
+  border-color: #f2ddb0 !important;
+  background: #fffdf6 !important;
+}

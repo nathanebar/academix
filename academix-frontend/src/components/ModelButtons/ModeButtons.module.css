@@ -1,0 +1,23 @@
+.modeButtonsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+
+.modeButton {
+  /* color: #6E7072; */
+  border-radius: 17px;
+  cursor: pointer;
+  border: none;
+  width: 4vw;
+  height: 3.5vh;
+  font-size: 12px;
+  background-color: #f8f6f2;
+  font-weight: 600;
+}
+
+
+.activeModeButton {
+  background-color: white !important;
+}

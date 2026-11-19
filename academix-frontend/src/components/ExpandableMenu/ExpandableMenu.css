@@ -1,0 +1,173 @@
+/* ExpandableMenu.css */
+
+/* קונטיינר ראשי */
+.expandable-menu {
+  position: fixed;
+  bottom: -2px;
+  left: 460px; /* קצת יותר רווח מהקצה */
+  z-index: 1000;
+}
+
+/* כפתור ראשי */
+.main-button {
+  position: relative !important;
+  /* transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important; */
+  
+}
+
+.main-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(63, 64, 66, 0.5) !important;
+}
+
+.main-button:active {
+  transform: scale(0.95);
+}
+
+/* קונטיינר לכפתורים המתרחבים */
+.expandable-items {
+  position: relative;
+  width: 56px;
+  height: 56px;
+}
+
+/* פריטים מתרחבים - עם מרווח מהכפתור הראשי */
+.expandable-item {
+  position: fixed;
+  left: 320px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-direction: row-reverse;
+  opacity: 0;
+  transform: translateX(-20px) scale(0.8);
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.expandable-item.visible {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Item 1 - צבע - מרווח מהכפתור הראשי */
+.expandable-item.item-1 {
+  bottom: 30px;
+}
+
+.expandable-items.expanded .expandable-item.item-1 {
+  bottom: 95px; /* הוספתי רווח */
+}
+
+/* Item 2 - גרירה */
+.expandable-item.item-2 {
+  bottom: 30px;
+}
+
+.expandable-items.expanded .expandable-item.item-2 {
+  bottom: 160px; /* הוספתי רווח */
+}
+
+/* Item 3 - צמצום צירים */
+.expandable-item.item-3 {
+  bottom: 30px;
+}
+
+.expandable-items.expanded .expandable-item.item-3 {
+  bottom: 225px; /* הוספתי רווח */
+}
+
+/* כפתורים פנימיים */
+.expandable-button {
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease !important;
+  position: relative;
+}
+
+.expandable-button:hover {
+  transform: scale(1.1);
+}
+
+.expandable-button:active {
+  transform: scale(0.95);
+}
+
+.expandable-button.active {
+  animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(24, 144, 255, 0.5);
+  }
+}
+
+/* תווית */
+.expandable-label {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  background: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateX(10px);
+  transition: all 0.3s ease 0.1s;
+}
+
+.expandable-item.visible .expandable-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Badge נעילה */
+.lock-badge {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 16px;
+  height: 16px;
+  background-color: #ff4d4f;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(255, 77, 79, 0.4);
+  animation: badge-bounce 0.5s ease;
+}
+
+@keyframes badge-bounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .expandable-label {
+    display: none;
+  }
+  
+  .expandable-menu {
+    left: 10px;
+  }
+  
+  .expandable-item {
+    left: 10px;
+  }
+}

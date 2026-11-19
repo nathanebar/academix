@@ -1,0 +1,58 @@
+.card {
+    height: 18vh;
+    max-height: 18vh;
+    overflow-y: auto;
+    grid-area: 2/1/auto/-1;
+    grid-row: 2;
+    direction: rtl;
+    background-color: #fff;
+    border-radius: 30px;
+    box-shadow: 0 2px 6px rgb(0, 0, 0, 0.1);
+    padding: 1.5vh;
+
+}
+
+.haveAxes {
+    /* height: 29vh; */
+    max-height: 29vh;
+    overflow-y: auto;
+    grid-area: 2/1/auto/-1;
+    grid-row: 2;
+    direction: rtl;
+    background-color: #fff;
+    border-radius: 30px;
+    box-shadow: 0 2px 6px rgb(0, 0, 0, 0.1);
+    padding: 1.5vh;
+
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 5px;
+    padding-top: 10px;
+}
+
+.search-input {
+    height: 3.5vh;
+    width: 16vw;
+    background-color: #f4f1eb;
+    border-radius: 50px;
+}
+
+.batchListTitles {
+    display: flex;
+    justify-content: space-between;
+    width: 85%;
+    padding-right: 1.5vh;
+    padding-top: 10px;
+}
+
+.batchListWarp {
+    /* height: 20vh; */
+    max-height: 20vh;
+    overflow-y: auto;
+    direction: ltr;
+    padding-right: 5px;
+}

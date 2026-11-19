@@ -1,0 +1,26 @@
+.wrapper {
+  min-height: 5vh;
+  width: 33vw;
+  border-radius: 20px;
+  padding-left: 1vw;
+  padding-right: 1vw;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1vh;
+}
+
+.rightSide {
+  width: 70%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.text {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #6e6d6d;
+}

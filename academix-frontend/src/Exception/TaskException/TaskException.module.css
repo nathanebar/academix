@@ -1,0 +1,67 @@
+.container {
+  width: 44%;
+  background-color: white;
+  height: 23vh;
+  border-radius: 20px;
+  flex-direction: column;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+}
+
+.headerDiv {
+  height: 15%;
+  display: flex;
+  justify-content: space-between;
+  padding: 2vh 30px 0px 30px;
+}
+
+.imporveDiv {
+  background-color: #d4c7ad;
+  width: 15vw;
+  height: 25px;
+  padding: 5px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
+}
+
+.imporveText {
+  border-radius: 20px;
+  padding: 5px 5px 5px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: small;
+}
+
+.teams {
+  width: 40%;
+  max-height: 30px;
+  margin: 0 auto;
+  overflow: auto;
+  max-height: 15vh;
+}
+
+.chartsContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: start;
+  margin-top: 1vh;
+  padding: 0 20px;
+
+   width: 100%;
+}
+.chartWrapper {
+  width: 60%; 
+  /* height: 1vh;  גובה מפורש! */
+}
+.chart-container {
+  border: none !important;
+  outline: none !important;
+}
+
+.chart-container * {
+  border: none !important;
+  outline: none !important;
+}

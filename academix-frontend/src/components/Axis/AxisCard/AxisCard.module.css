@@ -1,0 +1,260 @@
+/* רק עם צל קטן בתחתית כשיש גלילה */
+.axis-card {
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 262px;
+  flex-shrink: 0;
+  max-height: 70vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  position: relative;
+}
+
+/* מיקום הסקרולבר בצד ימין */
+.axis-card::-webkit-scrollbar {
+  width: 4px;
+  position: absolute;
+  left: auto;
+  right: 0;
+}
+.axis-card::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 8px 0;
+}
+.axis-card::-webkit-scrollbar-thumb {
+  background: #d9d9d9;
+  border-radius: 4px;
+}
+/* Firefox */
+.axis-card {
+  scrollbar-width: thin;
+  scrollbar-color: #d9d9d9 transparent;
+}
+.task-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.task-group h3 {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 18px;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 5px;
+}
+.tasks-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.task-item {
+  background-color: #ffffff;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 10px 15px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: 14px;
+  color: #495057;
+}
+.task-item:hover {
+  background-color: #e9ecef;
+  border-color: #007bff;
+  transform: translateX(5px);
+}
+.task-item:last-child {
+  margin-bottom: 0;
+}
+.task-groups-container {
+  margin: 15px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: auto;
+  padding: 10px;
+}
+.task-group-wrapper {
+}
+.add-button-container {
+  margin-top: 20px;
+}
+.loading,
+.error {
+  text-align: center;
+  padding: 20px;
+}
+.error {
+  color: #ff4444;
+}
+.axis-card {
+  background-color: #e6e1d8;
+  border-radius: 20px;
+  padding: 20px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 262px;
+}
+.add-axis-content {
+  text-align: center;
+}
+.add-button {
+  font-size: 20px;
+  color: #666;
+  border-radius: 20px;
+  padding: 20px;
+}
+.addButtonTaskGroup {
+  background-color: #2b2f3e;
+  border-radius: 50px;
+  color: white;
+  font-weight: 500;
+  font-size: 13px;
+  border: none;
+  box-shadow: none;
+}
+.add-text {
+  color: #666;
+  font-weight: 500;
+}
+.search-input {
+  width: 11vw;
+  border-radius: 50px;
+  height: 3.5vh;
+}
+.add-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-direction: column;
+}
+.axis-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1vw;
+}
+.edit-template-button {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  padding: 0;
+  border: 2px solid var(--settings-border);
+  background: var(--settings-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease-in-out;
+}
+.edit-template-button .anticon {
+  font-size: 14px;
+  color: #555;
+}
+.edit-template-button:hover {
+  background: var(--settings-hover-bg);
+  border-color: var(--settings-hover-bg);
+}
+.edit-template-button:hover .anticon {
+  color: #fff;
+}
+.edit-template-button:active {
+  transform: translateY(1px);
+  opacity: 0.9;
+}
+.edit-template-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
+}
+.expand-button {
+  display: flex;
+  position: absolute;
+  top: 5px;
+  left: 0px;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  z-index: 10;
+  transition: background-color 0.3s;
+}
+.expand-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.axis-card {
+  position: relative;
+}
+.axis-card:hover .expand-button {
+  opacity: 1;
+  visibility: visible;
+}
+.task-groups-container {
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+.add-button-container {
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+.axis-card-not-expansed {
+  cursor: pointer;
+  background-color: #e6e1d8;
+  border-radius: 20px;
+  padding: 20px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 15px;
+  height: 65vh;
+}
+.axis-rotate-not-expansed {
+  transform: rotate(270deg);
+}
+.axis-title-not-expansed {
+  color: white;
+  font-weight: bold;
+  padding: 7px;
+  border-radius: 20px;
+  display: flex;
+  position: fixed;
+  transform: translate(0px, -50%);
+}
+.axis-card-header-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  margin: -20px -20px 0 -20px;
+}
+
+.scrollable-wrapper {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  margin-top: 25px; 
+}
+
+.scrollable-wrapper::-webkit-scrollbar {
+  width: 4px;
+  position: absolute;
+  left: auto;
+  right: 0;
+}
+
+.scrollable-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 8px 0;
+}
+
+.scrollable-wrapper::-webkit-scrollbar-thumb {
+  background: #d9d9d9;
+  border-radius: 4px;
+}
+
+.scrollable-wrapper {
+  scrollbar-width: thin;
+  scrollbar-color: #d9d9d9 transparent;
+}

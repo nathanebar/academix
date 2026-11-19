@@ -1,0 +1,105 @@
+.create-form {
+  /* width: 45vw; */
+  padding: 2vh 1vw;
+  border-radius: 10px;
+  background: white;
+  direction: rtl;
+  margin-top: 10px;
+}
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 16px;
+  width: 98%;
+}
+.button-container {
+  width: 15%;
+  display: flex;
+  justify-content: center;
+  gap: 1.1574074074074074vw;
+}
+
+.action-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background-color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.action-button:hover {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+  transform: translateY(-2px);
+}
+
+.action-button svg {
+  color: #6b7280;
+  transition: color 0.2s ease;
+}
+
+.action-button:hover svg {
+  color: #374151;
+}
+.score-container {
+  width: 80%;
+  gap: 1vw;
+  display: flex;
+  align-items: center;
+}
+.scoreInput {
+  width: 100px;
+  height: 4.2vh;
+  border-radius: 8px;
+  border: 1px solid #d9d9d9;
+  padding: 8px 12px;
+  margin-right: 20px;
+  transition: border-color 0.3s;
+}
+
+.scoreInput:focus {
+  outline: none;
+  border-color: #40a9ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+.draggableQuestion {
+  border: 4px solid #abcbe2ff;
+}
+.draggableQuestion:hover {
+  animation: wiggleQuestion 0.4s infinite;
+}
+@keyframes wiggleQuestion {
+  0% {
+    transform: rotate(0.3deg);
+  }
+  50% {
+    transform: rotate(-0.3deg);
+  }
+  100% {
+    transform: rotate(0.3deg);
+  }
+}
+.dragging {
+  opacity: 0.4;
+  transform: scale(0.98);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  border: 2px dashed #1890ff;
+  cursor: grabbing;
+  position: relative;
+  z-index: 1000;
+  background: #fff;
+}
+
+.draggableQuestion {
+  cursor: grab;
+}
+
+.draggableQuestion:active {
+  cursor: grabbing;
+}

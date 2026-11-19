@@ -1,0 +1,118 @@
+.feedbackBox {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  /* gap: 2vw; */
+  height: 7vh;
+  width: 24%;
+  min-height: 0;
+  min-width: 0;
+  background-color: white;
+  border-radius: 15px;
+  padding: 4px 8px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.feedbackBox:not(.inactive):hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+
+.feedbackBox.inactive {
+  opacity: 0.65;
+  cursor: default;
+}
+.inactiveOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #fecaca;
+  border-radius: 20px;
+  z-index: 10;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  font-size: 13px;
+  font-weight: 600;
+  color: #dc2626;
+  white-space: nowrap;
+}
+.feedbackHeader {
+  display: flex;
+  padding: 0 4px;
+}
+
+.feedbackTitle {
+  margin: 0;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.2;
+  cursor: pointer;
+  color: #333;
+  transition: all 0.2s ease;
+  padding: 0;
+  border-radius: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  display: block;
+}
+
+.feedbackBox:not(.inactive) .feedbackTitle:hover {
+  background-color: #e9ecef;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dropDownClass {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 18px;
+  line-height: 1;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.categoryDivClass {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 4px 6px;
+  margin: 2px 4px 0;
+  overflow: scroll;
+  min-height: 0;
+  max-height:4vh;
+  flex: 1;
+}
+
+.categoryClass {
+  min-width: fit-content;
+  max-width: 100%;
+  background-color: #eaeaea;
+  border-radius: 10px;
+  font-size: 11px;
+  line-height: 1.3;
+  color: #6e7072;
+  padding: 0 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.feedbackBottom {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-left: 10px;
+  min-height: 0;
+}

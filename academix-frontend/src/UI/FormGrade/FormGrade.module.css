@@ -1,0 +1,139 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  padding-top: 10px;
+  width: 100%;
+}
+
+.gradeRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.select {
+  min-width: 110px;
+}
+
+.select :global(.ant-select-selector) {
+  border-radius: 999px !important;
+  border: 1.5px solid #ece8df !important;
+  background: #faf9f6 !important;
+  font-weight: 700;
+  color: #232b3a;
+  height: 38px;
+  display: flex;
+  align-items: center;
+}
+
+.select :global(.ant-select-selection-item) {
+  line-height: 38px !important;
+  text-align: center;
+}
+
+.outOf {
+  font-weight: 700;
+  color: #8a8f98;
+  font-size: 14px;
+  width: max-content;
+}
+
+.noteRow {
+  width: 100%;
+}
+
+.noteInput {
+  border-radius: 999px !important;
+  border: 1.5px solid #f2ddb0 !important;
+  background: #fffdf6 !important;
+  padding: 8px 16px !important;
+  height: 38px;
+}
+
+.noteInput:focus {
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.15) !important;
+}
+
+.noteDisplay {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #faf9f6;
+  border: 1px solid #ece8df;
+  border-radius: 999px;
+  padding: 6px 14px;
+}
+
+.noteLabel {
+  font-weight: 700;
+  color: #232b3a;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.noteText {
+  font-size: 13px;
+  color: #6e7072;
+  cursor: pointer;
+}
+
+.addNote {
+  border: 1px dashed #f2ddb0;
+  background: #fffaf0;
+  color: #c77f00;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.addNote:hover {
+  background: #fff1d6;
+  transform: translateY(-1px);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.actionBtn:hover {
+  transform: translateY(-1px);
+}
+
+.saveBtn {
+  background: #e6f7f1;
+  color: #1f8a70;
+  border: 1px solid #9fdcc8;
+}
+
+.saveBtn:hover {
+  background: #d3f0e4;
+}
+
+.cancelBtn {
+  background: #fdeaea;
+  color: #c0392b;
+  border: 1px solid #f2b8b8;
+}
+
+.cancelBtn:hover {
+  background: #f8d6d6;
+}

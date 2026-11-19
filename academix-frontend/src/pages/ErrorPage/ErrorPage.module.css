@@ -1,0 +1,524 @@
+/* ============================================================
+   ErrorPage.module.css
+   1) RTL + טקסט מיושר לימין + טקסט מימין / איור משמאל
+   2) אין גלילה בכל מסך (100dvh + overflow hidden + breakpoints)
+   3) כפתורים מעוצבים
+   4) באיור: ה-404 למעלה, הכרטיסיה ישירות מתחתיו (בלי חפיפה)
+   ============================================================ */
+.errPage,
+.errPage *,
+.errPage *::before,
+.errPage *::after { box-sizing: border-box; }
+
+.errPage {
+  --ep-bg: #FBF9F5;
+  --ep-ink: #1F1D1B;
+  --ep-muted: #6B625A;
+  --ep-accent: #E4503A;
+  --ep-accent-dark: #C93A26;
+  --ep-amber: #F7A823;
+  --ep-line: #E8E2D9;
+
+  direction: rtl;              /* כל ה-HTML בעברית, מיושר לימין */
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;            /* מחייב: בלי גלילה */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 2.5vw, 40px);
+  background:
+    radial-gradient(1100px 560px at 85% -10%, rgba(247,168,35,.14), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(228,80,58,.10), transparent 55%),
+    var(--ep-bg);
+  font-family: system-ui, "Segoe UI", "Heebo", "Rubik", sans-serif;
+  color: var(--ep-ink);
+}
+
+/* ---------- מסגרת / רשת: טקסט מימין, איור משמאל ---------- */
+.frame {
+  width: min(1280px, 100%);
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); /* RTL: טור 1=ימין */
+  gap: clamp(20px, 4vw, 56px);
+  align-items: center;
+}
+
+/* ============================================================
+   בלוק הטקסט (ימין)
+   ============================================================ */
+.copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 1.6vh, 20px);
+  text-align: right;
+}
+
+.eyebrow {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--ep-line);
+  color: var(--ep-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+.eyebrow i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ep-accent);
+  box-shadow: 0 0 0 4px rgba(228, 80, 58, .14);
+}
+
+.h1 {
+  margin: 0;
+  font-size: clamp(26px, 3.8vw, 52px);
+  line-height: 1.14;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  text-align: right;
+}
+.ours {
+  display: block;
+  color: var(--ep-accent);
+  background: linear-gradient(120deg, var(--ep-accent), var(--ep-amber));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.lead {
+  margin: 0;
+  font-size: clamp(13px, 1.5vw, 16px);
+  line-height: 1.8;
+  color: var(--ep-muted);
+  text-align: right;
+}
+.greetName { color: var(--ep-ink); }
+
+/* ---------- כרטיס "מה עושים" ---------- */
+.todo {
+  background: #fff;
+  border: 1px solid var(--ep-line);
+  border-radius: 20px;
+  padding: clamp(12px, 1.6vh, 20px) clamp(14px, 2vw, 24px);
+  box-shadow: 0 12px 32px -20px rgba(31, 29, 27, .4);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.todo h2 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  text-align: right;
+}
+
+.todo ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.todo li {
+  counter-increment: step;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: #F6F1E9;
+  border: 1px solid #F0E9DF;
+  font-size: 13px;
+}
+.todo li::before {
+  content: counter(step);
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid var(--ep-line);
+  color: var(--ep-accent);
+  font-size: 11px;
+  font-weight: 800;
+}
+.todo li p { margin: 0; display: inline; }
+.todo li p b { color: var(--ep-ink); }
+.todo li p span { color: var(--ep-muted); }
+
+.contact {
+  background: #FEF3E7 !important;
+  border-color: #F6DDB8 !important;
+  gap: 12px !important;
+  flex-wrap: wrap;
+}
+.chatLink {
+  color: var(--ep-accent-dark);
+  font-weight: 700;
+  font-size: 12.5px;
+  text-decoration: none;
+  border-bottom: 1px dashed currentColor;
+}
+.chatLink:hover { color: var(--ep-accent); }
+
+/* ---------- פרטים + כפתור העתקה ---------- */
+.details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  border-top: 1px dashed var(--ep-line);
+  padding-top: 10px;
+}
+.dwrap { min-width: 0; }
+.dcap {
+  margin: 0 0 4px;
+  font-size: 11px;
+  color: var(--ep-muted);
+}
+.dl {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+.dl > div { display: flex; gap: 6px; font-size: 12px; }
+.dt { color: var(--ep-muted); font-weight: 600; white-space: nowrap; }
+.dd {
+  color: var(--ep-ink);
+  font-weight: 700;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  direction: ltr;      /* URLs/קודים בשורה רגילה */
+  unicode-bidi: embed;
+}
+
+.copyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--ep-line);
+  background: #fff;
+  color: var(--ep-ink);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform .18s ease, color .18s ease,
+              border-color .18s ease, background .18s ease;
+}
+.copyBtn:hover {
+  border-color: var(--ep-accent);
+  color: var(--ep-accent);
+  transform: translateY(-1px);
+}
+.copyBtnOk {
+  background: #E8F6EC;
+  border-color: #3FA35B;
+  color: #1E7A3C;
+}
+
+/* ============================================================
+   כפתורי פעולה (יפים + רספונסיביים)
+   ============================================================ */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: clamp(10px, 1.3vh, 14px) clamp(16px, 2vw, 24px);
+  border-radius: 14px;
+  font-size: clamp(13px, 1.3vw, 14.5px);
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition: transform .18s ease, box-shadow .18s ease,
+              background .18s ease, color .18s ease,
+              border-color .18s ease;
+}
+.btn .ic { transition: transform .18s ease; }
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+.btn:focus-visible {
+  outline: 3px solid rgba(228, 80, 58, .35);
+  outline-offset: 2px;
+}
+
+.primary {
+  background: linear-gradient(180deg, #F0573F, #D63D26);
+  color: #fff;
+  box-shadow: 0 10px 22px -10px rgba(214, 61, 38, .75),
+              inset 0 1px 0 rgba(255, 255, 255, .25);
+}
+.primary:hover {
+  box-shadow: 0 16px 30px -12px rgba(214, 61, 38, .85),
+              inset 0 1px 0 rgba(255, 255, 255, .25);
+}
+.primary .ic { transform: scaleX(-1); } /* חץ ← ל-"חזרה" ב-RTL */
+
+.ghost {
+  background: #fff;
+  border-color: var(--ep-line);
+  color: var(--ep-ink);
+  box-shadow: 0 4px 14px -12px rgba(31, 29, 27, .5),
+              inset 0 1px 0 #fff;
+}
+.ghost:hover {
+  border-color: var(--ep-accent);
+  color: var(--ep-accent);
+  box-shadow: 0 10px 24px -12px rgba(228, 80, 58, .4);
+}
+
+.ic { flex: 0 0 auto; }
+
+/* ============================================================
+   האיור "404" (שמאל)
+   עמודה: ה-404 למעלה, הכרטיסיה ישירות מתחתיו
+   ============================================================ */
+.art {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(6px, 1vh, 14px);
+  min-height: 240px;
+  padding: clamp(10px, 2vh, 22px) 0;
+}
+
+.q, .dot { position: absolute; display: block; z-index: 0; }
+.q1 {
+  width: clamp(120px, 15vw, 210px);
+  height: clamp(120px, 15vw, 210px);
+  background: linear-gradient(135deg, rgba(247, 168, 35, .9), rgba(247, 168, 35, .5));
+  border-radius: 32px;
+  transform: rotate(12deg);
+  top: 0;
+  right: 2%;
+}
+.q2 {
+  width: clamp(80px, 10vw, 150px);
+  height: clamp(80px, 10vw, 150px);
+  background: linear-gradient(135deg, rgba(228, 80, 58, .85), rgba(228, 80, 58, .45));
+  border-radius: 24px;
+  transform: rotate(-14deg);
+  bottom: 2%;
+  left: 4%;
+}
+.dot { border-radius: 50%; background: var(--ep-accent); }
+.d1 { width: 16px; height: 16px; top: 16%; left: 12%; background: var(--ep-amber); }
+.d2 { width: 10px; height: 10px; bottom: 22%; right: 8%; }
+.d3 { width: 7px; height: 7px; top: 10%; right: 44%; background: var(--ep-amber); }
+
+.code {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(96px, 13.5vw, 200px);   /* ← הוגדל מ-150 ל-178 */
+  font-weight: 900;
+  line-height: .92;
+  letter-spacing: -.04em;
+  color: var(--ep-ink);
+  user-select: none;
+}
+.code span { line-height: 1; }
+.zero {
+  width: .6em;
+  height: .6em;
+  margin: 0 .05em;
+  filter: drop-shadow(0 14px 24px rgba(31, 29, 27, .16));
+}
+.m {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: spin 22s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.task {
+  position: relative;
+  z-index: 1;
+  width: min(320px, 88%);
+  background: rgba(255, 255, 255, .92);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--ep-line);
+  border-radius: 20px;
+  padding: 14px 16px;
+  box-shadow: 0 18px 40px -20px rgba(31, 29, 27, .5);
+  animation: float 5s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+.taskH { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ep-muted);
+}
+.crumb i { width: 6px; height: 6px; border-radius: 50%; background: var(--ep-accent); }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #F8E6DF;
+  color: var(--ep-accent-dark);
+}
+.task h3 {
+  margin: 8px 0 10px;
+  font-size: 15px;
+  line-height: 1.3;
+  text-align: right;
+}
+.task h3 small {
+  display: block;
+  font-size: 10px;
+  color: var(--ep-muted);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.track { display: flex; flex-direction: column; gap: 6px; }
+.st {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--ep-muted);
+}
+.st b {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #D8D0C6;
+}
+.st.done b { background: #3FA35B; }
+.st.done { color: var(--ep-ink); }
+.st.now b {
+  background: var(--ep-accent);
+  box-shadow: 0 0 0 4px rgba(228, 80, 58, .15);
+}
+.st.now { color: var(--ep-ink); font-weight: 700; }
+.st.now em {
+  font-style: normal;
+  font-size: 10px;
+  color: var(--ep-accent-dark);
+  margin-right: auto;
+}
+.fb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--ep-line);
+}
+.av {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ep-amber), var(--ep-accent));
+  display: grid;
+  place-items: center;
+  color: #fff;
+}
+.fb p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: right;
+  color: var(--ep-ink);
+}
+.fb p small {
+  display: block;
+  font-size: 10px;
+  color: var(--ep-muted);
+  margin-bottom: 1px;
+}
+.taskF {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--ep-line);
+  font-size: 11px;
+  color: var(--ep-muted);
+}
+
+/* ============================================================
+   רספונסיביות — תמיד בלי גלילה
+   ============================================================ */
+@media (max-width: 880px) {
+  .frame { grid-template-columns: 1fr; align-content: center; gap: 18px; }
+  .art { display: none; }           /* מסכים צרים: מסתירים את האיור */
+  .copy { max-width: 560px; margin-inline: auto; }
+}
+
+@media (max-height: 640px) {
+  .errPage { padding: 14px 18px; }
+  .code { font-size: clamp(76px, 12vw, 128px); line-height: .96; }  
+  .art { min-height: 180px; gap: 10px; }
+  .todo { padding: 10px 12px; gap: 7px; }
+  .todo h2 { font-size: 12px; }
+}
+
+/* מתח לבנייה כשאין גובה: מסתירים את האיור ועוברים לעמודה אחת */
+@media (max-width: 880px), (max-height: 560px) {
+  .art { display: none; }
+  .frame { grid-template-columns: 1fr; align-content: center; }
+}
+
+/* גובה ממש קטן (למשל מובייל לרוחב): רק המהות נשארת */
+@media (max-height: 480px) {
+  .todo,
+  .details,
+  .eyebrow { display: none; }
+  .copy { gap: 8px; }
+  .h1 { font-size: clamp(22px, 6vh, 32px); }
+  .lead { font-size: clamp(11px, 2.6vh, 14px); line-height: 1.6; }
+  .actions { justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .m { animation: none; }
+  .task { animation: none; }
+}

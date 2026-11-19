@@ -1,0 +1,48 @@
+.headerContainer {
+    /* height: 20%; */
+    display: flex;
+    justify-content: space-between;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2d3748;
+}
+
+.inputBtnDiv {
+    display: flex;
+    width: 30%;
+    justify-content: end;
+    align-items: center;
+}
+
+.btnClass {
+    border-radius: 20px;
+    color: white;
+    background-color: black;
+}
+
+.inputClass {
+    height: 3.5vh;
+    border-radius: 30px;
+    width: 50%;
+    direction: ltr;
+}
+
+.feedbacksContainer {
+    max-height: 80%;
+    overflow-y: auto;
+}
+
+.feedbacksWarp {
+    direction: rtl;
+    padding-right: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1vw;
+    justify-content: flex-start;
+    max-height: 40vh;
+    overflow-y: auto;
+    padding-bottom: 20px;
+}

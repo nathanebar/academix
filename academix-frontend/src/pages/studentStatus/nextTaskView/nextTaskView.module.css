@@ -1,0 +1,173 @@
+.container {
+  /* מרווח רגיל, בלי border-top של 7px */
+  margin-bottom: 16px;
+  direction: rtl;
+  font-family: var(--font-family, "Rubik", "Heebo", system-ui, sans-serif);
+   align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+ 
+}
+
+/* ── כרטיס המשימה ─────────────────────────────── */
+.dayTaskContainer {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  padding: 10px 12px;
+  background: #ffffff;
+  border: 1px solid #e6e9ef;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(31, 35, 40, 0.04);
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  width: 80%;
+  align-items: center;
+  justify-content: center;
+}
+
+.dayTaskContainer:hover {
+  box-shadow: 0 4px 14px rgba(31, 35, 40, 0.08);
+  transform: translateY(-1px);
+}
+
+/* ── קוביית הזמן ──────────────────────────────── */
+.timeCube {
+  flex: 0 0 58px;
+  width: 58px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: 6px 4px;
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.timeBar {
+  flex: 0 0 auto;
+  width: 5px;
+  height: 42px;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.timeCubeDay {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  /* color: #fff; */
+  direction: ltr;
+  letter-spacing: 0.3px;
+}
+
+.timeCubeHour {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(0, 0, 0, 0.12);
+  padding: 2px 6px;
+  border-radius: 5px;
+  direction: ltr;
+}
+
+/* ── התוכן ────────────────────────────────────── */
+.content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.rowTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.name {
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #1f2328;
+}
+
+.lockIcon {
+  color: #b0863a;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.rowGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.group {
+  font-size: 12px;
+  color: #8a93a2;
+  font-weight: 500;
+}
+
+.rowBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 2px;
+}
+
+.rangeTime {
+  font-size: 11px;
+  font-weight: 500;
+  color: #aeb6c2;
+  direction: ltr;
+}
+
+.badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 1px 8px;
+  border-radius: 20px;
+  background: rgba(111, 128, 158, 0.12);
+  color: #5b6472;
+}
+
+/* ── מצב ריק ──────────────────────────────────── */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 18px 16px;
+  border: 1px dashed #d9dee6;
+  border-radius: 12px;
+  background: #fafbfc;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 22px;
+  color: #b6bdc8;
+}
+
+.emptyTitle {
+  font-weight: 600;
+  font-size: 14px;
+  color: #5b6472;
+}
+
+.emptySubtitle {
+  font-size: 12px;
+  color: #9aa3b0;
+}

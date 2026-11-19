@@ -1,0 +1,89 @@
+.mainContainer {
+  width: 100%;
+  /* min-height: 100vh; */
+  max-height: 84vh;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  box-sizing: border-box;
+  justify-content: flex-start;
+  align-content: flex-start;
+}
+
+.cardContainer {
+
+}
+
+.firstDiv {
+  width: 100%;
+  min-height: 20vh;
+  display: flex;
+  gap:1.5vw;
+  /* background: yellowgreen; */
+  justify-content: space-between;
+}
+
+.secondDiv {
+  width: 65%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+height: 59vh;
+  gap: 10px;
+  /* background: yellow; */
+}
+
+.thirdDiv {
+  width: 100%;
+  height: 23vh;
+  /* max-height: 28vh; */
+  display: flex;
+  justify-content: space-between;
+}
+
+.headerWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1vh;
+}
+
+.gradeStageBtn {
+  background-color: rgb(228, 217, 197);
+  font-weight: 800;
+}
+
+.gradeStagesModal {
+  background-color: transparent;
+}
+
+.gradeStagesText {
+  margin: 0;
+  font-size: 16px;
+  color: gray;
+  font-weight: bold;
+}
+
+.addNewGradeStageWrapper {
+  width: 100%;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.addNewGradeStageInput {
+  width: 20vw;
+}
+
+.existingGradeStagesWrapper {
+  min-height: 40vh;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.empty {
+  background-color: transparent;
+}

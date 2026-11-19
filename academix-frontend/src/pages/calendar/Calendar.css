@@ -1,0 +1,85 @@
+/* סגנון לחצני החצים */
+.fc-toolbar .fc-button {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  margin: 0 4px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.fc-toolbar .fc-button:hover {
+  background-color: #0056b3;
+}
+
+/* סגנון חץ "הקודם" ו"הבא" */
+.fc-toolbar .fc-button-prev,
+.fc-toolbar .fc-button-next {
+  background-color: #f8f9fa;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.fc-toolbar .fc-button-prev:hover,
+.fc-toolbar .fc-button-next:hover {
+  background-color: #e9ecef;
+}
+.fc-daygrid-day {
+background: white;
+
+}
+
+.fc-daygrid-day-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  font-weight: bold;
+}
+
+
+.fc th {
+  background: white;
+  border-bottom: none;
+
+}
+
+
+
+.fc .fc-timegrid-slot {
+  height: 20px !important; /* Réduit la hauteur de chaque slot */
+}
+
+.fc .fc-timegrid-slot-lane {
+  height: 20px !important;
+}
+
+.fc .fc-timegrid-slot-minor {
+  height: 20px !important;
+}
+
+/* Optionnel: réduire l'espace entre les événements */
+.fc .fc-timegrid-event {
+  min-height: 20px;
+}
+
+/* Si vous voulez des slots encore plus petits */
+.fc .fc-timegrid-slot-frame {
+  height: 20px !important;
+}
+
+.fc-timegrid-now-indicator-line {
+  border-color: #e74c3c !important;
+  border-width: 3px !important;
+}
+
+.fc-timegrid-now-indicator-arrow {
+  border-color: #e74c3c !important;
+  border-top-color: transparent !important;
+  border-bottom-color: transparent !important;
+  border-width: 8px 10px 8px 0 !important;
+}
+
+

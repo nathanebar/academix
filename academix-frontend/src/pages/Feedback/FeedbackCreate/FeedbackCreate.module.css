@@ -1,0 +1,178 @@
+.container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 2vh;
+  direction: rtl;
+}
+
+.header {
+  row-gap: 2vh;
+  width: 46vw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.accessibilityContainer {
+  display: flex;
+  align-items: center;
+  gap: 1vw;
+  margin-bottom: 1vh;
+  direction: rtl;
+}
+
+.headerTitle {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.catagoryContainer {
+  width: 40vw;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 14px;
+}
+
+.questionInput {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.categoryItem {
+  display: flex;
+  margin-bottom: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.addCategoryRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+  width: 100%;
+}
+
+.buttonContainer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.gradeContainer {
+  width: 100%;
+  display: flex;
+}
+
+.gradOptionItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.optionContainer {
+  width: 65%;
+  flex-direction: column;
+}
+
+.ratingTable {
+  display: flex;
+  text-align: center;
+  background: #F4F1EB;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.levelColumn {
+  transition: all 0.2s ease;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+}
+
+.levelColumn:hover {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.selectedLevel {
+  background-color: #fff3e0;
+  border-width: 2px;
+}
+
+.selectedLevelTitle {
+  font-weight: bold;
+}
+
+.optionItem:hover {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-radius: 20px;
+}
+
+.optionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.optionItem {
+  font-size: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.optionItemC {
+  font-size: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.optionItem.selected {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .ratingTable {
+    flex-direction: column;
+  }
+  
+  .levelColumn {
+    min-width: 100%;
+  }
+}
+
+.levelTitle {
+  cursor: pointer;
+  background: #F4F1EB;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.selectedLevelTitle {
+  background-color: #E0D7C3;
+  color: white;
+}
+
+.ratingByGrade {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60%;
+}

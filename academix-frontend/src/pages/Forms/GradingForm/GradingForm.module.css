@@ -1,0 +1,27 @@
+.member_compact {
+  width: 58.5%;
+  margin: 0 auto 1.5vh;
+  padding: 6px 12px;
+  background: #fff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #e8e8e8;
+}
+
+.back_btn {
+  color: #9ca3af;
+  font-size: 0.75rem;
+}
+
+.back_btn:hover {
+  color: #374151;
+  background: #f3f4f6;
+}
+
+.member_compact_name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #374151;
+}

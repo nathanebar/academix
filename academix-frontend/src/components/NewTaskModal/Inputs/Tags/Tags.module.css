@@ -1,0 +1,52 @@
+.wrapper {
+  min-height: 5vh;
+  width: 33.5vw;
+  background-color: white;
+  margin-top: 1vh;
+  display: flex;
+  align-items: center;
+  padding-right: 1vw;
+  padding-left: 0.5vw;
+  border-radius: 20px;
+  gap: 10px;
+}
+
+.site-tag-plus,
+.site-tag-plus_locked {
+  height: 3vh;
+  width: 5.5vw;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  border-radius: 20px !important;
+  transition: all 0.3s ease;
+}
+
+.site-tag-plus:hover {
+  color: blue;
+  border-color: blue;
+}
+
+.wrapper :global(.ant-tag) {
+  border-radius: 20px !important;
+  padding: 4px 12px !important;
+  margin: 0 !important;
+}
+
+.wrapper :global(.ant-select-selector) {
+  border-radius: 20px !important;
+}
+
+.wrapper :global(.ant-select-dropdown) {
+  border-radius: 16px !important;
+  overflow: hidden;
+}
+
+.wrapper :global(.ant-select-dropdown .ant-input) {
+  border-radius: 12px !important;
+}
+
+.wrapper :global(.ant-tag-close-icon) {
+  border-radius: 50%;
+}

@@ -1,0 +1,14 @@
+.mainContainer {
+  width: 60%;
+  margin: 0 auto;
+  margin-top: 1vh;
+  overflow-y: auto;
+  min-height: 70vh;
+}
+.buttonsDiv {
+  height: 6vh;
+  width: 55%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

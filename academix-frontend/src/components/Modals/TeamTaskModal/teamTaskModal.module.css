@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  height: 100%;
+  gap: 3vh 1vw;
+  justify-content: space-around;
+}
+
+.isAnswerTagTrue {
+  background-color: rgb(199, 239, 227);
+  color: rgb(71, 198, 164);
+  border-radius: 5px;
+
+  width: 2.5462962962962963vw;
+  text-align: center;
+  justify-self: start;
+  white-space: nowrap;
+}
+.isAnswerTagFalse {
+  justify-self: start;
+  background-color: rgb(255, 220, 216);
+  color: rgb(252, 91, 72);
+  border-radius: 5px;
+  width: 100%;
+  min-width: 2.7696759259259259vw;
+  text-align: center;
+  white-space: nowrap;
+}

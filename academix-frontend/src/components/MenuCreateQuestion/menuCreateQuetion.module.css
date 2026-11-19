@@ -1,0 +1,39 @@
+.menu {
+  position: absolute;
+  left: -4vw;
+  bottom: 0vh;
+  background-color: white;
+  border-radius: 10px;
+  width: 3vw;
+  z-index: 1000;
+  border: 1px solid #c1c1c1 !important;
+}
+.button {
+  background-color: transparent !important;
+  outline: none !important;
+  border: none !important;
+  width: 30vw;
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  justify-self: center;
+}
+.menu > * > * > * {
+  width: 1vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.menu > li {
+  width: 1vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+:global(.ant-menu-item-selected) {
+  background-color: transparent !important;
+  color: black;
+}
+:global(.ant-menu-item-icon + span) {
+  display: none;
+}

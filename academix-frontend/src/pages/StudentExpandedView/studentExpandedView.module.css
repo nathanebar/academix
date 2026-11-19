@@ -1,0 +1,389 @@
+/* ============================================================
+   StudentExpandedView — עיצוב קומפקטי, חוסך מקום
+   ============================================================ */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  padding: 14px 16px;
+  background: #f6f4f1;
+  direction: rtl;
+  font-family: "Segoe UI", "Assistant", "Heebo", system-ui, sans-serif;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* ---------- Header קומפקטי ---------- */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid #ece8e2;
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-shadow: 0 1px 2px rgba(38, 36, 31, 0.05);
+  flex-shrink: 0;
+}
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ece8e2;
+  border-radius: 8px;
+  background: #f0eeea;
+  color: #5b6472;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+
+.backBtn:hover { background: #e4e0da; color: #26241f; }
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 800;
+  font-size: 15px;
+  flex-shrink: 0;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+.headerInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.studentName {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: #26241f;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.studentMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.metaBadge {
+  background: #f0eeea;
+  color: #5b6472;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.infoIcon {
+  color: #a79f97;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 6px;
+  border-radius: 8px;
+}
+
+.infoIcon:hover { background: #f0eeea; }
+
+/* ---------- גריד ראשי: 2 עמודות ---------- */
+.layoutGrid {
+  display: grid;
+  grid-template-columns: minmax(240px, 300px) 1fr;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+@media (max-width: 900px) {
+  .layoutGrid {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+}
+
+.sideCol,
+.mainCol {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  height: 100%;
+}
+
+/* ---------- פאנל ---------- */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #ece8e2;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 1px 2px rgba(38, 36, 31, 0.04);
+  min-height: 0;
+}
+
+/* עמודה שמאלית: הלו"ז תופס את רוב הגובה, המשימה הבאה תחתון */
+.sideCol .panel:first-child {
+  flex: 1;
+  min-height: 0;
+}
+
+.sideCol .panel:last-child {
+  flex-shrink: 0;
+}
+
+/* עמודת חריגות ממלאת את כל הגובה */
+.mainCol > .panel {
+  flex: 1;
+  min-height: 0;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.panelTitle {
+  font-weight: 700;
+  font-size: 14px;
+  color: #26241f;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.panelTitle::before {
+  content: "";
+  width: 4px;
+  height: 14px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #d98e7e, #e9bcae);
+}
+
+/* ---------- ניווט תאריך ---------- */
+.dateNav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: #f0eeea;
+  border-radius: 8px;
+  padding: 2px;
+}
+
+.dateNav button {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #5b6472;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.dateNav button:hover { background: #fff; color: #26241f; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+
+.dateLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: #5b6472;
+  min-width: 52px;
+  text-align: center;
+}
+
+/* ---------- טאבים ---------- */
+.tabsBar {
+  display: flex;
+  gap: 4px;
+  background: #f0eeea;
+  border-radius: 10px;
+  padding: 4px;
+  flex-shrink: 0;
+}
+
+.tab {
+  flex: 1;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 7px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6f6961;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.tab:hover { background: #e6e1db; color: #26241f; }
+
+.tabActive {
+  background: #fff;
+  color: #26241f;
+  border-color: #ece8e2;
+  box-shadow: 0 1px 3px rgba(38, 36, 31, 0.12);
+}
+
+.tabCount {
+  font-size: 10px;
+  font-weight: 800;
+  background: #f0eeea;
+  border-radius: 999px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tabActive .tabCount { background: #fff; }
+
+/* ---------- תוכן הטאב: גולל פנימה כדי לא לאבד מקום ---------- */
+.tabContent {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 4px 4px 4px 0;
+  scrollbar-width: thin;
+  scrollbar-color: #d4c8bf transparent;
+}
+
+.tabContent::-webkit-scrollbar { width: 5px; }
+.tabContent::-webkit-scrollbar-track { background: transparent; margin: 12px 0; }
+.tabContent::-webkit-scrollbar-thumb { background: #d4c8bf; border-radius: 99px; }
+
+/* ---------- אייטמים צפופים ---------- */
+.item {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid #ece8e2;
+  border-radius: 10px;
+  background: #fdfcfb;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.item:hover {
+  border-color: #d8cfc7;
+  box-shadow: 0 4px 10px -8px rgba(38, 36, 31, 0.18);
+}
+
+.itemBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  min-width: 0;
+}
+
+.itemRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.itemTitle {
+  font-weight: 600;
+  color: #26241f;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itemTime {
+  font-size: 11px;
+  color: #8a857d;
+  background: #f0eeea;
+  padding: 2px 7px;
+  border-radius: 999px;
+  white-space: nowrap;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.itemSub {
+  font-size: 11px;
+  color: #9a948b;
+}
+
+.itemFooter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pendingTag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #c25757;
+  background: #fdeeee;
+  border: 1px solid #f3cfd0;
+  border-radius: 999px;
+  padding: 2px 9px;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+
+.emptyBlock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 12px;
+  color: #9a948b;
+  font-size: 12px;
+  text-align: center;
+  border: 1px dashed #ddd7cf;
+  border-radius: 10px;
+  background: #fbfaf8;
+}
+
+/* הבטיח שהקומפוננטות הפנימיות לא יתפזרו */
+.panel > * {
+  min-height: 0;
+}

@@ -1,0 +1,16 @@
+/* RTL : survol = élévation + fond légèrement teinté */
+.fm-row:hover {
+    background: #f4f9ff !important;
+    box-shadow: 0 6px 18px rgba(35, 80, 140, 0.08);
+  }
+  
+  .fm-row:hover .fm-chevron {
+    transform: translateX(4px);  /* RTL : la flèche "avance" vers la gauche */
+    color: #2b6fe0;
+  }
+  
+  /* Focus clavier (accessibilité) */
+  .fm-row:focus-visible {
+    outline: 2px solid #2b6fe0;
+    outline-offset: -2px;
+  }

@@ -1,0 +1,93 @@
+.mainContainer {
+ /* width: 80vw; */
+ height: 100%;
+ transform: rotate(0edg);
+ display: flex;
+ flex-direction: column;
+ margin-top: 16px;
+ /* background: yellow; */
+ /* justify-content: space-between; */
+}
+
+.firstDiv {
+  width: 100%;
+  /* height: 28vh; */
+  display: flex;
+  /* justify-content: space-between; */
+  /* background: yellow; */
+}
+.secondDiv{
+  display: flex;
+  flex-direction: column;
+  width: 49%;
+  justify-content: space-between;
+  height: 46vh;
+}
+.thirdDiv {
+  width: 100%;
+  gap: 10px;
+  max-height:28vh;
+  display: flex;
+  
+  max-height:28vh;
+}
+/* 
+.thirdDiv > .leftSide  { flex: 0 0 46%; }   */
+/* .thirdDiv > .rightSide { flex: 0 0 53%; } */
+
+/* (אופציונלי) אם תרצו שהקצבה תישמר גם ב‑flex‑grow/shrink */
+.thirdDiv > .leftSide,
+ .thirdDiv > .rightSide { 
+  /* מונע פריסת יתר כאשר יש overflow */
+  min-width: 0;
+}
+
+.headerWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.gradeStageBtn {
+  background-color: rgb(228, 217, 197);
+  font-weight: 800;
+}
+.gradeStageBtnCommand {
+  background-color: black;
+  color: white;
+  font-weight: 800;
+}
+.gradeStagesModal {
+  background-color: transparent;
+}
+
+.gradeStagesText {
+  margin: 0;
+  font-size: 16px;
+  color: gray;
+  font-weight: bold;
+}
+
+.addNewGradeStageWrapper {
+  width: 100%;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.addNewGradeStageInput {
+  width: 20vw;
+}
+
+.existingGradeStagesWrapper {
+  min-height: 40vh;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.empty {
+  background-color: transparent;
+}

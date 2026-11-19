@@ -1,0 +1,365 @@
+.container {
+  width: 95%;
+  height: 100%;
+  display: flex;
+  direction: rtl;
+  justify-content: center;
+  flex-direction: column;
+}
+.headerContainer {
+  display: flex;
+  width: 90%;
+  align-items: center;
+}
+
+.missionButton {
+  margin-right: 1vw;
+  width: 5vw;
+  height: 3.5vh;
+  border-radius: 20px;
+  font-weight: 600;
+  color: gray;
+  background: #f4f1eb;
+  border: 1px solid #ced4da;
+}
+.missionButton:hover {
+  transform: scale(1.05);
+  color: gray !important;
+  background: #f4f1eb !important;
+  border: 1px solid #ced4da !important;
+}
+
+.userNavigationContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navButton {
+  padding: 8px 12px;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  min-width: 40px;
+}
+
+.navButton:hover:not(:disabled) {
+  background-color: #e9ecef;
+  transform: scale(1.05);
+}
+
+.navButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.select {
+  width: 100%;
+  border-radius: 20px;
+}
+
+.userSelector {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  padding: 10px;
+  background-color: #ffffff;
+  border-radius: 58px;
+  border: 1px solid #e9ecef;
+  width: 35%;
+  direction: rtl;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.userName {
+  font-weight: bold;
+  color: #212529;
+  font-size: 16px;
+}
+
+.userId {
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.selectContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.selectLabel {
+  font-weight: 500;
+  color: #495057;
+  font-size: 14px;
+}
+
+.inputContainer {
+  display: flex;
+  align-items: center;
+}
+
+.inputContainer .ant-input {
+  width: 100%;
+}
+
+.userAssignmentContainer {
+  height: 100%;
+  width: 100%;
+  direction: rtl;
+}
+
+.categoriesSection {
+  width: 40%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-start;
+  margin-top: 25px;
+}
+
+.commentContainer {
+  background: white;
+  width: 80%;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 15px;
+}
+.commentContainerView {
+  background: white;
+  padding: 20px;
+  width: 65%;
+  border-radius: 10px;
+  margin-top: 15px;
+}
+
+.categorie {
+  padding: 4px 6px;
+  border: 1px solid rgb(202, 202, 202);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  word-break: break-word;
+  text-align: center;
+  flex: 0 0 auto;
+  font-size: 12px;
+  height: 30px;
+  box-sizing: border-box;
+  cursor: pointer;
+  background: #e6e1d8;
+}
+.categorieView {
+  padding: 4px 6px;
+  border: 1px solid rgb(202, 202, 202);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  word-break: break-word;
+  text-align: center;
+  flex: 0 0 auto;
+  font-size: 12px;
+  height: 30px;
+  box-sizing: border-box;
+  cursor: pointer;
+  background: #e6e1d8;
+}
+
+.categorie:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.improvement {
+  background-color: #ffdcd8;
+
+}
+
+.preservation {
+  background-color: #c7efe3;
+
+}
+
+.questionsSection {
+  margin-top: 10px;
+  background: white;
+  width: 80%;
+  padding: 20px;
+  border-radius: 10px;
+}
+.ratingOptionsContainer {
+  gap: 15px;
+
+  width: 80%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+
+  display: flex;
+}
+.ratingOptionsContainerView {
+  width: 80%;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.ratingOptionItem {
+  padding: 6px 8px;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 20px;
+  text-align: center;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 5vw;
+  height: 2vh;
+  max-width: 10vw;
+}
+
+.ratingOptionItem:hover {
+  background-color: #e9ecef;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.ratingOptionItemView {
+  padding: 4px 6px;
+  background-color: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 20px;
+  text-align: center;
+  font-size: 12px;
+  transition: all 0.2s ease;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 5vw;
+  height: 3vh;
+  max-width: 10vw;
+}
+
+.ratingOptionItem.selected {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+.selectedOption {
+  background-color: #e6f7ff;
+  border: 1px solid #1890ff;
+  font-weight: bold;
+}
+
+.selectedOption span {
+  background-color: #1890ff !important;
+}
+.saveButtonContainer {
+  margin-top: 10px;
+}
+.relevant_missions2 {
+  display: flex;
+  width: 100%;
+  direction: rtl;
+  flex-direction: column;
+  margin-top: 2vh;
+}
+
+.wrapper {
+  margin: 24px 0;
+}
+.heading {
+  margin-bottom: 12px;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.question-card {
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+  padding: 12px;
+}
+.question-card p {
+  margin: 0;
+}
+
+.categoriesSection {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.groupTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0.5rem 0;
+  color: #333;
+}
+
+.groupList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px; 
+  width: 100%;
+}
+
+.imporveDiv {
+  width: 10vw;
+  padding: 5px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: small;
+  border: 2px solid rgb(216, 213, 213);
+}
+
+.imporveText {
+  border-radius: 20px;
+  padding: 5px 10px 5px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  
+} 
+.futureTaskTag {
+  margin-right: 1vw;
+  min-width: 8vw;
+  height: 3.5vh;
+  border-radius: 20px;
+  font-weight: 600;
+  color: gray;
+  background: #f4f1eb;
+  border: 1px solid #ced4da;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  padding: 0 15px;
+  text-align: center;
+  white-space: nowrap;
+}

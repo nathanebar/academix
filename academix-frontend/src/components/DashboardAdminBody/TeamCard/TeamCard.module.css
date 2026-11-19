@@ -1,0 +1,50 @@
+.warp {
+  display: flex;
+  max-width: 14.5vw;
+  height: 57px;
+  width: 15vw;
+  border: 1px solid #ececec;
+  border-radius: 20px;
+  align-items: center;
+  margin-bottom: 10px;
+  direction: rtl;
+  cursor: pointer;
+
+}
+.container {
+  display: flex;
+  max-width: 14.5vw;
+  height: 5.5vh;
+  width: 15vw;
+  justify-content: space-between;
+  padding: 2px;
+  align-items: center;
+}
+.usersDiv {
+  direction: ltr;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-top: 8px;
+ 
+}
+
+.usersDiv > * {
+  position: relative;
+  z-index: 1;
+  margin-right: -20px;
+}
+
+.teamCount {
+  border-radius: 50%;
+  width: 2vw;
+  height: 4vh;
+  background-color: #6de1e3;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}

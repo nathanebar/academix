@@ -1,0 +1,11 @@
+#trash-zone.active-trash {
+  border-color: rgb(0, 0, 0) !important;
+  background-color: #e6e6e6 !important;
+  transform: scale(1.05);
+}
+
+#trash-zone.active-trash:hover {
+  border-color: red !important;
+  background-color: #fff4f4 !important;
+  transform: scale(1.25);
+}

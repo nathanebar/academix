@@ -1,0 +1,85 @@
+/* דרישת הגופן שלך */
+@font-face {
+  font-family: "myFont";
+  src: url("../src/fonts/NotoSansHebrew-VariableFont_wdth,wght.ttf")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  /* overflow-x: hidden; */
+  background-color: #f8f6f2;
+}
+
+* {
+  font-family: "myFont", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif !important;
+}
+
+.ant-btn,
+.ant-input,
+.ant-select,
+.ant-table,
+.ant-modal,
+.ant-dropdown,
+.ant-menu,
+.ant-form,
+.ant-card,
+.ant-pagination,
+.ant-breadcrumb,
+.ant-tabs,
+.ant-steps,
+.ant-alert,
+.ant-badge,
+.ant-calendar,
+.ant-time-picker,
+.ant-date-picker,
+.ant-slider,
+.ant-switch,
+.ant-checkbox,
+.ant-radio,
+.ant-input-number,
+.ant-rate,
+.ant-tree,
+.ant-tree-select,
+.ant-cascader,
+.ant-transfer,
+.ant-select-dropdown,
+.ant-popover,
+.ant-tooltip,
+.ant-message,
+.ant-notification,
+.ant-progress,
+.ant-tag,
+.ant-avatar,
+.ant-collapse,
+.ant-descriptions,
+.ant-statistic,
+.ant-timeline,
+.ant-skeleton,
+.ant-empty,
+.ant-result,
+.ant-spin,
+.ant-back-top,
+.ant-affix,
+.ant-anchor,
+.ant-layout,
+.ant-grid,
+.ant-row,
+.ant-col,
+.ant-divider,
+.ant-icon,
+.ant-link,
+.ant-text,
+.ant-typography {
+  font-family: "myFont", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif !important;
+}
+* {
+  user-select: none;
+}

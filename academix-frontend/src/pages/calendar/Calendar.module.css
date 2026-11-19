@@ -1,0 +1,548 @@
+.numClass {
+  font-size: xx-small;
+  height: 1vh;
+  border-right: none !important;
+  border-left: none !important;
+  direction: ltr;
+}
+.blockedDay {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(192, 192, 192, 0.3),
+    rgba(192, 192, 192, 0.3) 8px,
+    rgba(220, 220, 220, 0.2) 8px,
+    rgba(220, 220, 220, 0.2) 16px
+  ) !important;
+}
+
+.blockedDay:hover {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(192, 192, 192, 0.5),
+    rgba(192, 192, 192, 0.5) 8px,
+    rgba(220, 220, 220, 0.4) 8px,
+    rgba(220, 220, 220, 0.4) 16px
+  ) !important;
+}
+.today {
+  background-color: inherit !important;
+  border: none !important;
+  color: gray;
+  font-size: small;
+  height: 1vh;
+  border-right: none !important;
+  border-left: none !important;
+  direction: ltr;
+}
+
+:global(.fc .fc-daygrid-day-number) {
+  font-weight: 500;
+}
+
+:global(.fc-col-header-cell) {
+  border-right: none !important;
+  border-left: none !important;
+}
+
+:global(.fc-daygrid-day-events) {
+  max-height: 15vh !important;
+  /* הורדתי כי הפריע בcalendar שבצד */
+  /* overflow-y: auto !important; */
+}
+
+:global(.fc-daygrid-day-frame) {
+  max-height: 8vh !important;
+}
+
+:global(.fc-col-header-cell-cushion) {
+  padding: 10px !important;
+  font-size: larger !important;
+  padding: 0 !important;
+}
+:global(.fc-daygrid-day-events) {
+  margin: 0;
+  overflow-y: auto;
+}
+/* :global(.fc-daygrid-day-events) {
+  margin: 0;
+  height: 30vh;
+  overflow: scroll;
+} */
+:global(.fc-dayGridMonth-view) :global(.fc-daygrid-day-events) {
+  margin: 0;
+  height: 9.8vh;
+  overflow-y: auto;
+}
+:global(.fc-col-header-cell-cushion) {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  font-weight: normal !important;
+  max-width: 5vw;
+}
+
+:global(.fc-timeGridWeek-view .fc-scrollgrid),
+:global(.fc-timeGridDay-view .fc-scrollgrid) {
+  border: none !important;
+}
+
+:global(.fc-timeGridWeek-view .fc-timegrid),
+:global(.fc-timeGridDay-view .fc-timegrid) {
+  border: none !important;
+}
+
+:global(.fc-timeGridWeek-view .fc-timegrid-col) {
+  border-left: 5px solid #c1bcbc !important;
+}
+:global(.fc-day .fc-day-mon .fc-day-disabled .fc-daygrid-day) {
+  display: none !important;
+}
+
+:global(.fc-twoWeeks-view .fc-daygrid-day-events) {
+  max-height: 30vh !important;
+  overflow-y: auto !important;
+}
+
+:global(.fc-twoWeeks-view .fc-daygrid-day-frame) {
+  max-height: 30vh !important;
+}
+
+:global(.fc-twoWeeks-view .fc-daygrid-day) {
+  height: 30vh !important;
+  direction: ltr;
+}
+
+:global(.fc-twoWeeks-view .fc-timegrid-slot) {
+  height: 30vh !important;
+}
+
+:global(.fc) {
+  border-radius: 25px;
+  overflow: hidden;
+  background: white;
+}
+
+:global(.fc-scrollgrid) {
+  border: none !important;
+  justify-content: center !important;
+}
+
+:global(.fc-scrollgrid td:last-child) {
+  border-right: none !important;
+  border-bottom: none !important;
+}
+
+:global(.fc-scrollgrid th:last-child) {
+  border-right: none !important;
+  border-bottom: none !important;
+}
+
+:global(.fc-timeGridWeek-view .fc-timegrid-event) {
+  border-radius: 0 0 20px 20px;
+  background: white !important;
+  border: #eaeaea solid 1px !important;
+}
+
+:global(.fc-timeGridDay-view .fc-timegrid-event) {
+  border-radius: 20px 0 0 20px;
+  background: white !important;
+  border: #eaeaea solid 1px !important;
+  /* problem in calendar nathane need to find solution */
+  /* margin-right: 15px; */
+  width: 100%;
+}
+
+:global(.fc-timegrid-slot-label) {
+  display: flex;
+  width: 3vw;
+}
+
+:global(.fc-timeGridDay-view .fc-timegrid-slot-label) {
+  margin-left: 15px !important;
+  justify-content: center !important;
+}
+
+:global(.fc-timegrid-slot-label-frame) {
+  border: none !important;
+}
+:global(.fc th) {
+  border: none !important;
+}
+
+/* events classes here =>>>>>> */
+
+/* Month View */
+.monthTaskContainer {
+  overflow-y: auto;
+  max-height: 3vh;
+  text-overflow: ellipsis;
+  direction: rtl;
+  display: flex;
+  width: 100%;
+  padding-right: 3px;
+
+  border: 1px solid #d9d9d9; /* קו רזה בגוון נשמע */
+  border-radius: 6px; /* פינות רכות */
+  background-color: #fafafa; /* רקע ניטרלי, מושך לעין */
+  transition: all 0.18s ease-in-out;
+}
+
+.monthTaskContainer:hover {
+  border-color: #40a9ff; /* שינוי צבע גבול לתכלת (או צבע מותאם) */
+  background-color: #e6f7ff; /* רקע מעט כחול-לבן */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12); /* הצללה קלה שמרמזת על אינטראקציה */
+  cursor: pointer; /* משדרת “אפשר ללחוץ” */
+}
+
+/* (אופציונלי) אפקט Focus – למשתמשים שמנווטים במקלדת */
+.monthTaskContainer:focus-visible {
+  outline: none;
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.taskDiv {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  direction: rtl;
+}
+
+.monthTaskCircle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  font-size: large;
+  font-weight: bold;
+}
+
+.twoWeeksTaskContainer {
+  width: 100%;
+  height: 8vh;
+  border-radius: 15px;
+  background: #ffffff;
+  border: 2px solid #f4f4f4;
+  margin-bottom: 7px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  direction: rtl;
+  cursor: pointer;
+}
+
+.twoWeeksTaskDiv {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 2vh;
+}
+
+.twoWeeksTaskCircle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.twoWeeksTaskProgress {
+  font-size: 12px;
+  height: 2.8vh;
+  /* width: 6vw; */
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+/* Week View */
+.weekTaskContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  overflow: hidden;
+  direction: rtl;
+  cursor: pointer;
+  /* align-items: center; */
+}
+
+.weeksTaskLine {
+  height: 0.8vh;
+  border-radius: 0 0 20px 20px;
+  z-index: 99;
+}
+
+.weeksTaskHeader {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 15px;
+  color: black;
+  padding: 8px;
+  width: 100%;
+  font-weight: 600;
+}
+
+.weeksTaskBody {
+  color: gray;
+  white-space: normal;
+  word-break: break-word;
+  font-size: 13px;
+  max-height: 55%;
+  width: 100%;
+}
+
+.weeksTaskProgress {
+  font-size: 12px;
+  min-height: 2.8vh;
+  /* width: 6vw; */
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  margin-top: auto;
+}
+
+/* Day View */
+.dayTaskContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  width: 100%;
+  color: black;
+  direction: rtl;
+  cursor: pointer;
+  vertical-align: top;
+}
+.dayTaskContainer:hover {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+
+.dayTaskContainer:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.dayTaskLine {
+  width: 7px;
+  height: 100%;
+  margin: -5px;
+  padding-right: 5px;
+  margin-right: 0px;
+  border-radius: 8px 0 0 8px;
+  z-index: 99;
+  transform-origin: center;
+}
+.dayTaskProgressDiv {
+  /* width: 15%;
+  height: 100%; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* padding-top: 20px; */
+  padding-left: 50px;
+}
+
+.dayTaskProgress {
+  font-size: 12px;
+  height: 2.8vh;
+  /* width: 6vw; */
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.eventClass:hover {
+  background: transparent !important;
+}
+
+.wrapper {
+  direction: rtl;
+  margin: 1rem 0;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.message {
+  padding: 30px 0;
+  font-size: 1.5625rem;
+  color: #000000;
+}
+.add_team_event_button {
+  color: white;
+  background-color: black;
+  width: 7.5rem;
+  height: 2.5rem;
+  top: 1vh;
+}
+.arrowsInput {
+  display: none;
+}
+.teamEvent {
+  width: 10vw;
+  height: 4vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1vw;
+  border: 1px dashed red;
+  border-radius: 30px 0 0 30px;
+  font-size: 1.3rem;
+}
+.icons_container {
+  display: flex;
+  gap: 1vw;
+}
+.color-picker-container {
+  display: flex;
+  justify-content: center;
+}
+
+.color-preview {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.color-preview:hover {
+  transform: scale(1.1);
+}
+
+.color-picker-tooltip {
+  padding: 10px;
+}
+
+.color-picker-title {
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.colors-container {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  flex-direction: row-reverse;
+  justify-content: center;
+}
+
+.color-option {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.color-option:hover {
+  transform: scale(1.2);
+}
+
+.color-option,
+.selected {
+  border-color: white;
+  transform: scale(1.2);
+}
+
+
+.headerContainer {
+/*   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0; */
+}
+
+.viewToggle {
+  display: flex;
+  background: #f1f5f9;
+  border-radius: 10px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.toggleBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggleBtn:hover {
+  color: #334155;
+  background: #e2e8f0;
+}
+
+.toggleBtn.active {
+  background: #fff;
+  color: #1e293b;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.splitView {
+  display: flex;
+  height: calc(74vh - 60px);
+  gap: 0;
+}
+
+.calendarSection {
+  flex: 1;
+  overflow: hidden;
+}
+
+.tasksPanel {
+  width: 380px;
+  background: #f8fafc;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+}
+.my-custom-indicator{
+  color: black;
+}

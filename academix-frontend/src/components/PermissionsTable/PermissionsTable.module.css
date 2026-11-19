@@ -1,0 +1,15 @@
+.table::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table::-webkit-scrollbar-track {
+  background: #faf9f9;
+}
+
+.table::-webkit-scrollbar-thumb {
+  background-color: rgb(223, 222, 222);
+  border-radius: 6px;
+}
+.row td {
+   background: linear-gradient( #fd644b 0%, #ff8a70 25%, #ff9e80 50%, #ffb399 75%, #ffc8b4 100%);
+}

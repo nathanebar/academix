@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 15px;
+}
+
+.dateDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 90%;
+}
+
+.couresTitle {
+  font-size: larger;
+  color: black;
+  padding-top: 20px;
+
+}
+
+.courseDate {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.courseBatchTitle {
+  height: 4vh;
+  margin: 0;
+  display: flex;
+  font-weight: 600;
+  color: black;
+  font-size: 1.3rem;
+  align-items: center;
+  cursor: pointer;
+
+}

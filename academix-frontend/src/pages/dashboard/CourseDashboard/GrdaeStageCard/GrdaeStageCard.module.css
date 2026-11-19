@@ -1,0 +1,43 @@
+.wrapper {
+  width: 13vw;
+  height: 4vh;
+  background-color: #f4f1eb;
+  margin-bottom: 2vh;
+  padding-right: 1vw;
+  padding-left: 1vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 25px;
+}
+
+.text {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.inputWrapper {
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+}
+
+.btns {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+.xBtn,
+.editBtn {
+  font-size: large;
+  margin-top: 0.25vh;
+  cursor: pointer;
+}
+
+.xBtn:hover,
+.editBtn:hover {
+  transform: scale(1.2);
+}

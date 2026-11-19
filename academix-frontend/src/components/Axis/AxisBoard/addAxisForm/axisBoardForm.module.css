@@ -1,0 +1,79 @@
+.search-input {
+  height: 3.5vh;
+  width: 11vw;
+  border-radius: 50px;
+}
+.add-button-container {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.add-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  direction: rtl;
+}
+
+.color-picker-container {
+  display: flex;
+  justify-content: center;
+}
+
+.color-preview {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.color-picker-tooltip {
+  padding: 10px;
+}
+
+.color-picker-title {
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.colors-container {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  flex-direction: row-reverse;
+  justify-content: center;
+}
+
+.color-option {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.color-option:hover {
+  transform: scale(1.2);
+}
+
+.color-option,
+.selected {
+  border-color: white;
+  transform: scale(1.2);
+}
+
+.add-axis-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}

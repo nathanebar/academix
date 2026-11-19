@@ -1,0 +1,112 @@
+.headerContainer {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.navButton {
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: large;
+  display: flex;
+  width: 4vh;
+  height: 3.5vh;
+  align-items: center;
+  justify-content: center;
+  color: #6E7072;
+  box-shadow: 0 0 10px rgba(224,219,210,0.9);
+}
+
+.monthYearText {
+  color: #6E7072;
+  margin: 0 10px;
+  font-weight: bold;
+  min-width: 3vw;
+}
+
+.buttonContainer {
+  height: 6vh;
+  width: 40%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ✅ חלק ימני - כל הכפתורים יחד */
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ✅ קו הפרדה בין הקבוצות */
+.separator {
+  width: 1px;
+  height: 24px;
+  background-color: #d9d9d9;
+  margin: 0 8px;
+}
+.viewToggle {
+  display: flex;
+  gap: 6px;
+  direction: rtl;
+  background: #f5f5f5;
+  padding: 4px;
+  border-radius: 10px;
+}
+
+.toggleBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: #595959;
+  transition: all 0.25s ease;
+}
+
+.toggleBtn:hover {
+  background: #e0e0e0;
+  color: #262626;
+}
+
+.toggleBtn.active {
+  background: #e0e0e0;
+  color: #1a1a1a;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ ModeButtons - גם מעוצבים */
+.modeButton {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: #000000;
+  transition: all 0.25s ease;
+}
+
+.modeButton:hover {
+  background: #e0e0e0;
+  color: #262626;
+}
+
+.modeButton.active {
+  background: #e0e0e0;
+  color: #1a1a1a;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

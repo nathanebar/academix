@@ -1,0 +1,199 @@
+.card {
+  background-color: white;
+  border-radius: 20px;
+  /* padding: 20px 20px; */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 262px;
+  min-height: auto;
+  height: 72vh;
+  padding-bottom: 7vh;
+  width: 14vw;
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+  /* background: #d98e7e; */
+    overflow-y: auto;          /* גלילה אנכית כשהתוכן עולה על הגובה */
+  overflow-x: hidden; 
+    scrollbar-width: thin;
+  scrollbar-color: #d8c9c2 transparent; 
+}
+.card::-webkit-scrollbar {
+  width: 6px;                        /* דקה יותר — 10px היה שמן וצורח */
+}
+
+.card::-webkit-scrollbar-track {
+  background: transparent;           /* בלי מסילה צבועה — פחות "קופץ" */
+  margin: 14px 0;                    /* שטח ריק בפינות העליונות/תחתונות → לא נגע ברדיוס */
+}
+
+.card::-webkit-scrollbar-thumb {
+  background: #d8c9c2;               /* בז'-ורדרד עדין, לא סלמון בוהק */
+  border-radius: 99px;               /* אליפסה חלקה */
+  border: 1px solid transparent;
+}
+
+.card::-webkit-scrollbar-thumb:hover {
+  background: #c4b0a7;               /* כהה-טיפה בהובר בלבד */
+}
+.card_expended {
+  background-color: #e6e1d8;
+  height: 77.5vh;
+  border-radius: 20px;
+  padding-bottom: 7vh;
+  padding: 20px 20px;
+  width: 1vw;
+  position: relative;
+}
+
+
+.nameTab {
+  position: sticky;
+  top: 0;                
+  z-index: 100;           
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 20px 20px 20px;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  background: #fff;     
+}
+
+/* נקודת צבע קטנה לפני השם */
+.nameTabDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d98e7e;        
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+/* הטקסט */
+.nameTabText {
+  font-size: 16px;
+  /* font-weight: 600; */
+  color: black;
+  letter-spacing: 0.8px;
+  /* white-space: nowrap; */
+}
+
+.student_name_expended {
+  border-radius: 40px;
+  position: absolute;
+  text-align: center;
+  margin-left: 6vw;
+  height: 2vw;
+  transform: translate(1vw);
+  width: 11vh;
+  color: white;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  transform: translate(0px, -50%);
+}
+
+.expanded_button {
+  position: absolute;
+  margin-right: 12.5vw;
+  margin-top: 0.6vw;
+
+  z-index: 100;
+}
+
+.calendar {
+  /* max-height: 26vh; */
+  /* min-height: 26vh; */
+  /* height: 26vh; */
+  /* background-color: white; */
+  /* border: 1px solid rgb(211, 211, 211); */
+  border-radius: 5px;
+}
+
+.calendar-header {
+  width: 100%;
+  height: 4vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.eventCard {
+  flex: 1;
+  height: 100%;
+  padding: 10px;
+}
+
+.eventGroup {
+  font-weight: bold;
+  margin: 0;
+}
+
+.eventTask {
+  font-size: large;
+  font-weight: bold;
+  margin: 0;
+}
+
+.eventTaskOccurrences {
+  font-size: xx-small;
+  margin: 0;
+}
+
+.my-calendar,
+.fc-timegrid-slot,
+.fc-timegrid-col {
+  font-size: 11px !important;
+}
+
+.dayTaskContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  width: 100%;
+  border-radius: 30px 0 0 30px;
+  border: rgb(187, 187, 187) 1px solid;
+  color: black;
+  direction: rtl;
+  cursor: pointer;
+  background-color: rgb(252, 249, 255);
+}
+
+.dayTaskLine {
+  width: 7px;
+  height: 100%;
+  margin: -5px;
+  padding-right: 5px;
+  margin-right: 0px;
+  border-radius: 8px 0 0 8px;
+  z-index: 99;
+  transform-origin: center;
+}
+
+.dayTaskProgressDiv {
+  width: 15%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
+}
+
+.dayTaskProgress {
+  font-size: 12px;
+  height: 2.8vh;
+  width: 6vw;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+
+
+/* ===== מסך ריק - אין צוות נבחר ===== */
+.empty-state {
+  display: flex;
+  
+}

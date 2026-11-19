@@ -1,0 +1,52 @@
+/* styles/hoef-modal.css */
+
+.hoef-modal .ant-modal-content {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.hoef-modal .ant-modal-close {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.hoef-modal .ant-modal-close:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* שורות בטבלה */
+.hoef-modal .ant-table-thead > tr > th {
+  background: #fafafa;
+  font-weight: 600;
+}
+
+.hoef-modal .ant-table-tbody > tr:hover > td {
+  background: #fafafa !important;
+}
+
+/* שורת פג תוקף */
+.overdue-row > td {
+  background: #fff2f0 !important;
+}
+
+/* שורת היום */
+.today-row > td {
+  background: #fffbe6 !important;
+}
+
+/* Badge animation */
+.hoef-modal .ant-statistic-content-value {
+  font-weight: 700;
+}
+
+/* Button hover effects */
+.hoef-modal .ant-btn-primary:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(114, 46, 209, 0.4) !important;
+}
+
+/* Select dropdown */
+.hoef-modal .ant-select-dropdown {
+  border-radius: 12px;
+  overflow: hidden;
+}

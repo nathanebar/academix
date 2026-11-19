@@ -1,0 +1,436 @@
+.container {
+    width: 55vw;
+    background-color: white;
+    border-radius: 20px;
+    /* height: 26vh; */
+    /* margin-left: 20px; */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+.containerForForms {
+    width: 15vw;
+    background-color: white;
+    border-radius: 20px;
+    /* height: 26vh; */
+    /* margin-left: 20px; */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    /* background: red; */
+}
+
+
+.scoreTitle {
+   /* margin-bottom: 16px; */
+  /* font-size: 16px; */
+  /* font-weight: 600; */
+  color: #6E7072;
+  margin-right: 20px;
+  /* padding: 15px 25px 0px 0px; */
+}
+
+.scoreSubTitle {
+    padding-right: 1vw;
+    margin: 0;
+    color: #6E7072;
+}
+
+.scoreDivUl {
+    display: flex;
+    gap: 30px;
+    justify-content: space-between;
+   
+    
+}
+.scoreDivUlForFeedback{
+ display: flex;   
+ width: 100%;
+}
+
+.scoreUl {
+    list-style: none;
+    padding-right: 2.5vw;
+    font-size: 14px;
+  
+}
+.scoreUlForFeedback {
+    display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  /* max-height: 20vh; */
+  overflow-y: auto;
+  width: 90%;
+  align-content: flex-start;
+  margin-right: 15px;
+}
+
+.scoreUlFeedback {
+    list-style: none;
+    padding-right: 2.5vw;
+    font-size: 14px;
+
+    padding-top: 1vh;
+}
+
+.scoreDot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-left: 8px;
+}
+
+.responsive :focus {
+    outline: none !important;
+}
+
+.responsive>*>*>*>* {
+    /* to make to tooltip without background */
+    background-color: transparent !important;
+}
+
+.pieClass {
+    outline: none;
+    margin: auto;
+}
+
+.tooltipContainer {
+    width: 14vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.tooltHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    background-color: #E6E1D8;
+    height: 5vh;
+    width: 100%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.tooltipFormList {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: white;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.tooltipForm {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
+}
+
+
+/* החלף את הסגנונות הישנים של scoreUl ו-liClass */
+.scoreUl {
+
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+  gap: 8px;
+
+}
+
+.scoreBreakdownItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border-left: 3px solid #e2e8f0;
+  transition: all 0.2s ease;
+
+}
+
+.scoreBreakdownItem.active {
+  background: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.scoreDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.scoreBreakdownLabel {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 500;
+  color: #475569;
+  white-space: nowrap;
+}
+
+.scoreBreakdownCount {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  min-width: 20px;
+  text-align: center;
+}
+
+.feedbackVerticalContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+ 
+}
+.feedbackVerticalItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  width: 130px;
+}
+
+
+.feedbackVerticalItem.active {
+  background: #f1f5f9;
+}
+
+.feedbackVerticalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.feedbackScoreTitle {
+  font-weight: 600;
+  font-size: 14px;
+  color: #1e293b;
+}
+
+.feedbackScoreCount {
+  font-weight: 600;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.feedbackBarContainer {
+  width: 100%;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.feedbackBar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease-in-out;
+  min-width: 2px;
+}
+
+
+.feedbackBarChart {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.barRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.barLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.barDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.barTitle {
+  font-weight: 600;
+  font-size: 13px;
+  color: #374151;
+  white-space: nowrap;
+}
+
+.barContainer {
+  flex: 1;
+  height: 24px;
+  background: #f3f4f6;
+  border-radius: 12px;
+  overflow: hidden;
+  min-width: 100px;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: 12px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 4px;
+}
+
+.barStats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 70px;
+  justify-content: flex-end;
+}
+
+.barCount {
+  font-weight: 700;
+  font-size: 15px;
+  color: #111827;
+}
+
+.barPercentage {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.noFeedbacks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.noFeedbacks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 8px;
+  color: #94a3b8;
+  padding: 20px;
+}
+
+.noFeedbacksIcon {
+  font-size: 40px;
+  color: #e2e8f0;
+  margin-bottom: 8px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.noFeedbacksText {
+  font-size: 15px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.feedbackTooltip {
+  direction: rtl;
+  max-width: 350px;
+}
+
+.tooltipContent {
+  padding: 0;
+  min-width: 280px;
+}
+
+.tooltipHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e8e8e8;
+  font-weight: bold;
+  color: #333;
+}
+
+.tooltipHeader span:last-child {
+  font-size: 12px;
+  color: #666;
+  font-weight: normal;
+}
+
+.tooltipList {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.tooltipItem {
+  padding: 10px 12px;
+}
+
+.tooltipRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.tooltipRow:last-child {
+  margin-bottom: 0;
+}
+
+.tooltipLabel {
+  color: #666;
+  font-size: 12px;
+}
+
+.tooltipValue {
+  color: #333;
+  font-weight: 500;
+  text-align: right;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tooltipGrade {
+  color: #1890ff;
+  font-weight: bold;
+}
+
+.tooltipDivider {
+  height: 1px;
+  background-color: #e8e8e8;
+  margin-top: 10px;
+}
+
+.tooltipList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tooltipList::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.tooltipList::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}

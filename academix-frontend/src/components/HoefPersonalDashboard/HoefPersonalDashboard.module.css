@@ -1,0 +1,602 @@
+/* ==========================================
+   📱 Container & Layout
+   ========================================== */
+
+.container {
+  /* min-height: 100vh; */
+  padding: 24px;
+}
+
+.mainContent {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+
+
+.profileEmail {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 14px;
+}
+
+/* ==========================================
+   🔄 Progress Ring
+   ========================================== */
+
+.progressCard {
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 24px;
+}
+
+.progressHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.progressIcon {
+  font-size: 24px;
+  color: #faad14;
+}
+
+.progressTitle {
+  font-size: 18px;
+  color: #262626;
+}
+
+.progressRingWrapper {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0;
+}
+
+.progressRingContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progressRingSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.progressRingContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.progressRingPercent {
+  font-size: 28px;
+  color: #52c41a;
+  font-weight: 700;
+}
+
+.progressRingLabel {
+  font-size: 12px;
+}
+
+.progressStats {
+  display: flex;
+  justify-content: center;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.progressStatItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.progressStatValue {
+  font-size: 20px;
+}
+
+/* ==========================================
+   📊 Quick Stats Card
+   ========================================== */
+
+.quickStatsCard {
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 24px;
+}
+
+/* ==========================================
+   ⏰ Upcoming Card
+   ========================================== */
+
+.upcomingCard {
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 24px;
+}
+
+.cardTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.upcomingItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.upcomingColor {
+  width: 8px;
+  height: 40px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.upcomingInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.upcomingTaskName {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.upcomingDeadline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+/* ==========================================
+   ⚠️ Overdue Alert
+   ========================================== */
+
+.overdueAlert {
+  border-radius: 16px;
+  margin-bottom: 24px;
+  border: 2px solid #ffccc7;
+  background: #fff2f0;
+}
+
+/* ==========================================
+   📋 Tasks Card
+   ========================================== */
+
+.tasksCard {
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 24px;
+}
+
+.tasksList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.emptyTasks {
+  padding: 48px 0;
+}
+
+/* ==========================================
+   📝 Task Card
+   ========================================== */
+
+.taskCard {
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+}
+
+.taskCard:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.taskCardCompleted {
+  opacity: 0.85;
+}
+
+.taskCardCompleted:hover {
+  transform: none;
+}
+
+.taskCardContent {
+  padding: 20px;
+}
+
+.taskCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.taskInfoSection {
+  flex: 1;
+  min-width: 0;
+}
+
+.taskNameRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.taskName {
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+}
+
+.completedTag {
+  font-size: 12px;
+}
+
+.assignedToRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.assignedIcon {
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+.assignedText {
+  font-size: 13px;
+}
+
+.statusTag {
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+.taskDivider {
+  margin: 16px 0;
+}
+
+.deadlineSection {
+  padding-top: 8px;
+}
+
+.deadlineDisplay {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.deadlineIcon {
+  color: #8c8c8c;
+}
+
+.deadlineText {
+  font-weight: 500;
+}
+
+.deadlineTextOk {
+  color: #1890ff;
+}
+
+.deadlineTextUpcoming {
+  color: #faad14;
+  font-weight: 600;
+}
+
+.deadlineTextUrgent {
+  color: #ff7a45;
+  font-weight: 600;
+}
+
+.deadlineTextOverdue {
+  color: #ff4d4f;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.editDeadlineBtn {
+  font-size: 12px;
+  padding: 0;
+  height: auto;
+  margin-right: 8px;
+}
+
+.deadlineEditor {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.deadlinePicker {
+  min-width: 200px;
+}
+
+/* ==========================================
+   📈 Activity Card
+   ========================================== */
+
+.activityCard {
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.timelineItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ==========================================
+   🔄 Loading & Error States
+   ========================================== */
+
+.loadingContainer,
+.errorContainer,
+.notFoundContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 16px;
+}
+
+/* ==========================================
+   📱 Responsive
+   ========================================== */
+
+@media (max-width: 991px) {
+  .container {
+    padding: 16px;
+  }
+
+  .header {
+    padding: 24px;
+    border-radius: 16px;
+  }
+
+  .profileSection {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profileName {
+    font-size: 24px !important;
+  }
+
+  .taskCardHeader {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .statusTag {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 575px) {
+  .container {
+    padding: 12px;
+  }
+
+  .header {
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  .profileAvatar {
+    width: 64px !important;
+    height: 64px !important;
+  }
+
+  .profileName {
+    font-size: 20px !important;
+  }
+
+  .progressRingWrapper {
+    padding: 8px 0;
+  }
+}
+
+/* ==========================================
+   🔘 Filter Chips - Modern Style
+   ========================================== */
+
+.filterChips {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ==========================================
+   🔘 Filter Tabs - Button Style
+   ========================================== */
+
+.filterTabs {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: #f5f5f5;
+  padding: 4px;
+  border-radius: 12px;
+}
+
+.filterTab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.filterTab:global(.ant-btn-text) {
+  color: #595959;
+}
+
+.filterTab:global(.ant-btn-text:hover) {
+  color: #1890ff;
+  background: rgba(24, 144, 255, 0.1);
+}
+
+.filterTabActive:global(.ant-btn-text) {
+  color: #1890ff;
+}
+
+.filterTabSuccess:global(.ant-btn-text) {
+  color: #52c41a;
+}
+
+.filterCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  background: #8c8c8c;
+  border-radius: 10px;
+}
+
+.filterCountBlue {
+  background: #1890ff;
+}
+
+.filterCountGreen {
+  background: #52c41a;
+}
+
+/* ==========================================
+   📑 Tabs Style
+   ========================================== */
+
+.filterTabs :global(.ant-tabs-nav) {
+  margin-bottom: 0;
+}
+
+.filterTabs :global(.ant-tabs-tab) {
+  padding: 8px 0;
+}
+
+.tabLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.tabCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 22px;
+  padding: 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #595959;
+  background: #f0f0f0;
+  border-radius: 11px;
+  transition: all 0.3s ease;
+}
+
+.tabCountBlue {
+  background: #e6f4ff;
+  color: #1890ff;
+}
+
+.tabCountGreen {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+.filterTabs :global(.ant-tabs-tab-active) .tabCount {
+  background: #1677ff;
+  color: #fff;
+}
+
+.filterTabs :global(.ant-tabs-tab-active) .tabCountBlue {
+  background: #fff;
+  color: #1677ff;
+}
+
+.filterTabs :global(.ant-tabs-tab-active) .tabCountGreen {
+  background: #fff;
+  color: #52c41a;
+}
+
+/* ==========================================
+   🎯 Filter Badges
+   ========================================== */
+
+.filterBadges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filterBadge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  background: #f0f0f0;
+  border-radius: 8px;
+}
+
+.filterBadgeNumber {
+  font-size: 18px;
+  font-weight: 700;
+  color: #262626;
+}
+
+.filterBadgeLabel {
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+/* ==========================================
+   📱 Responsive
+   ========================================== */
+
+@media (max-width: 575px) {
+  .filterChips {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .filterTabs {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .filterBadge {
+    padding: 2px 8px;
+  }
+
+  .filterBadgeNumber {
+    font-size: 14px;
+  }
+}

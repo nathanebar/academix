@@ -1,0 +1,152 @@
+.mainContainer {
+  padding: 20px;
+  direction: rtl;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.titleSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.titleSection h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.taskBadge {
+  font-size: 14px;
+  color: #666;
+  background-color: rgba(236, 229, 214, 1);
+  padding: 4px 12px;
+  border-radius: 15px;
+  align-self: flex-start;
+}
+
+.statsContainer {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.donutCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  min-width: 220px;
+}
+
+.donutTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.donutTotalCount {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+}
+
+.donutLabel {
+  font-size: 14px;
+  color: #666;
+  margin-top: 4px;
+}
+
+/* עיגול */
+.pieContainer {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 8px 0;
+}
+
+.donutCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.donutPercentage {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+}
+
+.legendContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+}
+
+.legendColor {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.legendText {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+}
+
+.tableWrapper {
+  flex: 1;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  padding: 16px;
+}
+
+.emptyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 30vh;
+  gap: 16px;
+}
+
+.emptyIcon {
+  font-size: 48px;
+}
+
+.emptyText {
+  font-size: 18px;
+  color: #666;
+}
+
+.statistics {
+  max-height: 79vh;
+  overflow-y: auto;
+}

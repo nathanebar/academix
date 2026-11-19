@@ -1,0 +1,17 @@
+.switchWrapper {
+  height: 3.25vh;
+  background-color: #d4c7ad;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.option {
+  width: 50%;
+  color: #807c7c;
+  display: flex;
+  justify-content: center;
+  font-weight: 400;
+  border-radius: 30px;
+}

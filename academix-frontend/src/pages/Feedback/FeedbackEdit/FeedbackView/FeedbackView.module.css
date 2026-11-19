@@ -1,0 +1,239 @@
+/* =========================================================================
+   Layout + General
+   ========================================================================= */
+.container{
+    width: 95%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;      /* rtl direction is set on children */
+    direction: rtl;
+    justify-content: center;
+    align-items: center;
+}
+.headerContainer{
+    display: flex;
+    width: 90%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* =========================================================================
+   User selector (ה‑UserSelector הוא אותו רכיב גם ב‑FeedbackForm)
+   ========================================================================= */
+.userNavigationContainer{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.navButton{
+    padding: 8px 12px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all .2s ease;
+    min-width: 40px;
+}
+.navButton:hover:not(:disabled){
+    background-color: #e9ecef;
+    transform: scale(1.05);
+}
+.navButton:disabled{
+    opacity: .5;
+    cursor: not-allowed;
+}
+.select{
+    width: 100%;
+    border-radius: 20px;
+}
+.userSelector{
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    padding: 10px;
+    background:#fff;
+    border-radius:58px;
+    border:1px solid #e9ecef;
+    width:35%;
+    direction: rtl;
+    justify-content: space-around;
+    align-items: center;
+}
+.userInfo{
+    display: flex;
+    flex-direction: column;
+    gap:5px;
+}
+.userName{
+    font-weight:bold;
+    color:#212529;
+    font-size:16px;
+}
+.userId{
+    color:#6c757d;
+    font-size:14px;
+}
+.selectContainer{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+    width:100%;
+}
+.selectLabel{
+    font-weight:500;
+    color:#495057;
+    font-size:14px;
+}
+
+/* =========================================================================
+   Assignment list (חלק שבו מציגים את כל ה‑TaskAssignmentCard‑ים)
+   ========================================================================= */
+.userAssignmentContainer{
+    height:100%;
+    width:100%;
+    direction: rtl;
+}
+
+/* =========================================================================
+   Categories (תגיות של שיפור/שימור)
+   ========================================================================= */
+.categoriesSection{
+    width:40%;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    padding:10px;
+    justify-content:flex-start;
+}
+.categorie{
+    padding:4px 6px;
+    border:1px solid #cacaca;
+    border-radius:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-width:100px;
+    word-break:break-word;
+    text-align:center;
+    flex:0 0 auto;
+    font-size:12px;
+    height:30px;
+    box-sizing:border-box;
+    cursor:pointer;
+    background:#E6E1D8;
+}
+.categorie:hover{
+    transform:translateY(-2px);
+    box-shadow:0 2px 4px rgba(0,0,0,.1);
+}
+.improvement{
+    background-color:#C7EFE3;   /* ירוק – שיפור */
+}
+.preservation{
+    background-color:#FFDCD8;   /* אדום – שמירה */
+}
+
+/* =========================================================================
+   Comment block
+   ========================================================================= */
+.commentContainer{
+    background:#fff;
+    width:80%;
+    border-radius:10px;
+    padding:20px;
+}
+
+/* =========================================================================
+   Questions block
+   ========================================================================= */
+.questionsSection{
+    margin-top:10px;
+    background:#fff;
+    width:80%;
+    padding:20px;
+    border-radius:10px;
+}
+
+/* =========================================================================
+   Rating options (הכפתורים של דירוג / בחירת ציון)
+   ========================================================================= */
+.ratingOptionsContainer{
+    width:80%;
+    margin:10px 0;
+    border-radius:10px;
+    display:flex;
+    gap:15px;
+}
+.ratingOptionItem{
+    padding:6px 8px;
+    background:#f8f9fa;
+    border:1px solid #e9ecef;
+    border-radius:20px;
+    text-align:center;
+    font-size:12px;
+    cursor:pointer;
+    transition:all .2s ease;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-width:5vw;
+    height:2vh;
+}
+.ratingOptionItem:hover{
+    background:#e9ecef;
+    transform:translateY(-2px);
+    box-shadow:0 2px 4px rgba(0,0,0,.1);
+}
+.ratingOptionItem.selected{
+    background:#007bff;
+    color:#fff;
+    border-color:#007bff;
+}
+.selectedOption{
+    background:#e6f7ff;
+    border:1px solid #1890ff;
+    font-weight:bold;
+}
+.selectedOption span{
+    background:#1890ff !important;
+}
+
+/* =========================================================================
+   File‑upload block (UploadFiles) – מציג קבצים מצורפים
+   ========================================================================= */
+.fileContainer{
+    /* אם תחליט להציג קטע נפרד של קבצים, אפשר לשכפל את
+       העיצוב של ה‑UploadFiles כאן, או להסתמך על ה‑CSS של אותו רכיב */
+}
+
+/* =========================================================================
+   Save / Action buttons (ב‑FeedbackView אין שמירה, אבל נשמר לשימוש חוזר)
+   ========================================================================= */
+.saveButtonContainer{
+    margin-top:10px;
+}
+
+/* =========================================================================
+   רזולוציה + התאמות למובייל (אופציונלי)
+   ========================================================================= */
+@media (max-width: 768px){
+    .container{
+        width:98%;
+    }
+    .headerContainer,
+    .userSelector{
+        width:100%;
+        flex-direction:column;
+        align-items:flex-start;
+    }
+    .categoriesSection,
+    .questionsSection,
+    .commentContainer,
+    .ratingOptionsContainer{
+        width:100%;
+    }
+}
+
+

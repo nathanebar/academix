@@ -1,0 +1,42 @@
+.wrapper {
+  min-height: 5vh;
+  width: 33vw;
+  border-radius: 20px;
+  padding-left: 1vw;
+  padding-right: 1vw;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1vh;
+}
+
+.right,
+.left {
+  width: 45%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 10px;
+  margin-left: 10px;
+}
+
+.header {
+  color: #818486;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.btn{
+    background-color: #E8E1D3;
+    color: #9fa0a0 !important;
+    font-size: .75rem;
+}
+.timeDisplay{
+  font-weight: bold;
+  font-size: 0.8rem;
+  color:#806638 ;
+  padding: 0.5vh;
+  direction: rtl;
+}

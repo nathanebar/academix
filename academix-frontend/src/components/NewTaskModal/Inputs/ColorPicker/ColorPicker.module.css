@@ -1,0 +1,43 @@
+.wrapper {
+  min-height: 7vh;
+  width: 33.5vw;
+  background-color: white;
+  margin-top: 1vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding-right: 1vw;
+  padding-left: 0.5vw;
+  padding-bottom: 12px;
+  border-radius: 20px;
+}
+.colors-container {
+  padding-left: 1rem;
+  padding-right: 1.25rem;
+  height: 4vh;
+  width: 35vw;
+  border-radius: 20px;
+  border: none !important;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  flex-direction: row-reverse;
+  justify-content: center;
+}
+.color-option {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.color-option:hover {
+  transform: scale(1.2);
+}
+
+.selected {
+  border-color: rgb(206, 206, 206);
+  border: 1px solid;
+  transform: scale(1.4);
+}

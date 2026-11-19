@@ -1,0 +1,33 @@
+.userDiv{
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+.userImg{
+    height: 3.5rem;
+    width: 3.5rem;
+    border-radius: 50%;
+    background-position: center;
+    background-size: cover;
+}
+.userDeatiles{
+    background-color:rgba(244, 241, 235, 1) ;
+    height: 43px;
+    border-radius: 40px;
+    color: rgba(110, 112, 114, 1);
+    min-width: 348px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-right: 1vw;
+}
+
+.buttons{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5vh;
+}
+.deleteReasonButton:hover{
+    transform: scale(1.2);
+}

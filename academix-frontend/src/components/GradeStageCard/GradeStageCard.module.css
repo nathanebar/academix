@@ -1,0 +1,96 @@
+.wrapper {
+  border-radius: 20px;
+  padding: 20px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 262px;
+  flex-shrink: 0;
+  background-color: rgb(202, 181, 144);
+}
+
+.name {
+  background-color: rgb(170, 146, 105);
+  width: 96%;
+  height: 3vh;
+  display: flex;
+  align-items: center;
+  padding-right: 10px;
+  margin-bottom: 2vh;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 20px;
+}
+
+.tasksWrapper {
+  background-color: white;
+  min-height: 5vh;
+  max-height: 62vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 1vh;
+  border-radius: 20px;
+  overflow-y: auto;
+}
+
+.taskCard {
+  margin-bottom: 1vh;
+}
+.axis-card {
+  border-radius: 20px;
+  padding: 20px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 262px;
+  flex-shrink: 0;
+}
+.expand-button {
+  display: flex;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  z-index: 10;
+  transition: background-color 0.3s;
+}
+
+.expand-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.wrapper {
+  position: relative;
+}
+.wrapper:hover .expand-button {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+.axis-card-not-expansed {
+  cursor: pointer;
+  background-color: #e2c58f;
+  border-radius: 20px;
+  padding: 20px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 15px;
+  height: 65vh;
+}
+
+.axis-rotate-not-expansed {
+  transform: rotate(270deg);
+}
+.axis-title-not-expansed {
+  color: white;
+  font-weight: bold;
+  padding: 7px;
+  border-radius: 20px;
+  display: flex;
+  position: fixed;
+  transform: translate(0px, -50%);
+}

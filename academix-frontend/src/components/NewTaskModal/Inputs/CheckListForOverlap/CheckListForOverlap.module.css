@@ -1,0 +1,148 @@
+.wrapper {
+  min-height: 17vh;
+  margin-top: 1vh;
+  border-radius: 15px;
+  background-color: #f4f1eb;
+}
+
+.header {
+  width: 94%;
+  height: 3.5vh;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  margin-top: 1vh;
+  position: sticky;
+  top: 1vh;
+  z-index: 2;
+  background-color: #f4f1eb;
+}
+
+.header_text {
+  width: 8vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #9ea3a8;
+  font-size: 0.93rem;
+  font-weight: 600;
+}
+
+.content {
+  overflow-y: auto;
+  min-height: 15vh;
+  max-height: 30vh;
+}
+
+.content::-webkit-scrollbar {
+  -webkit-appearance: none !important;
+  width: 6px !important;
+  overflow: scroll !important;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: rgb(199, 199, 199) !important;
+  border-radius: 20px !important;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: rgb(107, 107, 107) !important;
+}
+
+.content::-webkit-scrollbar-track {
+  background: transparent !important;
+  border-radius: 10px !important;
+}
+
+.addRowBtn {
+  background-color: #ece5d6;
+}
+
+.newRowInput {
+  width: 28.5vw;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.rowLine {
+  background-color: white;
+  margin-top: 1vh !important;
+  margin-bottom: 1vh !important;
+  height: 3.5vh;
+  width: 90%;
+  padding-left: 1.5vw;
+  padding-right: 0.5vw;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1.5px solid #ece5d6;
+  border-radius: 20px;
+}
+
+.checkboxWrapper {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  margin-top: 0.5vh;
+}
+
+.checkboxInput {
+  display: none;
+}
+
+.customCheckboxLabel {
+  width: 20px;
+  height: 20px;
+  border: 1.75px solid #707070;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  margin-right: 8px;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.checkboxInput:checked + .customCheckboxLabel {
+  background-color: white;
+}
+
+.innerCircle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  background-color: #000000;
+  border-radius: 50%;
+}
+
+.progress-container-fluid {
+  width: 92%;
+  height: 10px;
+  margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  margin-top: 0.5vh;
+  padding-bottom: 0.5vh;
+}
+
+.progress-container {
+  width: 90%;
+  height: 5px;
+  margin: 0 auto;
+  background-color: #d2e7f3;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: #a7d2c4;
+  border-radius: 10px;
+  transition: width 0.3s ease-in-out;
+}

@@ -1,0 +1,15 @@
+.color{
+    width: 0.5vw;
+    height: 0.5vw;
+    border-radius: 50%;
+}
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 85%;
+  height: 3vh;
+  border-radius: 25.5px;
+  background-color: rgba(244, 241, 235, 1);
+  margin: 10px;
+}

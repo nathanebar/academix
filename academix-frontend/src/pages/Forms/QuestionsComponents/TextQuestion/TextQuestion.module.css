@@ -1,0 +1,35 @@
+/* TextQuestion.module.css */
+.card {
+  background: #ffffff;
+  border: 1px solid #ece8df;
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: 0 4px 18px rgba(35, 43, 58, 0.05);
+  direction: rtl;
+}
+
+.question {
+  font-size: 16px;
+  font-weight: 700;
+  color: #232b3a;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.textarea {
+  background: #faf9f6 !important;
+  border: 1.5px solid #ece8df !important;
+  border-radius: 12px !important;
+  padding: 12px 14px !important;
+  font-size: 14px;
+  line-height: 1.6;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  color: black !important;
+}
+
+.textarea:focus,
+.textarea:focus-within {
+  border-color: #c77f00 !important;
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.15) !important;
+  background: #fff !important;
+}

@@ -1,0 +1,210 @@
+.exceptionsDiv {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  /* max-width: 600px; */
+  margin: 0 auto;
+
+    /* background: #ffffff; */
+  /* border-radius: 12px; */
+  /* padding: 12px; */
+  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); */
+  border: 1px solid #f3f4f6;
+  width: 55%;
+  /* height: 100%; */
+  overflow: auto;
+  box-sizing: border-box;
+  max-height: 30vh;
+
+  
+}
+
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.headerIcon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: white;
+}
+
+.title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.exceptionsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  /* max-height: 500px; */
+  /* overflow-y: auto; */
+}
+
+.teamCard {
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.teamCard:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.teamInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.teamAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+}
+
+.teamName {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.teamStage {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.progressBadge {
+  background: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.progressNumber {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* סטטיסטיקות */
+.statsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.statIcon {
+  font-size: 18px;
+}
+
+.statContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.statLabel {
+  font-size: 11px;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statValue {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.statDivider {
+  width: 1px;
+  height: 32px;
+  background: #e5e7eb;
+  margin: 0 8px;
+}
+
+/* בר התקדמות */
+.progressBarContainer {
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.progressBar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.teamFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stageDots {
+  display: flex;
+  gap: 6px;
+}
+
+.stageDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+.stagesText {
+  font-size: 12px;
+  color: #6b7280;
+}

@@ -1,0 +1,254 @@
+.container {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+
+  overflow-x: auto;
+  /* overflow-y: hidden; */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  
+ /* padding-bottom: 35px; */
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.container::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.container::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+
+.axis-card {
+  background-color: #e6e1d8;
+  border-radius: 20px;
+  padding: 20px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 262px;
+  height: 100%;
+}
+.add-axis-content {
+  text-align: center;
+}
+
+.add-button {
+  font-size: 20px;
+  color: #666;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.add-text {
+  color: #666;
+  font-weight: 500;
+}
+.search-input {
+  height: 3.5vh;
+  width: 11vw;
+  border-radius: 50px;
+}
+.add-button-container {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.add-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  direction: rtl;
+  min-height: 42px;
+}
+
+.color-picker-container {
+  display: flex;
+  justify-content: center;
+}
+
+.color-preview {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.color-preview:hover {
+  transform: scale(1.1);
+}
+
+.color-picker-tooltip {
+  padding: 10px;
+}
+
+.color-picker-title {
+  margin-bottom: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.colors-container {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  flex-direction: row-reverse;
+  justify-content: center;
+}
+
+.color-option {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.color-option:hover {
+  transform: scale(1.2);
+}
+
+.color-option,
+.selected {
+  border-color: white;
+  transform: scale(1.2);
+}
+
+.add-axis-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.search-input {
+  max-width: 180px; 
+}
+
+/* ============================================
+   🔥 DRAG HANDLE - ידית גרירה מעל הציר
+   ============================================ */
+.drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  cursor: grab;
+  color: #9ca3af;
+  background: linear-gradient(
+    180deg,
+    #f9fafb 0%,
+    #f3f4f6 60%,
+    #e5e7eb 100%
+  );
+  border: 1px solid #e5e7eb;
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  transition: all 0.2s ease;
+  opacity: 0;
+  width: 100%;
+  min-height: 32px;
+  box-sizing: border-box;
+  /* 🔥 פייד למטה */
+  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+}
+
+.drag-handle-active {
+  opacity: 1;
+}
+
+.drag-handle-active:hover {
+  background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+  border-color: #93c5fd;
+  color: #3b82f6;
+  box-shadow: 0 -4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.drag-handle-active:active {
+  cursor: grabbing;
+  background: linear-gradient(180deg, #dbeafe 0%, #bfdbfe 100%);
+  transform: scaleY(0.95);
+}
+
+/* שלושה קווים במרכז */
+.drag-handle-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+
+.drag-handle-line {
+  width: 24px;
+  height: 3px;
+  background-color: currentColor;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+.drag-handle-active:hover .drag-handle-line {
+  width: 28px;
+  background-color: #3b82f6;
+}
+
+/* ============================================
+   🔥 ORDER BADGE
+   ============================================ */
+.order-badge {
+  position: absolute;
+  top: -10px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  z-index: 10;
+  border: 3px solid white;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+}
+
+.drag-handle-active:hover ~ .order-badge {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  transform: scale(1.1);
+}
+.floatingButton {
+  /* position: absolute; */
+  /* top: 93vh; */
+  width: 50px;
+  height: 50px;
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.blockColorBtn{
+  background: yellow;
+}

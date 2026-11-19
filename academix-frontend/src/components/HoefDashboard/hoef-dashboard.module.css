@@ -1,0 +1,731 @@
+/* hoef-dashboard.module.css */
+
+/* ==========================================
+   🎯 Container
+   ========================================== */
+.container {
+  padding: 24px;
+  background: #fff;
+  min-height: 100vh;
+}
+
+/* ==========================================
+   🎯 Header Section
+   ========================================== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  direction: rtl;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.headerIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #722ed1;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.headerTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #262626;
+  margin: 0 !important;
+}
+
+.headerSubtitle {
+  font-size: 13px;
+  color: #8c8c8c;
+  margin-top: 2px;
+}
+
+.refreshBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  background: #fff;
+  color: #595959;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.refreshBtn:hover {
+  border-color: #722ed1;
+  color: #722ed1;
+}
+
+/* ==========================================
+   🎯 Stats Row
+   ========================================== */
+.statsRow {
+  direction: rtl;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+width: 100%;
+  margin-bottom: 20px;
+
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #fafafa;
+  border-radius: 6px;
+  /* flex: 1; */
+  min-width: 120px;
+}
+
+.statIcon {
+  font-size: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.statInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.statValue {
+  font-size: 18px;
+  font-weight: 600;
+  color: #262626;
+  line-height: 1.2;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+.statItemPrimary .statIcon {
+  background: #f9f5ff;
+  color: #722ed1;
+}
+
+.statItemDanger .statIcon {
+  background: #fff2f0;
+  color: #ff4d4f;
+}
+
+.statItemWarning .statIcon {
+  background: #fffbe6;
+  color: #faad14;
+}
+
+.statItemSuccess .statIcon {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+
+
+
+/* ==========================================
+   🎯 Progress Section
+   ========================================== */
+.progressSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: #fafafa;
+  border-radius: 8px;
+  /* margin-bottom: 20px; */
+  min-width: 30vw;
+}
+
+.progressIcon {
+  font-size: 20px;
+  color: #722ed1;
+}
+
+.progressInfo {
+  flex: 1;
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.progressTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: #262626;
+}
+
+.progressStats {
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+.progressBar {
+  height: 6px;
+  background: #e8e8e8;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #722ed1, #52c41a);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* ==========================================
+   🎯 Filters Row
+   ========================================== */
+.filtersRow {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.searchWrapper {
+  flex: 1;
+  min-width: 200px;
+}
+
+.datePickerWrapper {
+  min-width: 280px;
+}
+
+.filterSelect {
+  min-width: 140px;
+}
+
+/* ==========================================
+   🎯 Task List (Vertical)
+   ========================================== */
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ==========================================
+   🎯 Task Item
+   ========================================== */
+.taskItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  background: #fff;
+  transition: all 0.2s ease;
+}
+
+.taskItem:hover {
+  border-color: #d9d9d9;
+  background: #fafafa;
+}
+
+.taskItemOverdue {
+  border-color: #ffccc7;
+  background: #fff2f0;
+}
+
+.taskItemOverdue:hover {
+  border-color: #ff4d4f;
+  background: #fff2f0;
+}
+
+.taskItemUpcoming {
+  border-color: #ffe58f;
+  background: #fffbe6;
+}
+
+.taskItemUpcoming:hover {
+  border-color: #faad14;
+  background: #fffbe6;
+}
+
+.taskLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.taskDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.taskInfo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.taskName {
+  font-size: 14px;
+  font-weight: 500;
+  color: #262626;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.taskMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.taskId {
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+.taskCompleted {
+  font-size: 11px;
+  padding: 1px 6px;
+  background: #f6ffed;
+  border: 1px solid #b7eb8f;
+  border-radius: 4px;
+  color: #52c41a;
+}
+
+.taskRight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+/* Assigned To */
+.assignedTo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  background: #f5f5f5;
+  border-radius: 16px;
+}
+
+.assignedAvatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #722ed1;
+  color: #fff;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.assignedName {
+  font-size: 12px;
+  color: #595959;
+}
+
+/* Timeline Progress */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+}
+
+.timelineBar {
+  height: 4px;
+  background: #e8e8e8;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.timelineFill {
+  height: 100%;
+  background: #1890ff;
+  border-radius: 2px;
+}
+
+.timelineFillOverdue {
+  background: #ff4d4f;
+}
+
+.timelineInfo {
+  font-size: 11px;
+  color: #8c8c8c;
+}
+
+/* Status Tag */
+.statusTag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.statusOverdue {
+  background: #fff2f0;
+  color: #cf1322;
+}
+
+.statusUpcoming {
+  background: #fffbe6;
+  color: #d46b08;
+}
+
+.statusOk {
+  background: #f6ffed;
+  color: #389e0d;
+}
+
+.statusNoDeadline {
+  background: #f5f5f5;
+  color: #8c8c8c;
+}
+
+.statusDays {
+  font-size: 11px;
+  color: #8c8c8c;
+  margin-right: 4px;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 4px;
+}
+
+.actionBtn {
+  padding: 4px 8px;
+  border: none;
+  background: transparent;
+  color: #8c8c8c;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actionBtn:hover {
+  background: #f0f0f0;
+  color: #722ed1;
+}
+
+.actionBtnDanger:hover {
+  color: #ff4d4f;
+}
+
+/* ==========================================
+   🎯 Empty State
+   ========================================== */
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  background: #fafafa;
+  border-radius: 8px;
+  border: 1px dashed #d9d9d9;
+}
+
+.emptyIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: #d9d9d9;
+}
+
+.emptyText {
+  color: #8c8c8c;
+  font-size: 14px;
+}
+
+/* ==========================================
+   🎯 Loading State
+   ========================================== */
+.loadingItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.loadingLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.loadingRight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ==========================================
+   🎯 Pagination
+   ========================================== */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-top: 1px solid #f0f0f0;
+  background: #fafafa;
+}
+
+.paginationInfo {
+  font-size: 13px;
+  color: #8c8c8c;
+}
+
+.paginationControls {
+  display: flex;
+  gap: 4px;
+}
+
+.pageBtn {
+  padding: 4px 8px;
+  border: 1px solid #d9d9d9;
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pageBtn:hover {
+  border-color: #722ed1;
+  color: #722ed1;
+}
+
+.pageBtnActive {
+  background: #722ed1;
+  border-color: #722ed1;
+  color: #fff;
+}
+
+/* ==========================================
+   🎯 Drawer
+   ========================================== */
+.drawerContent {
+  padding: 16px 0;
+}
+
+.drawerSection {
+  margin-bottom: 20px;
+}
+
+.drawerSectionTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #8c8c8c;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.drawerInfoRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.drawerInfoRow:last-child {
+  border-bottom: none;
+}
+
+.drawerInfoLabel {
+  font-size: 13px;
+  color: #8c8c8c;
+}
+
+.drawerInfoValue {
+  font-size: 13px;
+  font-weight: 500;
+  color: #262626;
+}
+
+.drawerTimeline {
+  padding: 12px 0;
+}
+
+.drawerTimelineItem {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.drawerTimelineDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.drawerTimelineDotGreen { background: #52c41a; }
+.drawerTimelineDotBlue { background: #1890ff; }
+.drawerTimelineDotRed { background: #ff4d4f; }
+.drawerTimelineDotGray { background: #d9d9d9; }
+
+.drawerTimelineContent {
+  flex: 1;
+}
+
+.drawerTimelineLabel {
+  font-size: 13px;
+  font-weight: 500;
+  color: #262626;
+}
+
+.drawerTimelineValue {
+  font-size: 12px;
+  color: #8c8c8c;
+  margin-top: 2px;
+}
+
+.drawerAssigned {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.drawerAssignedAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #722ed1;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.drawerAssignedInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.drawerAssignedName {
+  font-size: 14px;
+  font-weight: 500;
+  color: #262626;
+}
+
+.drawerAssignedEmail {
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+.drawerActions {
+  margin-top: 20px;
+}
+
+/* ==========================================
+   🎯 Responsive
+   ========================================== */
+@media (max-width: 992px) {
+  .statsRow {
+    gap: 8px;
+  }
+
+  .statItem {
+    min-width: calc(50% - 8px);
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .statsRow {
+    flex-wrap: wrap;
+  }
+
+  .statItem {
+    flex: 1 1 calc(50% - 8px);
+  }
+
+  .filtersRow {
+    flex-direction: column;
+  }
+
+  .searchWrapper,
+  .datePickerWrapper,
+  .filterSelect {
+    width: 100%;
+  }
+
+  .taskItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .taskLeft {
+    width: 100%;
+  }
+
+  .taskRight {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding-top: 12px;
+    border-top: 1px dashed #e8e8e8;
+  }
+
+  .timeline {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .statItem {
+    flex: 1 1 100%;
+  }
+}

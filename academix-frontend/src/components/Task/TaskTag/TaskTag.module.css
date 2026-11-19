@@ -1,0 +1,40 @@
+.task-assigned-full {
+  width: fit-content;
+  border: 2px solid #28a983;
+  font-weight: bold;
+  border-radius: 12px;
+  color: #3bc183;
+  background-color: #e7fcf6;
+  padding: 2px 12px;             
+  line-height: 1.4;            
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.task-assigned-half {
+  width: fit-content;
+  border: 2px solid #f49833;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 12px;
+  color: #ffa52d;
+  background-color: #fff7e2;
+  padding: 2px 12px;             
+  line-height: 1.4;             
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.select {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  padding-right: 18px;
+  min-width: 0;                  
+  overflow: hidden;              
+}

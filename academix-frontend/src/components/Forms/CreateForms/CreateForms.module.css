@@ -1,0 +1,305 @@
+
+.container {
+  /* width: 100%; */
+  min-height: 100vh;
+  display: flex;
+  direction: rtl;
+  align-items: center;
+  flex-direction: column;
+  gap: 18px;
+  padding: 28px 16px 120px; /* padding bas = espace pour la barre flottante */
+  background: radial-gradient(
+      1200px 500px at 100% 0%,
+      rgba(255, 199, 89, 0.14),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 400px at 0% 20%,
+      rgba(179, 143, 64, 0.08),
+      transparent 55%
+    ),
+    #f6f4ef;
+}
+
+/* ---------- Barre d'en-tête (outils + titre) ---------- */
+.header {
+  width: min(760px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ---------- Carte "tóolbar" principale ---------- */
+.editor-shell {
+  width: min(45vw, 100%);
+}
+
+/* Panneau de contrôle (switchs) */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding: 12px 18px;
+  background: #ffffff;
+  border: 1px solid #ece8 DF;
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(35, 43, 58, 0.05);
+  margin-bottom: 16px;
+}
+
+.toolbar-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+}
+
+/* ---------- Carte "héro" : titre + description ---------- */
+.create-form {
+  /* width: 100%; */
+  padding: 26px 28px 22px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid #ece8df;
+  box-shadow: 0 10px 34px rgba(35, 43, 58, 0.07);
+  direction: rtl;
+  margin-top: 0;
+}
+
+.header-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.header-container h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  color: #232b3a;
+  letter-spacing: -0.2px;
+}
+
+.header-container .form-badge {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1f8a70;
+  background: #e6f7f1;
+  padding: 5px 14px;
+  border-radius: 999px;
+}
+
+.input-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Champs titre — modernisés via vars antd, wrappers dédiés */
+.form-title-field {
+  width: 100%;
+}
+.form-title-field input {
+  border-radius: 12px !important;
+  border-color: #e7e2d6 !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #232b3a !important;
+  padding: 10px 14px !important;
+  height: 48px !important;
+}
+
+.form-title-field input:focus {
+  border-color: #f5a623 !important;
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.15) !important;
+}
+
+.TextArea {
+  direction: rtl;
+  width: 100%;
+  min-height: 96px !important;
+  margin-top: 0;
+  display: flex;
+  resize: none !important;
+  border-radius: 12px !important;
+  border-color: #e7e2d6 !important;
+  background-color: #faf9f6 !important;
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 12px 14px !important;
+}
+
+.TextArea:focus {
+  border-color: #f5a623 !important;
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.12) !important;
+  background-color: #ffffff !important;
+}
+
+/* ---------- Zone des questions ---------- */
+.questions-zone {
+  margin-top: 16px;
+}
+
+/* ---------- Bandeau "score max" ---------- */
+.score-banner {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: min(480px, 90%);
+  margin: 6px auto;
+  padding: 12px 22px;
+  background: linear-gradient(90deg, #fdf3df, #fbeeda);
+  border: 1px solid #f2ddb0;
+  border-radius: 999px;
+  color: #7a5b1f;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.score-banner .score-value {
+  font-weight: 800;
+  color: #c77f00;
+  font-size: 16px;
+}
+
+/* ---------- Switchs antd retravaillés ---------- */
+.switch-affix-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5b5f66;
+}
+
+.switch-affix {
+  width: auto;
+}
+
+/* ---------- Champ "score max" ---------- */
+.grade {
+  width: 120px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  border-color: #f2ddb0 !important;
+  background: #fffaf0 !important;
+  color: #7a5b1f !important;
+}
+
+/* ---------- Ruban de sélection admin ---------- */
+.accessibility-panel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  background: #fffdf6;
+  border: 1px dashed #e6d5a8;
+  border-radius: 14px;
+  margin-bottom: 14px;
+  font-size: 13px;
+}
+
+.accessibility-panel .radio-label {
+  font-weight: 700;
+  color: #5b4a24;
+  white-space: nowrap;
+}
+
+/* ---------- Barre d'action flottante ---------- */
+.btnDiv {
+  position: fixed;
+  z-index: 100;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  filter: drop-shadow(0 12px 26px rgba(35, 43, 58, 0.25));
+}
+
+.submit-button {
+  background: linear-gradient(135deg, #232b3a, #151a24) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 999px !important;
+  min-width: 180px;
+  height: 52px;
+  padding: 0 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.submit-button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #2d3de4, #1c2230) !important;
+  box-shadow: 0 14px 30px rgba(35, 43, 58, 0.35);
+}
+
+.submit-button:active {
+  transform: translateY(0);
+}
+
+.submit-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ---------- Bloc "pas d'autorisation" ---------- */
+.cannot-edit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #92400e;
+  background: #fff4e0;
+  border: 1px solid #f59e0b;
+  border-radius: 999px;
+  direction: rtl;
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.18);
+}
+
+.cannot-edit svg {
+  font-size: 17px;
+}
+
+/* ---------- Utility ---------- */
+.scrollableAreaStyle {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 80px;
+}
+
+@media (max-width: 720px) {
+  .header,
+  .editor-shell {
+    width: 100%;
+  }
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .submit-button {
+    min-width: 140px;
+    height: 48px;
+  }
+}

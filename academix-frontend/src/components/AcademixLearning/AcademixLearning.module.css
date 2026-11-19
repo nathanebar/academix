@@ -1,0 +1,77 @@
+.modal {
+  direction: rtl;
+  align-items: center;
+  justify-content: center;
+  width: 85vw;
+  height: 85vh;
+}
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.modal_learning_details {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 30px;
+  gap: 5px;
+  width: 100%;
+  justify-content: start;
+  background-color: white;
+}
+
+.modalRightDiv {
+  border-top-right-radius: 30px;
+  border-bottom-right-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-inline: 3rem;
+  height: 85vh;
+  background-color: rgb(244, 241, 235);  
+}
+
+.modalRightDivTitle {
+  margin-top: 2vh;
+  font-weight: 900;
+  font-size: x-large;
+}
+.separator {
+  margin: 0px;
+  flex-shrink: 0;
+  border-width: thin 0px 0px 0px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.12);
+  width: 65%;
+}
+.modalRightDivParts{
+  height: 90%;
+  width: 100%;
+  font-size: small;
+  gap: 5px;
+}
+.subjects_ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding:2px;
+  height: 90%;
+  font-size: medium;
+  list-style: none;
+}
+.subject{
+  font-size: larger;
+  cursor: pointer;
+}
+.subject:hover{
+ text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2),
+ 0px 6px 12px rgba(0, 0, 0, 0.3),
+ 0px 12px 20px rgba(0, 0, 0, 0.4);
+}
+
+.leftDiv{
+  height: 70vh;
+  width: 75%;
+  margin: 0 auto;
+}
