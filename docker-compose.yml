@@ -1,5 +1,12 @@
 # Infra locale pour Academix : PostgreSQL + MinIO (S3)
 # Usage : docker compose up -d
+# Ports de l'hôte modifiables dans un fichier .env à la racine (voir README) :
+#   POSTGRES_PORT (5432), MINIO_PORT (9000), MINIO_CONSOLE_PORT (9001)
+
+# Image MinIO : minio/minio et minio/mc ne sont plus publiées sur Docker Hub.
+# On utilise l'image Chainguard (contient aussi le client `mc`), épinglée par digest.
+x-minio-image: &minio-image cgr.dev/chainguard/minio@sha256:548147b5fc95a67e3e45285dff7e0e50326c3eb1977c6218039461771156c5e7
+
 services:
   postgres:
     image: postgres:16
@@ -9,7 +16,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: academix_dev
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -19,15 +26,16 @@ services:
       retries: 10
 
   minio:
-    image: minio/minio:RELEASE.2025-04-22T22-12-26Z
+    image: *minio-image
     restart: unless-stopped
-    command: server /data --console-address ":9001"
+    entrypoint: ["/usr/bin/minio"]
+    command: ["server", "/data", "--console-address", ":9001"]
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
     ports:
-      - "9000:9000"   # API S3
-      - "9001:9001"   # Console web
+      - "${MINIO_PORT:-9000}:9000"           # API S3
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"   # Console web
     volumes:
       - miniodata:/data
     healthcheck:
@@ -38,16 +46,16 @@ services:
 
   # Crée le bucket "academix" en lecture publique (le front lit les fichiers en lien direct)
   minio-init:
-    image: minio/mc:RELEASE.2025-04-16T18-13-26Z
+    image: *minio-image
     depends_on:
       minio:
         condition: service_healthy
-    entrypoint: >
-      /bin/sh -c "
-      mc alias set local http://minio:9000 minioadmin minioadmin &&
-      mc mb --ignore-existing local/academix &&
-      mc anonymous set download local/academix
-      "
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - >
+        mc alias set local http://minio:9000 minioadmin minioadmin &&
+        mc mb --ignore-existing local/academix &&
+        mc anonymous set download local/academix
 
 volumes:
   pgdata:

@@ -28,6 +28,19 @@ npm start                       # http://localhost:3000 -> page de connexion
 
 Créer d'autres comptes : `npm run user:create -- <username> <password> [nom] [militaryid]`.
 
+### Ports de l'infra
+Si un port est déjà pris (par exemple un PostgreSQL installé sur Windows occupe 5432), créer un fichier `.env` à la racine du dépôt (ignoré par git) :
+
+```bash
+POSTGRES_PORT=5433
+MINIO_PORT=9000
+MINIO_CONSOLE_PORT=9001
+```
+
+puis reporter les mêmes valeurs dans `academix-backend/.env` (`DB_PORT=5433`, `S3_ENDPOINT=http://localhost:<MINIO_PORT>`) et, si `MINIO_PORT` change, dans `REACT_APP_S3_BASE_URL` du front (`academix-frontend/.env.development.local`).
+
+L'image MinIO est `cgr.dev/chainguard/minio` (épinglée par digest dans `docker-compose.yml`) : `minio/minio` et `minio/mc` ne sont plus publiées sur Docker Hub.
+
 ### Authentification
 | `AUTH_MODE` | Utilisation | Fonctionnement |
 |---|---|---|
