@@ -61,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       },
      selection_type: {
-        type: DataTypes.ENUM("improvement", "preservation", null),
+        type: DataTypes.ENUM("improvement", "preservation"),
         allowNull: true
       },
     },
