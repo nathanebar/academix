@@ -1,35 +1,48 @@
 # Academix
 
-- `academix-backend/` : API Express 5 + Sequelize (PostgreSQL), stockage S3/MinIO, auth NTLM **ou** username/password.
-- `academix-frontend/` : React 18 (Create React App, TypeScript), interface en hébreu (RTL).
-- `docker-compose.yml` : infra locale (PostgreSQL 16 + MinIO).
+**English** · [עברית](README.he.md)
 
-## Lancement local (hors réseau)
+Academix is a course and training management platform (similar to Moodle) with a Hebrew, right-to-left interface.
 
-Prérequis : Node.js ≥ 20, Docker Desktop.
+> **Origin and goal.** Academix comes from a **closed university network with no internet access**. It is being developed and improved outside that network, and the goal is to **redeploy it there** once the changes are done. Everything in this repository must therefore keep working offline: see [Redeploying on the closed network](#redeploying-on-the-closed-network).
+
+## Repository layout
+
+| Path | Content |
+|---|---|
+| `academix-backend/` | REST API: Express 5 + Sequelize 6 (PostgreSQL), S3 / MinIO file storage, NTLM **or** username/password authentication |
+| `academix-frontend/` | Web app: React 18 + TypeScript (Create React App), Ant Design 5, TanStack Query, Zustand |
+| `docker-compose.yml` | Local infrastructure for development: PostgreSQL 16 + MinIO |
+| `CLAUDE.md` | Collaboration rules (ownership zones, git workflow, closed-network constraints) |
+| `RAPPORT.he.md` | Full project review and performance roadmap (Hebrew) |
+
+## Running locally (outside the closed network)
+
+Requirements: Node.js 20 or later, Docker Desktop.
 
 ```bash
-# 1. Infra
-docker compose up -d            # Postgres :5432, MinIO :9000 (console :9001, minioadmin/minioadmin)
+# 1. Infrastructure
+docker compose up -d            # Postgres :5432, MinIO :9000 (console :9001, minioadmin / minioadmin)
 
 # 2. Backend
 cd academix-backend
-cp .env.example .env            # puis mettre un JWT_SECRET aléatoire
-npm install
-npm run db:init                 # crée toutes les tables depuis les models + triggers
-npm run db:seed                 # rôles, système "Academix", utilisateur admin/admin (SYSTEM-ADMIN)
+cp .env.example .env            # then set a random JWT_SECRET
+npm ci
+npm run db:init                 # creates every table from the models, plus the triggers
+npm run db:seed                 # roles, "Academix" system, admin / admin user (SYSTEM-ADMIN)
 npm run dev                     # http://localhost:8007
 
-# 3. Frontend (autre terminal)
+# 3. Frontend (another terminal)
 cd academix-frontend
-npm install                     # .env.development est déjà fourni
-npm start                       # http://localhost:3000 -> page de connexion
+npm ci                          # .env.development is already provided
+npm start                       # http://localhost:3000 -> login page
 ```
 
-Créer d'autres comptes : `npm run user:create -- <username> <password> [nom] [militaryid]`.
+Create more accounts: `npm run user:create -- <username> <password> [name] [militaryid]` (in `academix-backend/`).
 
-### Ports de l'infra
-Si un port est déjà pris (par exemple un PostgreSQL installé sur Windows occupe 5432), créer un fichier `.env` à la racine du dépôt (ignoré par git) :
+### Infrastructure ports
+
+If a port is already in use (for example a PostgreSQL installed on Windows already listens on 5432), create a `.env` file at the root of the repository (ignored by git):
 
 ```bash
 POSTGRES_PORT=5433
@@ -37,45 +50,68 @@ MINIO_PORT=9000
 MINIO_CONSOLE_PORT=9001
 ```
 
-puis reporter les mêmes valeurs dans `academix-backend/.env` (`DB_PORT=5433`, `S3_ENDPOINT=http://localhost:<MINIO_PORT>`) et, si `MINIO_PORT` change, dans `REACT_APP_S3_BASE_URL` du front (`academix-frontend/.env.development.local`).
+Then use the same values in `academix-backend/.env` (`DB_PORT=5433`, `S3_ENDPOINT=http://localhost:<MINIO_PORT>`) and, if `MINIO_PORT` changes, in the frontend's `REACT_APP_S3_BASE_URL` (`academix-frontend/.env.development.local`).
 
-L'image MinIO est `cgr.dev/chainguard/minio` (épinglée par digest dans `docker-compose.yml`) : `minio/minio` et `minio/mc` ne sont plus publiées sur Docker Hub.
+The MinIO image is `cgr.dev/chainguard/minio`, pinned by digest in `docker-compose.yml`: `minio/minio` and `minio/mc` are no longer published on Docker Hub.
 
-### Authentification
-| `AUTH_MODE` | Utilisation | Fonctionnement |
+### Authentication
+
+| `AUTH_MODE` | Used | How it works |
 |---|---|---|
-| `local` | hors réseau | `POST /api/auth/login` vérifie `Users.password` (hash scrypt natif Node), pose les cookies `token` (JWT httpOnly) + `userInfo`. Page de connexion et bouton de déconnexion côté front. |
-| `ntlm` | réseau fermé | `GET /api/auth/ntlm` (express-ntlm sur `NTLM_DOMAIN` / `NTLM_DOMAIN_CONTROLLER`), comportement d'origine. `/api/auth/login` n'existe pas dans ce mode. |
+| `local` | outside the closed network (development) | `POST /api/auth/login` checks `Users.password` (native Node scrypt hash) and sets the `token` (httpOnly JWT) and `userInfo` cookies. The frontend shows a login page and a logout button. |
+| `ntlm` | on the closed network | `GET /api/auth/ntlm` (express-ntlm with `NTLM_DOMAIN` / `NTLM_DOMAIN_CONTROLLER`), the original behavior. `/api/auth/login` does not exist in this mode. |
 
-Le front lit le mode via `GET /api/auth/mode`. `REQUIRE_AUTH=true` impose un JWT valide sur toutes les routes `/api` (désactivé par défaut pour ne pas changer le comportement d'origine).
+The frontend reads the mode from `GET /api/auth/mode`. `REQUIRE_AUTH=true` requires a valid JWT on every `/api` route. It is off by default so that the original behavior does not change.
 
-### Base de données
-Les migrations de `migrations/` sont **incohérentes** : table `TeamCourseBatches` jamais créée, clés étrangères vers des tables créées plus tard, doublons, timestamps invalides, et des tables absentes. Le schéma est donc créé par `npm run db:init` (`sequelize.sync()` à partir des models). Options : `-- --alter` ajuste les tables existantes, `-- --force` **supprime et recrée tout**.
+### Database
 
-### Médias
-Le dossier `academix-frontend/src/media/` n'a pas été extrait. `npm run media:placeholders` génère des images neutres aux chemins attendus (87 fichiers). Il ne remplace jamais un fichier existant : copier les vrais médias par-dessus suffit.
+The migrations in `academix-backend/migrations/` are **inconsistent**: `TeamCourseBatches` is never created, some foreign keys point to tables created later, there are duplicates, invalid timestamps and missing tables. The schema is therefore created by `npm run db:init` (`sequelize.sync()` from the models).
 
-## Redéploiement sur le réseau fermé — checklist
+| Command | Effect |
+|---|---|
+| `npm run db:init` | creates the missing tables only |
+| `npm run db:init -- --alter` | adjusts existing tables to the models (run it after pulling model changes) |
+| `npm run db:init -- --force` | **drops and recreates every table**. Never on a shared or production database |
 
-1. **Dépendances hors ligne** : transférer `node_modules` (même OS et même version de Node que la cible) ou un cache npm / registre interne (Verdaccio). Pour le front, on peut aussi ne transférer que le dossier `build/`.
-2. **ffmpeg** : `@ffmpeg-installer` contient un binaire propre à chaque OS. Si la plateforme diffère, fournir le binaire et définir `FFMPEG_PATH`.
-3. **Backend `.env`** :
+### Media
+
+The `academix-frontend/src/media/` folder was not fully extracted. `npm run media:placeholders` (in `academix-frontend/`) generates neutral images at the expected paths (87 files). It never overwrites an existing file, so copying the real media over them is enough.
+
+## Contributing
+
+Two developers work in parallel, each with their own Claude Code session. The rules are in [`CLAUDE.md`](CLAUDE.md). In short:
+
+- Backend and root files: @nathanebar. Frontend: @shneorshr1. Only edit your own zone.
+- One task = one GitHub issue = one branch (`be/<topic>` or `fe/<topic>`) = one small pull request. `main` is protected.
+- The work plan is tracked in the pinned issue [#23](https://github.com/nathanebar/academix/issues/23).
+
+## Redeploying on the closed network
+
+The target has **no internet access**: everything it needs must be brought in.
+
+1. **Offline dependencies**: transfer `node_modules` (same OS and same Node version as the target), or an npm cache / internal registry (Verdaccio). For the frontend, transferring only the `build/` folder is also enough. Docker is used for local development only; the target does not need it.
+2. **ffmpeg**: `@ffmpeg-installer` contains a binary for one OS. If the platform differs, provide the binary and set `FFMPEG_PATH`.
+3. **Backend `.env`**:
    - `NODE_ENV=production`
    - `AUTH_MODE=ntlm`, `NTLM_DOMAIN`, `NTLM_DOMAIN_CONTROLLER`
    - `HTTPS=true`, `CERT_PATH=certificate/cert.pfx`, `PASSWORD=<passphrase>`
-   - `DB_*` : l'ancienne base tournait probablement sur le port **5433** d'après les logs
-   - `S3_*` (+ `S3_STORAGE_CLASS=STANDARD_IA` si c'était le cas avant)
-   - `CORS_ORIGINS=<url du front>`
-   - `PEOPLE_API_URL` / `PEOPLE_API_COOKIE` pour la recherche annuaire (utiliser un compte de service, ne pas réutiliser le cookie qui était en dur)
-4. **Base existante** : ne pas lancer `db:init -- --force`. `db:init` sans option crée seulement les tables manquantes. Faire un `pg_dump` avant.
-5. **Frontend** : construire avec les variables de la cible, par exemple :
+   - `DB_*`: according to the logs, the old database probably ran on port **5433**
+   - `S3_*` (plus `S3_STORAGE_CLASS=STANDARD_IA` if that was the case before)
+   - `CORS_ORIGINS=<frontend URL>`
+   - `PEOPLE_API_URL` / `PEOPLE_API_COOKIE` for the directory search (use a service account; do not reuse the cookie that used to be hard-coded)
+4. **Existing database**: take a `pg_dump` first. Never run `db:init -- --force`. `db:init` without options only creates missing tables; `db:init -- --alter` applies model changes.
+5. **Frontend**: build with the target's variables, for example:
    `REACT_APP_API_BASE_URL=https://<api>:8007/api REACT_APP_S3_BASE_URL=https://<minio> REACT_APP_PHOTO_API_URL=... REACT_APP_CHAT_URL=... npm run build:prod`
-   Le cookie `userInfo` doit être lisible par le front : servir le front et l'API sur le même hôte, ou via un reverse proxy.
-6. Remettre les vrais médias dans `academix-frontend/src/media/` avant le build.
-7. Mettre un `.env` propre sur la cible et ne pas reprendre `config/config.json`, qui contient d'anciens mots de passe et n'est plus utilisé.
+   The `userInfo` cookie must be readable by the frontend: serve the frontend and the API from the same host, or behind a reverse proxy.
+6. Put the real media back in `academix-frontend/src/media/` before the build.
+7. Use a clean `.env` on the target. Do not reuse `config/config.json`: it contains old passwords and is no longer used.
+8. Check the merged pull requests since the last deployment: each one has a "Closed-network deployment impact" section listing the extra steps it needs (new variables, binaries, database steps).
 
-## Points de sécurité connus (non corrigés)
-- Sans `REQUIRE_AUTH=true`, aucune route `/api/*` n'exige d'authentification.
-- Injection SQL possible : `teamId` est interpolé dans la requête à `src/controllers/taskAssignment.controller.js` (~ligne 1948).
-- `errorHandler` renvoie `error.message` au client ; les appels HTTPS internes utilisent `rejectUnauthorized: false`.
-- `academix-backend/logs/` contient environ 68 Mo de logs de production (IP, usernames, corps de requêtes) : à purger avant tout partage.
+## Known security issues (not fixed yet)
+
+Tracked in the work plan ([#23](https://github.com/nathanebar/academix/issues/23)):
+
+- Without `REQUIRE_AUTH=true`, no `/api/*` route requires authentication; the user identity comes from client headers ([#13](https://github.com/nathanebar/academix/issues/13)).
+- Possible SQL injection: `teamId` is interpolated into the query in `src/controllers/taskAssignment.controller.js` (~line 1948) ([#8](https://github.com/nathanebar/academix/issues/8)).
+- `errorHandler` returns `error.message` to the client; internal HTTPS calls use `rejectUnauthorized: false` ([#15](https://github.com/nathanebar/academix/issues/15)).
+- Production logs (`academix-backend/logs/`, ignored by git) contain IPs, usernames and request bodies: purge them before sharing anything.
