@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { ConfigProvider, Layout, Menu, Modal, Tooltip } from "antd";
 import "./Topbar.css";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -9,12 +9,14 @@ import { useUserStore } from "../../store/userStore";
 import { useSelectionsStore } from "../../store/selectionStore";
 import hiChatLogo from "../../media/icons/hiChatLogo.png";
 import questionLogo from "../../media/icons/question-circle 2.png";
-import AcademixLearning from "../AcademixLearning/AcademixLearning";
 import { LogoutOutlined, QqOutlined } from "@ant-design/icons";
 import { logout } from "../../services/ntlmService";
 import graduateHat from "../../media/svg/graduate-hat.svg";
 
 const { Header } = Layout;
+
+// The tutorial (67 slides, LearningData) is only needed when the user opens it: load it on first open.
+const AcademixLearning = lazy(() => import("../AcademixLearning/AcademixLearning"));
 
 interface TopbarProps {
   isSidebarVisible?: boolean;
@@ -25,6 +27,11 @@ const Topbar: React.FC<TopbarProps> = ({ isSidebarVisible = false }) => {
   const [selectedKey, setSelectedKey] = useState("/");
   const { selectedPermission, permissions } = usePermissionStore();
   const [isOpenLearning, setIsOpenLearning] = useState<boolean>(false);
+  // mounted from the first open on, then kept (same behavior as before for later opens)
+  const [learningLoaded, setLearningLoaded] = useState<boolean>(false);
+  useEffect(() => {
+    if (isOpenLearning) setLearningLoaded(true);
+  }, [isOpenLearning]);
   const [modalOpen, setModalOpen] = useState(false);
   const { user, authMode } = useUserStore();
 
@@ -208,12 +215,16 @@ const Topbar: React.FC<TopbarProps> = ({ isSidebarVisible = false }) => {
           />
         </Header>
       </ConfigProvider>
-      <AcademixLearning
-        isOpen={isOpenLearning}
-        handleClose={() => {
-          setIsOpenLearning(false);
-        }}
-      />
+      {learningLoaded && (
+        <Suspense fallback={null}>
+          <AcademixLearning
+            isOpen={isOpenLearning}
+            handleClose={() => {
+              setIsOpenLearning(false);
+            }}
+          />
+        </Suspense>
+      )}
       <Modal
         title={<div className="modal_title">צור קשר</div>}
         open={modalOpen}
