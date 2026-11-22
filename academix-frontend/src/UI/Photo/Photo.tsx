@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import unknownUserSrc from "../../media/unkownUserPhoto.jpg";
 import { Tooltip } from "antd";
 
@@ -11,121 +11,93 @@ interface Props {
   title?: string;
 }
 
+const TIMEOUT = 2000;
+const DEBOUNCE_DELAY = 300;
+
+// One request per username for the whole session (the same people appear in many lists and pages).
+// A definite answer (photo, or "no photo" = HTTP error) is cached; a network error / timeout is not,
+// so a later render tries again. Blob URLs are kept for the session (small images, one per user).
+const photoCache = new Map<string, Promise<string | null>>();
+
+const fetchPhoto = (username: string): Promise<string | null> => {
+  // Internal photo service (closed network); not configured => default image
+  const photoApi = process.env.REACT_APP_PHOTO_API_URL;
+  if (!photoApi) return Promise.resolve(null);
+
+  const cached = photoCache.get(username);
+  if (cached) return cached;
+
+  const request = (async () => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
+    try {
+      const resp = await fetch(`${photoApi}?username=${encodeURIComponent(username)}`, {
+        signal: controller.signal,
+      });
+      if (!resp.ok) return null;
+      return URL.createObjectURL(await resp.blob());
+    } catch {
+      photoCache.delete(username); // network error / timeout: not a definite answer
+      return null;
+    } finally {
+      clearTimeout(timeoutId);
+    }
+  })();
+  photoCache.set(username, request);
+  return request;
+};
+
 const Photo = React.memo((props: Props) => {
   const [src, setSrc] = useState<string>(unknownUserSrc);
-  const TIMEOUT = 2000;
-  const DEBOUNCE_DELAY = 300;
-  
-  const abortControllerRef = useRef<AbortController | null>(null);
-  const requestIdRef = useRef(0);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const currentBlobUrlRef = useRef<string>(unknownUserSrc);
+  const imgRef = useRef<HTMLImageElement>(null);
+  // Fetch the photo only when the avatar gets near the viewport (long lists, hidden tabs)
+  const [nearViewport, setNearViewport] = useState(false);
 
-  // שחרור blob URL (לא משתנה בין רינדורים)
-  const revokeBlobUrl = useCallback((url: string) => {
-    if (url && url.startsWith('blob:') && url !== unknownUserSrc) {
-    
-      URL.revokeObjectURL(url);
+  useEffect(() => {
+    if (nearViewport) return;
+    const el = imgRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      setNearViewport(true);
+      return;
     }
-  }, []);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setNearViewport(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [nearViewport]);
 
   useEffect(() => {
     if (!props.username) {
-      // שחרור blob אם יש
-      revokeBlobUrl(currentBlobUrlRef.current);
-      currentBlobUrlRef.current = unknownUserSrc;
       setSrc(unknownUserSrc);
       return;
     }
+    if (!nearViewport) return;
 
-    // ביטול בקשות קודמות
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    const currentRequestId = ++requestIdRef.current;
-
-    timeoutRef.current = setTimeout(async () => {
-      if (currentRequestId !== requestIdRef.current) return;
-
-      abortControllerRef.current = new AbortController();
-
-      // Service photo interne (réseau fermé) ; sans configuration => image par défaut
-      const photoApi = process.env.REACT_APP_PHOTO_API_URL;
-      const candidateUrls: string[] = photoApi
-        ? [`${photoApi}?username=${encodeURIComponent(String(props.username))}`]
-        : [];
-
-      const tryFetch = async (url: string): Promise<string | null> => {
-        if (currentRequestId !== requestIdRef.current) return null;
-        
-        try {
-          const timeoutId = setTimeout(() => {
-            abortControllerRef.current?.abort();
-          }, TIMEOUT);
-          
-          const resp = await fetch(url, { signal: abortControllerRef.current!.signal });
-          clearTimeout(timeoutId);
-          
-          if (!resp.ok || currentRequestId !== requestIdRef.current) return null;
-          
-          const blob = await resp.blob();
-          const newBlobUrl = URL.createObjectURL(blob);
-          
-          // בדיקה שהבקשה עדיין רלוונטית
-          if (currentRequestId !== requestIdRef.current) {
-            URL.revokeObjectURL(newBlobUrl);
-            return null;
-          }
-          
-          // שחרור blob ישן לפני שמירת החדש
-          revokeBlobUrl(currentBlobUrlRef.current);
-          
-          currentBlobUrlRef.current = newBlobUrl;
-          setSrc(newBlobUrl);
-          return newBlobUrl;
-        } catch {
-          return null;
-        }
-      };
-
-      for (const url of candidateUrls) {
-        if (currentRequestId !== requestIdRef.current) return;
-        
-        const result = await tryFetch(url);
-        if (result) return;
-      }
-
-      // כל הבקשות נכשלו
-      if (currentRequestId === requestIdRef.current) {
-        revokeBlobUrl(currentBlobUrlRef.current);
-        currentBlobUrlRef.current = unknownUserSrc;
-        setSrc(unknownUserSrc);
-      }
+    let cancelled = false;
+    const timer = setTimeout(() => {
+      fetchPhoto(String(props.username)).then((url) => {
+        if (!cancelled) setSrc(url || unknownUserSrc);
+      });
     }, DEBOUNCE_DELAY);
-
-    // ====== הניקוי הקריטי שהיה חסר! ======
     return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
-      }
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-        abortControllerRef.current = null;
-      }
-      // שחרור blob URL בכל ניקוי!
-      revokeBlobUrl(currentBlobUrlRef.current);
-      currentBlobUrlRef.current = unknownUserSrc;
+      cancelled = true;
+      clearTimeout(timer);
     };
-  }, [props.username, revokeBlobUrl]);
+  }, [props.username, nearViewport]);
 
   return (
     <Tooltip title={props.title}>
       <img
+        ref={imgRef}
+        loading="lazy"
+        decoding="async"
         onClick={props.onClick}
         height={props.height || "40vh"}
         width={props.width || "40vw"}
