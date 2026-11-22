@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const { identifyUsername } = require("../utils/identifyUserName");
 const { verifyPassword } = require("../utils/password");
 const { User } = require("../../models");
+const { SESSION_MAX_AGE_MS } = require("../utils/jwt");
 
 const AUTH_MODE = (process.env.AUTH_MODE || "ntlm").toLowerCase();
 const secureCookies = process.env.HTTPS === "true";
@@ -23,15 +24,17 @@ const issueSession = (res, username, result) => {
       httpOnly: false,
       secure: secureCookies,
       sameSite: "lax",
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: SESSION_MAX_AGE_MS,
     }
   );
 
+  // Both cookies live as long as the JWT (JWT_EXPIRES_IN, default 12h).
   res
     .cookie("token", result?.token, {
       httpOnly: true,
       secure: secureCookies,
       sameSite: "lax",
+      maxAge: SESSION_MAX_AGE_MS,
     })
     .json(result);
 };

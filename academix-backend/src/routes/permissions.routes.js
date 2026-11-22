@@ -5,9 +5,21 @@ const { System } = require('../../models');
 const logger = require('../utils/logger');
 const { catchError } = require('../utils/errorHandler');
 
+// Permissions of the authenticated user (#13).
+router.get("/my", async (req, res) => {
+  if (!req.user) return res.status(401).json({ error: "unauthenticated" });
+  try {
+    res.json(await getPermissionsForUser(req.user.id));
+  } catch (err) {
+    catchError(err, req, res, { function: 'getMyPermissions', userId: req.user.id });
+  }
+});
+
+// Legacy (removed in step 3 of #13): with a valid token, the token's user wins over :userId,
+// so nobody can read another user's permissions anymore.
 router.get("/my/:userId", async (req, res) => {
   try {
-    const userId = Number(req.params.userId) || 3
+    const userId = req.user?.id ?? (Number(req.params.userId) || 3);
     const detailedAssignments = await getPermissionsForUser(userId);
     
     res.json(detailedAssignments);

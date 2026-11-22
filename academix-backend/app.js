@@ -112,13 +112,9 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// Optionnel : exiger un JWT valide sur toutes les routes /api sauf /api/auth
-if (process.env.REQUIRE_AUTH === 'true') {
-  const { validateJWT } = require("./src/controllers/auth");
-  app.use("/api", (req, res, next) =>
-    req.path.startsWith("/auth") ? next() : validateJWT(req, res, next)
-  );
-}
+// Identity from the JWT cookie, active role from X-Role-Assignment-Id, allowed ids checked
+// server-side (#13). With REQUIRE_AUTH=true, every /api route except /api/auth needs a token.
+require("./src/middlewares/auth").installAuth(app);
 
 app.use("/api/systems", systemRoutes);
 app.use("/api/domains", domainRoutes);
