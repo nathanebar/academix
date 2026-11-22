@@ -399,7 +399,7 @@ const FormBody = (props: FormBodyProps) => {
       }
 
       queryClient.refetchQueries({ queryKey: ["form"] });
-      queryClient.refetchQueries({ queryKey: ["UsersInTeamAndTask"] });
+      queryClient.invalidateQueries({ queryKey: ["UsersInTeamAndTask"] });
     } catch (error) {
       Notification({ type: "error", msg: "שמירת המבחן נכשלה" });
     }

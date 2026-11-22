@@ -292,7 +292,7 @@ export default function DayCalendar({
               }
 
 
-              queryClient.refetchQueries({
+              queryClient.invalidateQueries({
   queryKey: ["hoefs", "team", selectedTeam?.id],
 });
               message.success("המשימה שובצה לחופף בהצלחה!");
@@ -603,7 +603,7 @@ export default function DayCalendar({
                     ),
                     // info.event.startStr
                   );
-                  queryClient.refetchQueries({
+                  queryClient.invalidateQueries({
                     queryKey: ["tasks-range"],
                   });
 

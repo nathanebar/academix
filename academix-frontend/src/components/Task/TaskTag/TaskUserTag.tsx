@@ -247,19 +247,19 @@ const TaskUserTag: React.FC<TaskProps> = ({
 
   // Fonction pour recharger les données
   const refetchData = () => {
-    queryClient.refetchQueries({
+    queryClient.invalidateQueries({
       queryKey: ["taskCountByGradeStages"],
     });
-    queryClient.refetchQueries({
+    queryClient.invalidateQueries({
       queryKey: ["taskCountByAxis"],
     });
-    queryClient.refetchQueries({
+    queryClient.invalidateQueries({
       queryKey: ["taskGroupsToCalendar"],
     });
-    queryClient.refetchQueries({
+    queryClient.invalidateQueries({
       queryKey: ["group-tasks"],
     });
-    queryClient.refetchQueries({
+    queryClient.invalidateQueries({
       queryKey: ["tasks-range"],
     });
   };
@@ -750,19 +750,19 @@ export default TaskUserTag;
 //     } else {
 //       setIsCompleted(false);
 //     }
-//     queryClient.refetchQueries({
+//     queryClient.invalidateQueries({
 //       queryKey: ["taskCountByGradeStages"],
 //     });
-//     queryClient.refetchQueries({
+//     queryClient.invalidateQueries({
 //       queryKey: ["taskCountByAxis"],
 //     });
-//     queryClient.refetchQueries({
+//     queryClient.invalidateQueries({
 //       queryKey: ["taskGroupsToCalendar"],
 //     });
-//     queryClient.refetchQueries({
+//     queryClient.invalidateQueries({
 //       queryKey: ["group-tasks"],
 //     });
-//     queryClient.refetchQueries({
+//     queryClient.invalidateQueries({
 //       queryKey: ["tasks-range"],
 //     });
 //   };

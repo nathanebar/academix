@@ -227,7 +227,7 @@ const NewTaskModal = (props: NewMissionProps) => {
     if (!props.editingTask) {
       resetAll();
     }
-    /*    queryClient.refetchQueries({
+    /*    queryClient.invalidateQueries({
       queryKey: ["task-users"],
     }); */
   }, []);
@@ -1076,10 +1076,10 @@ const NewTaskModal = (props: NewMissionProps) => {
           // שמירת נתוני תזמון
 
           await saveSchedulingData(savedTaskId);
-          queryClient.refetchQueries({
+          queryClient.invalidateQueries({
             queryKey: ["group-tasks"],
           });
-          queryClient.refetchQueries({
+          queryClient.invalidateQueries({
             queryKey: ["tasksByGradeStage"],
           });
           queryClient.invalidateQueries({ queryKey: ["surveyDashboard"] });
@@ -1112,10 +1112,10 @@ const NewTaskModal = (props: NewMissionProps) => {
           await saveSchedulingData(res.data.id);
           props.onTasksChanged(res.data);
 
-          queryClient.refetchQueries({
+          queryClient.invalidateQueries({
             queryKey: ["group-tasks"],
           });
-          queryClient.refetchQueries({
+          queryClient.invalidateQueries({
             queryKey: ["tasksByGradeStage"],
           });
           queryClient.invalidateQueries({ queryKey: ["surveyDashboard"] });

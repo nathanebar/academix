@@ -377,7 +377,7 @@ const DroppableCard: React.FC<DroppableCardProps> = ({
     );
     setRemovingId(null);
     if (result.success) {
-      queryClient.refetchQueries({
+      queryClient.invalidateQueries({
         queryKey: ["tasks-range"],
       });
       notification.success({
@@ -1541,7 +1541,7 @@ const HoefOverview: React.FC = () => {
       }
 
       if (successCount > 0) {
-        queryClient.refetchQueries({
+        queryClient.invalidateQueries({
           queryKey: ["tasks-range"],
         });
         notification.success({
@@ -1604,7 +1604,7 @@ const HoefOverview: React.FC = () => {
       );
 
       if (addResult.success) {
-        queryClient.refetchQueries({
+        queryClient.invalidateQueries({
           queryKey: ["tasks-range"],
         });
         notification.success({
@@ -1641,7 +1641,7 @@ const HoefOverview: React.FC = () => {
       );
 
       if (result.success) {
-        queryClient.refetchQueries({
+        queryClient.invalidateQueries({
           queryKey: ["tasks-range"],
         });
         notification.success({

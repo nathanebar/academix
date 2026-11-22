@@ -65,7 +65,7 @@ const GradeStage = (props: GradeStageProps) => {
       //   gradeStageId: res?.data?.id
       // }));
 
-      queryClient.refetchQueries({ queryKey: ["gradeStages"] });
+      queryClient.invalidateQueries({ queryKey: ["gradeStages"] });
       setNewGradeStageName("");
     } else if (res?.status === 401) {
       notification.error({

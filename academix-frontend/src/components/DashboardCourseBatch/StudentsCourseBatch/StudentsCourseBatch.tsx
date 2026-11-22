@@ -236,7 +236,7 @@ const StudentsCourseBatch = (props: StudentsCourseBatchProps) => {
           placement: "top",
           style: { direction: "rtl" },
         });
-        queryClient.refetchQueries({
+        queryClient.invalidateQueries({
           queryKey: ["teamMembers"],
         });
         setResults([]);

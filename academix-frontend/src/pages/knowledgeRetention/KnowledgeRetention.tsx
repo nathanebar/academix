@@ -470,7 +470,7 @@ const KnowledgeRetention = () => {
         onSuccess: () => {
           setIsAddingFolder(false);
           setNewFolderName("");
-          queryClient.refetchQueries({ type: "active" });
+          queryClient.invalidateQueries({ type: "active" });
           message.success("התיקייה נוצרה בהצלחה");
         },
         onError: () => {
@@ -508,7 +508,7 @@ const KnowledgeRetention = () => {
         {
           onSuccess: () => {
             setUploadProgress(100);
-            queryClient.refetchQueries({ type: "active" });
+            queryClient.invalidateQueries({ type: "active" });
             message.success("הקובץ הועלה בהצלחה");
             setTimeout(() => setUploadProgress(0), 500);
           },
@@ -534,7 +534,7 @@ const KnowledgeRetention = () => {
       onOk: () => {
         deleteFile(fileId, {
           onSuccess: () => {
-            queryClient.refetchQueries({ type: "active" });
+            queryClient.invalidateQueries({ type: "active" });
             message.success("הקובץ נמחק בהצלחה");
           },
           onError: () => {
@@ -554,7 +554,7 @@ const KnowledgeRetention = () => {
       onOk: () => {
         deleteFolder(axis.id, {
           onSuccess: () => {
-            queryClient.refetchQueries({ type: "active" });
+            queryClient.invalidateQueries({ type: "active" });
             message.success("הציר נמחק בהצלחה");
           },
           onError: () => {
@@ -584,7 +584,7 @@ const KnowledgeRetention = () => {
         onSuccess: () => {
           setEditingFolderId(null);
           setEditFolderName("");
-          queryClient.refetchQueries({ type: "active" });
+          queryClient.invalidateQueries({ type: "active" });
           message.success("הציר עודכן בהצלחה");
         },
         onError: () => {

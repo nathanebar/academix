@@ -469,8 +469,8 @@ const CreateForms = () => {
     queryClient.invalidateQueries({ queryKey: ["surveyDashboard"] });
     queryClient.invalidateQueries({ queryKey: ["forms"] });
     navigateTimer.current = setTimeout(() => {
-      queryClient.refetchQueries({ queryKey: ["formByFormId"] });
-      queryClient.refetchQueries({ queryKey: ["surveyDashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["formByFormId"] });
+      queryClient.invalidateQueries({ queryKey: ["surveyDashboard"] });
       navigate(
         isSurveyPage ? "/survey/surveyDashboard" : "/forms/formDashboard"
       );
