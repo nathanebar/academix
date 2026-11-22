@@ -21,7 +21,7 @@ import { usePermissionStore } from "../../../store/permissionStore";
 import { useQueryClient } from "@tanstack/react-query";
 import { isUnique } from "../../../utils/checkCategoriesDuplicate";
 import { ROLE_CODE } from "../../../types/types";
-import { isEqual } from "lodash";
+import { isEqual } from "es-toolkit/compat";
 
 const ABOVE_TEAM_COMMANDER_ROLES: ROLE_CODE[] = [
   "COURSE_COMMANDER",

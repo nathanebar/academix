@@ -3,7 +3,7 @@ import axios from "axios";
 import { sha256 } from "js-sha256";
 import { create } from "zustand";
 import { getAudioDurationFromFile } from "../utils/getFileLength";
-import _ from "lodash";
+import { isEqual } from "es-toolkit/compat";
 
 export type Survey = {};
 
@@ -309,7 +309,7 @@ export const updateCheckListToDB = async (
   const strings1 = checkList?.map((i: any) => i?.toDo);
   const strings2 = prevCL?.map((i: any) => i?.todo);
 
-  if (_.isEqual(strings1, strings2) && newCl) {
+  if (isEqual(strings1, strings2) && newCl) {
     return;
   }
   try {

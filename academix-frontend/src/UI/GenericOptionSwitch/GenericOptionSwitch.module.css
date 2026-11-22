@@ -1,0 +1,9 @@
+/* Same rules as the previous styled-components OptionLabel (only these two were active). */
+.option {
+  color: white;
+}
+
+.active {
+  background-color: white;
+  color: black;
+}

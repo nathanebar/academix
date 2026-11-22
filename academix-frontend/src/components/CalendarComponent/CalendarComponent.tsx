@@ -1,16 +1,9 @@
 import { Calendar, ConfigProvider } from "antd";
 import React, { useState } from "react";
 import style from "./CalendarComponent.module.css";
-import moment from "moment";
 import dayjs from "dayjs";
 import he_IL from "antd/locale/he_IL";
 import "dayjs/locale/he";
-import { dateFnsLocalizer } from "react-big-calendar";
-import parse from "date-fns/parse";
-import startOfWeek from "date-fns/startOfWeek";
-import getDay from "date-fns/getDay";
-import { format } from "date-fns";
-import enUS from "date-fns/locale/he";
 import { CaretLeftOutlined, CaretRightOutlined } from "@ant-design/icons";
 import { useSelectionsStore } from "../../store/selectionStore";
 
@@ -34,16 +27,6 @@ const CalendarComponent = (props: Props) => {
 
   function onPanelChange(value: any, mode: any) {}
 
-  const locales = {
-    he: enUS,
-  };
-  const localizer = dateFnsLocalizer({
-    format,
-    parse,
-    startOfWeek,
-    getDay,
-    locales,
-  });
   return (
     <div className={style["site-calendar-demo-card"]}>
       <div style={{ display: "flex" }} className={style["header-calendar"]}>

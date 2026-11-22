@@ -13,7 +13,6 @@ import {
 import CertificationSteps from "../CertificationSteps/CertificationSteps";
 import ChartBar from "../CertificationSteps/ChartBar/ChartBar";
 import { useGetGradeStageProgress } from "../../hooks/useGetGradeStageProgress";
-import { divide } from "lodash";
 import { useLocation } from "react-router-dom";
 import { useSelectionsStore } from "../../store/selectionStore";
 

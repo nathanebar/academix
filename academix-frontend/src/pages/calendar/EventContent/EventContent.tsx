@@ -12,7 +12,6 @@ import { Avatar, Button, message, Tooltip } from "antd";
 import dayjs from "dayjs";
 import { Gradient, SchemaName } from "../../../types/types";
 import style from "../Calendar.module.css";
-import { CSSProperties } from "styled-components";
 import { TaskContainer } from "../TaskContainer/TaskContainer";
 import { TaskHeader } from "../TaskHeader/TaskHeader";
 import { CreatorBadge } from "../CreatorBadge/CreatorBadge";
