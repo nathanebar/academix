@@ -24,6 +24,9 @@ module.exports = (sequelize, DataTypes) => {
           model: "Axes",
           key: "id",
         },
+        // ON DELETE CASCADE as in the original migration (32323555552323-create-axis-batch-archive),
+        // which is what the production database has.
+        onDelete: "CASCADE",
       },
       course_batch_id: {
         type: DataTypes.INTEGER,
@@ -32,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
           model: "CourseBatches",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       repository_kind: {
         type: DataTypes.ENUM("operational", "assignment_bank", "archives"),

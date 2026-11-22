@@ -1,4 +1,4 @@
-const { TaskGroup, TaskGroupBatchStatus, File, Task } = require("../../models");
+const { TaskGroup, TaskGroupBatchStatus, File, Task, Axis } = require("../../models");
 const { sequelize } = require("../../models/index");
 const fileController = require("../controllers/file.controller");
 const logger = require("../utils/logger");

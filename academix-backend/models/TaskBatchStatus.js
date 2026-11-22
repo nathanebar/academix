@@ -2,10 +2,13 @@ const { Model, Sequelize, DataTypes } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class TaskBatchStatus extends Model {
     static associate(models) {
-      TaskBatchStatus.belongsTo(models.Task, { foreignKey: "taskId" });
+      // ON DELETE CASCADE as in the original migration (20251123181148-create-Task-batch-status),
+      // which is what the production database has.
+      TaskBatchStatus.belongsTo(models.Task, { foreignKey: "taskId", onDelete: "CASCADE" });
       TaskBatchStatus.belongsTo(models.CourseBatch, {
         foreignKey: "course_batch_id",
         as: "batch",
+        onDelete: "CASCADE",
       });
     }
   }

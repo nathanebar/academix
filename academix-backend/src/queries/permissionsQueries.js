@@ -58,11 +58,13 @@ const getDeveloperData = async () => {
 
   let allowedTeamIds = [];
   if (allowedCourseBatcheIds.length > 0) {
-    const teams = await Team.findAll({
+    // Teams are linked to batches through TeamCourseBatches (Teams has no course_batch_id).
+    const teamCourseBatches = await TeamCourseBatch.findAll({
       where: { course_batch_id: { [Op.in]: allowedCourseBatcheIds } },
-      attributes: ["id"],
+      attributes: ["team_id"],
+      raw: true,
     });
-    allowedTeamIds = [...new Set(teams.map((t) => t.id))];
+    allowedTeamIds = [...new Set(teamCourseBatches.map((tcb) => tcb.team_id))];
   }
 
   let allowedAxisIds = [];
