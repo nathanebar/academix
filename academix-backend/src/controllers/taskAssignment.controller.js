@@ -944,11 +944,10 @@ LEFT JOIN "Users" student ON student.id = tm_student.user_id
     if (assignedByUserIds.length > 0) {
       const uniqueIds = [...new Set(assignedByUserIds)];
       
-      const assignersQuery = uniqueIds.length === 1
-        ? `SELECT id, name FROM "Users" WHERE id = ${uniqueIds[0]}`
-        : `SELECT id, name FROM "Users" WHERE id = ANY(ARRAY[${uniqueIds.join(',')}])`;
-      
+      const assignersQuery = `SELECT id, name FROM "Users" WHERE id IN (:uniqueIds)`;
+
       const assigners = await sequelize.query(assignersQuery, {
+        replacements: { uniqueIds },
         type: sequelize.QueryTypes.SELECT,
         raw: true,
       });
@@ -1175,10 +1174,10 @@ exports.assignedUserDayRange = async (req, res) => {
     // ✅ אחרי - ללא פסיק בסוף
     const colorSelect = `
       a.color AS color,
-      CASE 
-        WHEN ${hasSpecialPermission} THEN t.color
+      CASE
+        WHEN :hasSpecialPermission THEN t.color
         WHEN t.status = 'assignment_bank' THEN t.color
-        WHEN ${!isBlockColorEnabled} THEN t.color
+        WHEN :isBlockColorEnabled = false THEN t.color
         ELSE NULL
       END AS Tcolor
     `;
@@ -1396,6 +1395,10 @@ ORDER BY start ASC, task_id ASC;
         endDate,
         skipVisibility,
         course_batch_id,
+        // Booleans for colorSelect (hasSpecialPermission is undefined without the
+        // selectedpermission header, which produced the SQL "WHEN undefined THEN").
+        hasSpecialPermission: Boolean(hasSpecialPermission),
+        isBlockColorEnabled: Boolean(isBlockColorEnabled),
       },
       type: sequelize.QueryTypes.SELECT,
       raw: true,
@@ -1412,11 +1415,10 @@ ORDER BY start ASC, task_id ASC;
     if (assignedByUserIds.length > 0) {
       const uniqueIds = [...new Set(assignedByUserIds)];
       
-      const assignersQuery = uniqueIds.length === 1
-        ? `SELECT id, name FROM "Users" WHERE id = ${uniqueIds[0]}`
-        : `SELECT id, name FROM "Users" WHERE id = ANY(ARRAY[${uniqueIds.join(',')}])`;
-      
+      const assignersQuery = `SELECT id, name FROM "Users" WHERE id IN (:uniqueIds)`;
+
       const assigners = await sequelize.query(assignersQuery, {
+        replacements: { uniqueIds },
         type: sequelize.QueryTypes.SELECT,
         raw: true,
       });
@@ -1905,13 +1907,22 @@ exports.getFeedbackFormsForTask = async (req, res) => {
       });
     }
 
-    if (!taskId || isNaN(parseInt(taskId)) || !teamId || isNaN(parseInt(teamId))) {
+    // Strict integers only: every value below goes into SQL as a bound replacement.
+    // (parseInt("5 OR 1=1") is 5, so it must not be used to validate a value that is
+    // then used as-is.)
+    const toId = (value) => (/^\d+$/.test(String(value).trim()) ? Number(value) : NaN);
+    const taskIdNum = toId(taskId);
+    const teamIdNum = toId(teamId);
+    const assignmentIdsNum = Array.isArray(assignmentIds) ? assignmentIds.map(toId) : [];
+
+    if (
+      !Number.isSafeInteger(taskIdNum) ||
+      !Number.isSafeInteger(teamIdNum) ||
+      assignmentIdsNum.length === 0 ||
+      !assignmentIdsNum.every(Number.isSafeInteger)
+    ) {
       return res.status(400).json({ success: false, message: "Invalid parameters" });
     }
-
-    const taskIdNum = parseInt(taskId);
-    const assignmentIdsNum = assignmentIds.map((id) => parseInt(id));
-    const assignmentIdsList = assignmentIdsNum.join(',');
 
     const taskExists = await Task.findByPk(taskIdNum);
     if (!taskExists) {
@@ -1943,12 +1954,13 @@ exports.getFeedbackFormsForTask = async (req, res) => {
       JOIN "TeamMembers" tm ON tm.id = ta.user_id
       JOIN "Users" u ON u.id = tm.user_id
       LEFT JOIN "Feedbacks" fb ON fb.id = t."feedbackId"
-      WHERE ta.id IN (${assignmentIdsList})
-        AND ta.task_id = ${taskIdNum}
-        AND ta.team_id = ${teamId}
+      WHERE ta.id IN (:assignmentIds)
+        AND ta.task_id = :taskId
+        AND ta.team_id = :teamId
     `;
 
     const taskAssignments = await sequelize.query(taskAssignmentsQuery, {
+      replacements: { assignmentIds: assignmentIdsNum, taskId: taskIdNum, teamId: teamIdNum },
       type: sequelize.QueryTypes.SELECT,
       raw: true,
     });
@@ -1976,10 +1988,11 @@ exports.getFeedbackFormsForTask = async (req, res) => {
         fa.leaders_only_comment,
         fa.is_viewable
       FROM "FeedbackAnswers" fa
-      WHERE fa.task_assignment_id IN (${assignmentIdsList})
+      WHERE fa.task_assignment_id IN (:assignmentIds)
     `;
 
     const feedbackAnswers = await sequelize.query(feedbackAnswersQuery, {
+      replacements: { assignmentIds: assignmentIdsNum },
       type: sequelize.QueryTypes.SELECT,
       raw: true,
     });
@@ -2005,16 +2018,17 @@ exports.getFeedbackFormsForTask = async (req, res) => {
       fqa.answer_text
     FROM "FeedbackQuestions" fq
     CROSS JOIN (
-      SELECT unnest(ARRAY[${assignmentIdsList}])::integer AS id
+      SELECT unnest(ARRAY[:assignmentIds])::integer AS id
     ) AS ta
-    LEFT JOIN "FeedbackQuestionAnswers" fqa 
-      ON fqa.question_id = fq.id 
+    LEFT JOIN "FeedbackQuestionAnswers" fqa
+      ON fqa.question_id = fq.id
       AND fqa.task_assignment_id = ta.id
-    WHERE fq.feedback_id = ${feedbackId} 
+    WHERE fq.feedback_id = :feedbackId
      ORDER BY fq.id, ta.id
   `;
 
       allQuestionsData = await sequelize.query(questionsQuery, {
+        replacements: { assignmentIds: assignmentIdsNum, feedbackId },
         type: sequelize.QueryTypes.SELECT,
         raw: true,
       });
@@ -2033,15 +2047,16 @@ exports.getFeedbackFormsForTask = async (req, res) => {
       fcs.selection_type
     FROM "FeedbackCategories" fc
     CROSS JOIN (
-      SELECT unnest(ARRAY[${assignmentIdsList}])::integer AS id
+      SELECT unnest(ARRAY[:assignmentIds])::integer AS id
     ) AS ta
-    LEFT JOIN "FeedbackCategorySelections" fcs 
-      ON fcs.category_id = fc.id 
+    LEFT JOIN "FeedbackCategorySelections" fcs
+      ON fcs.category_id = fc.id
       AND fcs.task_assignment_id = ta.id
-    WHERE fc.feedback_id = ${feedbackId}
+    WHERE fc.feedback_id = :feedbackId
   `;
 
       allCategoriesData = await sequelize.query(catsQuery, {
+        replacements: { assignmentIds: assignmentIdsNum, feedbackId },
         type: sequelize.QueryTypes.SELECT,
         raw: true,
       });
