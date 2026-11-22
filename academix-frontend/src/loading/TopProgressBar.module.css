@@ -1,0 +1,39 @@
+.track {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  overflow: hidden;
+  z-index: 9998; /* below GlobalLoader (9999) */
+  pointer-events: none;
+}
+
+/* Indeterminate bar, moving right to left (RTL UI) */
+.bar {
+  position: absolute;
+  top: 0;
+  right: -40%;
+  width: 40%;
+  height: 100%;
+  background: #6c8cd5;
+  animation: slide 1.1s ease-in-out infinite;
+}
+
+@keyframes slide {
+  from {
+    right: -40%;
+  }
+  to {
+    right: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    animation: none;
+    right: 0;
+    width: 100%;
+    opacity: 0.6;
+  }
+}

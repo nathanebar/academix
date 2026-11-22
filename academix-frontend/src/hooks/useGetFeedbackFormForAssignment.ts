@@ -19,7 +19,9 @@ export const useFeedbackForm = (
         {
           dates,
           assignmentIds,
-        }
+        },
+        // a read sent as POST (the body carries the filters): don't block the screen
+        { globalLoader: false }
       );
 
       return response.data;
