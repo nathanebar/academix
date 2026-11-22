@@ -1,3 +1,4 @@
+import { teamEventKeys } from "../../api/queryKeys";
 import React, {
   useState,
   useEffect,
@@ -2182,7 +2183,7 @@ const MyCalendar: React.FC = () => {
             },
             {
               onSuccess: (data) => {
-                queryClient.invalidateQueries({ queryKey: ["teamEvents"] });
+                queryClient.invalidateQueries({ queryKey: teamEventKeys.all });
                 queryClient.invalidateQueries({
                   queryKey: ["teamEventAssignment"],
                 });

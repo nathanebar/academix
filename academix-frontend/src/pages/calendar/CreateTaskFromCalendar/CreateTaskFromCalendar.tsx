@@ -1,3 +1,4 @@
+import { teamEventKeys } from "../../../api/queryKeys";
 import React, { useEffect, useMemo, useState } from "react";
 import {
   Modal,
@@ -201,7 +202,7 @@ export const CreateTaskFromCalendar: React.FC<CreateTaskWizardProps> = ({
         title,
         constant,
       });
-      queryClient.invalidateQueries({ queryKey: ["teamEvents"] });
+      queryClient.invalidateQueries({ queryKey: teamEventKeys.all });
 
       if (constant) {
         generateConstantTeamEvent(

@@ -1,3 +1,4 @@
+import { teamEventKeys } from "../api/queryKeys";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "../api/axios";
 
@@ -9,7 +10,8 @@ export const useTeamEvent = () => {
   const { selectedTeam, selectedCourseBatch } = useSelectionsStore();
   const { setTeamEvents } = useTeamEventStore();
   return useQuery({
-    queryKey: ["teamEvents", selectedTeam, selectedCourseBatch],
+    // ids only: the whole store objects made a new cache entry on any unrelated field change
+    queryKey: teamEventKeys.byTeamAndBatch(selectedTeam?.id, selectedCourseBatch?.id),
     queryFn: async () => {
       const { data } = await api.get(
         `/teamEvents/${selectedTeam.id}/${selectedCourseBatch.id}`,
@@ -17,6 +19,8 @@ export const useTeamEvent = () => {
 
       return data;
     },
+    // previously the queryFn threw on `selectedTeam.id` when nothing was selected
+    enabled: !!selectedTeam?.id && !!selectedCourseBatch?.id,
     meta: {
       onSuccess: (data: any) => {
         setTeamEvents(data);
@@ -33,7 +37,7 @@ export const useRemoveTeamEvent = () => {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["teamEvents"] });
+      queryClient.invalidateQueries({ queryKey: teamEventKeys.all });
     },
   });
 };
@@ -49,7 +53,7 @@ export const useAddTeamEvent = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["teamEvents"],
+        queryKey: teamEventKeys.all,
       });
     },
   });
@@ -66,7 +70,7 @@ export const useUpdateTeamEvent = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["teamEvents"],
+        queryKey: teamEventKeys.all,
       });
     },
   });

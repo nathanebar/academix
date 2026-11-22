@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../../api/axios";
+import { feedbackKeys } from "../../api/queryKeys";
 import { notification } from "antd";
 
 export const useMissedFetchFeedbackByMemberId = (
@@ -7,7 +8,7 @@ export const useMissedFetchFeedbackByMemberId = (
 ) => {
   
   return useQuery({
-    queryKey: ["feedbackByUserId", teamMemberId],
+    queryKey: feedbackKeys.missedByMember(teamMemberId),
     queryFn: async () => {
       // Check if at least one ID is valid
       const isValidUserId =

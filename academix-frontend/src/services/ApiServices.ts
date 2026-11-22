@@ -12,6 +12,7 @@ import {
 } from "../types/types";
 import { Dayjs } from "dayjs";
 import { queryClient } from "../api/queryClient";
+import { feedbackKeys } from "../api/queryKeys";
 import { message } from "antd";
 import api from "../api/axios";
 
@@ -985,7 +986,7 @@ export async function updateFeedbackIsViewable(
       }
     );
     if (response.status === 200) {
-      queryClient.refetchQueries({ queryKey: ["feedbackByUserId"] });
+      queryClient.refetchQueries({ queryKey: feedbackKeys.memberLists() });
     }
     return { success: true, data: response.data };
   } catch (error: any) {

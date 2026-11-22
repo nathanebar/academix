@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import api from '../api/axios';
+import { feedbackKeys } from '../api/queryKeys';
 
 
 export const useFeedbackByAssignment = (
@@ -11,7 +12,7 @@ export const useFeedbackByAssignment = (
   const headers: any = {selectedPermission};
   return useQuery({
 
-    queryKey: ['feedbackByAssignment', id ,selectedPermission],
+    queryKey: feedbackKeys.byAssignment(id, selectedPermission),
 
     queryFn: async () => {
       if (id === undefined) return null;              

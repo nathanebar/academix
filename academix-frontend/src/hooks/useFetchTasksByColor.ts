@@ -34,7 +34,6 @@ export const useFetchTasksByColor = (
       return data.data.byColor ?? [];
     },
     enabled: !!teamId || !!selectedCourseBatch,
-    retry: 2,
     // staleTime: 5 * 60 * 1000,
   });
 };
