@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { systemKeys } from "../../../api/queryKeys";
 import { usePermissionStore } from "../../../store/permissionStore";
 import { useUserStore } from "../../../store/userStore";
 import { useSelectionsStore } from "../../../store/selectionStore";
@@ -27,26 +28,18 @@ const DevDashboard = () => {
     setSelectedSystemId,
     setSelectedSystem,
   } = useSelectionsStore();
-  const [systems, setSystems] = useState<SystemCard[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [errorMsg, setErrorMsg] = useState("");
-
-  useEffect(() => {
-    fetchAllSystems();
-  }, []);
-
-  const fetchAllSystems = async () => {
-    try {
-      setLoading(true);
-      const response = await api.get("/systems");
-      setSystems(response.data);
-    } catch (err: any) {
-      console.error(err);
-      setErrorMsg("שגיאה בטעינת המערכות");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    data: systems = [],
+    isPending: loading,
+    isError,
+    refetch: fetchAllSystems,
+  } = useQuery({
+    queryKey: systemKeys.all,
+    queryFn: async (): Promise<SystemCard[]> => (await api.get("/systems")).data,
+    staleTime: 0, // refetch on every mount, like the former useEffect
+  });
+  // (the former errorMsg state was never cleared after a successful retry)
+  const errorMsg = isError ? "שגיאה בטעינת המערכות" : "";
 
   const handleSystemSelect = (system: SystemCard) => {
     if (!system.scope_id) {
@@ -87,7 +80,7 @@ const DevDashboard = () => {
         <div style={{ textAlign: 'center', padding: '40px', color: 'red' }}>
           <p>שגיאה: {errorMsg}</p>
           <button
-            onClick={fetchAllSystems}
+            onClick={() => fetchAllSystems()}
             style={{
               padding: '10px 20px',
               fontSize: '16px',

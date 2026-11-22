@@ -1,4 +1,6 @@
 import React, { useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { taskKeys } from "../../api/queryKeys";
 import style from "./studentExpandedView.module.css";
 import dayjs, { Dayjs } from "dayjs";
 import {
@@ -187,7 +189,28 @@ const StudentExpandedView: React.FC<Props> = ({ student, color, onBack }) => {
 const [selectedTaskId, setSelectedTaskId] = useState<number>(-1);
 const [openUserTask, setOpenUserTask] = useState<boolean>(false);
 
-  const [tasksByUser, setTasksByUser] = useState<Task[]>([]);
+  const { data: tasksByUser = [] } = useQuery({
+    queryKey: taskKeys.byUser(
+      student?.user_id,
+      selectedTeam?.id,
+      selectedPermission?.role_code,
+      selectedCourseBatch?.id
+    ),
+    queryFn: async (): Promise<Task[]> => {
+      try {
+        return await getTasksByUser(
+          student.user_id,
+          selectedTeam!.id,
+          selectedPermission?.role_code,
+          selectedCourseBatch?.id
+        );
+      } catch {
+        return [];
+      }
+    },
+    enabled: !!student?.user_id && !!selectedTeam?.id,
+    staleTime: 0, // refetch on every mount, like the former useEffect
+  });
 
   const { data: tasksData = [], refetch } = useFetchDayTaskAssignement(
     date.format("YYYY-MM-DD"),
@@ -206,19 +229,6 @@ const [openUserTask, setOpenUserTask] = useState<boolean>(false);
     selectedCourseBatch?.id,
     selectedPermission?.role_code
   );
-
-  React.useEffect(() => {
-    if (student?.user_id && selectedTeam?.id) {
-      getTasksByUser(
-        student.user_id,
-        selectedTeam.id,
-        selectedPermission?.role_code,
-        selectedCourseBatch?.id
-      )
-        .then(setTasksByUser)
-        .catch(() => setTasksByUser([]));
-    }
-  }, [student?.user_id, selectedTeam?.id, selectedCourseBatch?.id]);
 
   React.useEffect(() => {
     if (student?.id && selectedTeam?.id) {
