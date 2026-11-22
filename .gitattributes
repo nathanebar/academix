@@ -1,0 +1,17 @@
+# Normalize line endings so Windows / macOS / Linux never produce whole-file diffs
+* text=auto eol=lf
+
+# Binary files
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.webp  binary
+*.ttf   binary
+*.woff  binary
+*.woff2 binary
+*.pfx   binary
+*.mp4   binary
+*.mp3   binary
+*.pdf   binary
