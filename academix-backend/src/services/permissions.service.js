@@ -112,4 +112,4 @@ const getPermissionsForUser = async (userId) => {
     ? [...processedAssignments, ...processedStudentAssignments, processedAdmin]
     : [...processedAssignments, ...processedStudentAssignments];
 };
-module.exports = { getPermissionsForUser };
+module.exports = { getPermissionsForUser, withScopes };
