@@ -1,10 +1,7 @@
 const router = require("express").Router();
 const fileController = require("../controllers/file.controller");
 
-const multer = require("multer");
-
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
+const { singleFile } = require("../middlewares/upload");
 
 router.get("/stream-file", fileController.streamFile);
 router.get("/download-file", fileController.downloadFile); 
@@ -15,7 +12,7 @@ router.get(
   "/filesByFeedbackAnswerId",
   fileController.getFilesByFeedbackAnswerId
 );
-router.post("/upload-file", upload.single("file"), fileController.uploadFile);
+router.post("/upload-file", singleFile("file"), fileController.uploadFile);
 router.post("/create-bucket", fileController.createBucket);
 router.delete("/by-feedback", fileController.deleteByFeedback);
 router.delete("/delete-file", async (req, res) => {

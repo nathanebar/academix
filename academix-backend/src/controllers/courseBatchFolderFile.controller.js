@@ -2,6 +2,7 @@ const courseBatchFolderFileService = require('../services/courseBatchFolderFile.
 const { S3Client, PutObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const logger = require('../utils/logger');
 const { catchError } = require('../utils/errorHandler');
+const { fileStream } = require('../middlewares/upload');
 
 const endpoint = process.env.S3_ENDPOINT;
 const accessKey = process.env.S3_ACCESS_KEY;
@@ -29,7 +30,9 @@ exports.uploadFile = async (req, res) => {
     const uploadParams = {
       Bucket: bucket,
       Key: key,
-      Body: file.buffer,
+      // Streamed from the temporary file written by middlewares/upload.js (not held in RAM).
+      Body: fileStream(file),
+      ContentLength: file.size,
       ContentType: file.mimetype,
       ACL: "public-read",
       ...(process.env.S3_STORAGE_CLASS ? { StorageClass: process.env.S3_STORAGE_CLASS } : {}),

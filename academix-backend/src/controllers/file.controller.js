@@ -2,7 +2,6 @@ const { config } = require("dotenv");
 const { File, Sequelize } = require("../../models");
 const { S3Client, HeadObjectCommand } = require("@aws-sdk/client-s3");
 const {
-  GetObjectCommand: GetObject,
   PutObjectCommand: UploadObject,
   CreateBucketCommand: CreateBucket,
   DeleteObjectCommand: DeleteObject,
@@ -21,6 +20,8 @@ const {
 const { encodeBuffer } = require("../utils/encodeVideo");
 const logger = require("../utils/logger");
 const { catchError } = require("../utils/errorHandler");
+const { fileStream } = require("../middlewares/upload");
+const { sendS3Object } = require("../utils/s3Stream");
 
 config({ quiet: true });
 
@@ -64,12 +65,11 @@ exports.streamFile = async (req, res) => {
         return res.status(404).json({ message: "File not found or access denied" });
       }
 
-      const downloadParams = { Bucket: bucket, Key: key };
-      const response = await s3Client.send(new GetObject(downloadParams));
-
-      res.set("Content-Type", response.ContentType);
-      res.setHeader("Content-Disposition", "inline");
-      return response.Body.pipe(res);
+      return await sendS3Object(s3Client, req, res, {
+        bucket,
+        key,
+        headers: { "Content-Disposition": "inline" },
+      });
     }
 
     // 3. קובץ רגיל – בדיקת הרשאות רגילה
@@ -83,12 +83,11 @@ exports.streamFile = async (req, res) => {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    const downloadParams = { Bucket: bucket, Key: key };
-    const response = await s3Client.send(new GetObject(downloadParams));
-
-    res.set("Content-Type", response.ContentType);
-    res.setHeader("Content-Disposition", "inline");
-    response.Body.pipe(res);
+    await sendS3Object(s3Client, req, res, {
+      bucket,
+      key,
+      headers: { "Content-Disposition": "inline" },
+    });
   } catch (error) {
     catchError(error, req, res, { function: "streamFile", bucket, key });
   }
@@ -194,7 +193,9 @@ exports.uploadFile = async (req, res) => {
     if (FilesWithSameS3Key?.length === 0) {
       const uploadParams = {
         Bucket: bucket,
-        Body: file.buffer,
+        // Streamed from the temporary file written by middlewares/upload.js (not held in RAM).
+        Body: fileStream(file),
+        ContentLength: file.size,
         Key: key,
         ContentType: file.mimetype,
         ...(process.env.S3_STORAGE_CLASS ? { StorageClass: process.env.S3_STORAGE_CLASS } : {}),
@@ -430,6 +431,14 @@ exports.deleteAllFilesByTaskId = async (req, res) => {
   }
 };
 
+// Headers of downloadFile: attachment with the original (UTF-8) name, never cached.
+const downloadHeaders = (fileName) => ({
+  "Content-Disposition": `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`,
+  "Cache-Control": "no-cache, no-store, must-revalidate",
+  Pragma: "no-cache",
+  Expires: "0",
+});
+
 exports.downloadFile = async (req, res) => {
   try {
     const { key, fileName, teamMemberId, teamId } = req.query;
@@ -454,16 +463,12 @@ exports.downloadFile = async (req, res) => {
       }
 
       const s3Bucket = process.env.S3_BUCKET_NAME || "academix";
-      const downloadParams = { Bucket: s3Bucket, Key: key };
-      const response = await s3Client.send(new GetObject(downloadParams));
-
       const originalFileName = fileName || key.split("/").pop() || "file";
-      res.setHeader("Content-Type", response.ContentType || "application/octet-stream");
-      res.setHeader("Content-Disposition", `attachment; filename*=UTF-8''${encodeURIComponent(originalFileName)}`);
-      res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-      res.setHeader("Pragma", "no-cache");
-      res.setHeader("Expires", "0");
-      return response.Body.pipe(res);
+      return await sendS3Object(s3Client, req, res, {
+        bucket: s3Bucket,
+        key,
+        headers: downloadHeaders(originalFileName),
+      });
     }
 
     // 3. קובץ רגיל – בדיקת הרשאות רגילה
@@ -482,26 +487,11 @@ exports.downloadFile = async (req, res) => {
     let s3Bucket =
       fileRecord.s3BucketName || process.env.S3_BUCKET_NAME || "academix";
 
-    const downloadParams = { Bucket: s3Bucket, Key: key };
-    const response = await s3Client.send(new GetObject(downloadParams));
-
-    res.setHeader(
-      "Content-Type",
-      response.ContentType || "application/octet-stream"
-    );
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename*=UTF-8''${encodeURIComponent(originalFileName)}`
-    );
-    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    res.setHeader("Pragma", "no-cache");
-    res.setHeader("Expires", "0");
-
-    if (response.Body) {
-      response.Body.pipe(res);
-    } else {
-      return res.status(500).json({ error: "Failed to get file from S3" });
-    }
+    await sendS3Object(s3Client, req, res, {
+      bucket: s3Bucket,
+      key,
+      headers: downloadHeaders(originalFileName),
+    });
   } catch (error) {
     console.error("Download file error:", error);
     catchError(error, req, res, {
