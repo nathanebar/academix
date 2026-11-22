@@ -1,25 +1,5 @@
 import React from "react";
-import styled from "styled-components";
-
-// const SwitchContainer = styled.div`
-//   display: flex;
-//   align-items: center;
-//   gap: 8px;
-//   padding: 4px;
-//   background-color: #bfac8b;
-//   border-radius: 20px;
-//   width: fit-content;
-// `;
-
-const OptionLabel = styled.span<{ $active: boolean }>`
-  background-color: ${(props) => (props.$active ? "white" : "none")};
-  color: ${(props) => (props.$active ? "black" : "white")};
-  // padding: 4px 52px;
-  // border-radius: 16px;
-  // font-size: 14px;
-  // cursor: pointer;
-  // transition: all 0.2s ease;
-`;
+import style from "./GenericOptionSwitch.module.css";
 
 interface Option {
   id: number;
@@ -44,14 +24,18 @@ export const GenericOptionSwitch: React.FC<GenericOptionSwitchProps> = ({
   return (
     <div style={SwitchContainerLabelStyle}>
       {options.map((option) => (
-        <OptionLabel
+        <span
           style={OptionLabelStyle}
           key={option.id}
-          $active={selectedOption === option.id}
+          className={
+            selectedOption === option.id
+              ? `${style.option} ${style.active}`
+              : style.option
+          }
           onClick={() => setSelectedOption(option.id)}
         >
           {option.label}
-        </OptionLabel>
+        </span>
       ))}
     </div>
   );

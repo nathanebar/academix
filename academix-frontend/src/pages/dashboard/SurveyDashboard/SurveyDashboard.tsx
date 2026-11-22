@@ -18,19 +18,7 @@ import {
   TagOutlined,
   StopOutlined,
 } from "@ant-design/icons";
-import { format } from "date-fns";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip as ChartTooltip,
-  Legend,
-  ArcElement,
-  PointElement,
-  LineElement,
-} from "chart.js";
+import dayjs from "dayjs";
 import { useSelectionsStore } from "../../../store/selectionStore";
 import styles from "./SurveyDashboard.module.css";
 import { HeaderPermissionDisplay } from "../../../components/HeaderPermissionDisplay";
@@ -41,18 +29,6 @@ import FormFiltersAndList from "../../../components/DashboardUserForms/FormFilte
 import { usePermissionStore } from "../../../store/permissionStore";
 import { queryClient } from "../../../api/queryClient";
 import { toggleFormActive } from "../../../services/ApiServices";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  ChartTooltip,
-  Legend,
-  ArcElement,
-  PointElement,
-  LineElement
-);
 
 const SurveyDashboard: React.FC = () => {
   const {
@@ -415,7 +391,7 @@ const AssignedSurveyCard: React.FC<{
           <CalendarOutlined className={styles.infoIcon} />
           <span>
             {survey.createdAt
-              ? format(new Date(survey.createdAt), "dd.MM.yy")
+              ? dayjs(new Date(survey.createdAt)).format("DD.MM.YY")
               : ""}
           </span>
         </div>
@@ -532,7 +508,7 @@ const SurveyCard: React.FC<{
           <CalendarOutlined className={styles.infoIcon} />
           <span>
             {survey.createdAt
-              ? format(new Date(survey.createdAt), "dd.MM.yy")
+              ? dayjs(new Date(survey.createdAt)).format("DD.MM.YY")
               : ""}
           </span>
         </div>

@@ -11,7 +11,8 @@ import {
   UserOutlined,
   EditOutlined,
 } from "@ant-design/icons";
-import { format, formatDate } from "date-fns";
+import dayjs from "dayjs";
+import "dayjs/locale/he";
 import { getScoreColor } from "../ScoreUlLi";
 import style from "./FormDiv.module.css";
 import { useNavigate } from "react-router-dom";
@@ -22,7 +23,6 @@ import type { MenuProps } from "antd";
 import { usePermissionStore } from "../../store/permissionStore";
 import { Form, Permission, Team } from "../../types/types";
 import Notification from "../../UI/Notification/Notification";
-import { he } from "date-fns/locale";
 import {
   toggleFormActive,
   toggleFormDuplicate,
@@ -216,11 +216,9 @@ const FormDiv = ({
             <div className={style.leftSection}>
               <span className={style.assignAt}>
                 <CalendarOutlined className={style.icon} />
-                {formatDate(
-                  new Date(form.assignAt),
-                  "EEEE, d בMMMM yyyy, HH:mm",
-                  { locale: he }
-                )}
+                {dayjs(new Date(form.assignAt))
+                  .locale("he")
+                  .format("[יום ]dddd, D [ב]MMMM YYYY, HH:mm")}
               </span>
 
               {isOverflow ? (
@@ -363,7 +361,7 @@ const FormDiv = ({
                   <CalendarOutlined className={style["infoIcon"]} />
                   <span>
                     {form?.assignmentAt
-                      ? format(new Date(form.assignmentAt), "dd.MM.yy")
+                      ? dayjs(new Date(form.assignmentAt)).format("DD.MM.YY")
                       : ""}
                   </span>
                 </div>

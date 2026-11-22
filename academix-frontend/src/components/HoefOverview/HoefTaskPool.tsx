@@ -20,8 +20,8 @@ import {
 } from "@ant-design/icons";
 import { useDraggable } from "@dnd-kit/core";
 import { TaskItem } from "../../types/types";
-import { formatDate } from "date-fns";
-import { he } from "date-fns/locale";
+import dayjs from "dayjs";
+import "dayjs/locale/he";
 import styles from "./HoefTaskPool.module.css";
 import TaskUserTag from "../../components/Task/TaskTag/TaskUserTag";
 import {
@@ -186,8 +186,9 @@ const DraggableTask: React.FC<DraggableTaskProps> = ({
   const formatAssignmentDate = (dateString: string | null): string => {
     if (!dateString) return "";
     try {
-      const date = new Date(dateString);
-      return formatDate(date, "EEEE, dd/MM/yyyy, HH:mm", { locale: he });
+      const date = dayjs(new Date(dateString));
+      if (!date.isValid()) return ""; // date-fns threw here, which returned ""
+      return date.locale("he").format("[יום ]dddd, DD/MM/YYYY, HH:mm");
     } catch {
       return "";
     }
