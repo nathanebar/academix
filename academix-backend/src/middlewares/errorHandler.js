@@ -1,7 +1,7 @@
 const logger = require('../utils/logger');
 
 const globalErrorHandler = (err, req, res, next) => {
-  logger.error(err.message, {
+  const errorId = logger.error(err.message, {
     stack: err.stack,
     endpoint: req.originalUrl,
     method: req.method,
@@ -14,9 +14,10 @@ const globalErrorHandler = (err, req, res, next) => {
   
   res.status(err.status || 500).json({
     success: false,
-    message: process.env.NODE_ENV === 'production' 
-      ? 'שגיאה התרחשה בשרת' 
-      : err.message
+    message: process.env.NODE_ENV === 'production'
+      ? 'שגיאה התרחשה בשרת'
+      : err.message,
+    errorId,
   });
 };
 

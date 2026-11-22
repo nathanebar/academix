@@ -4,6 +4,7 @@ const express = require("express");
 const app = express();
 const cookieParser = require("cookie-parser");
 const compression = require("compression");
+const helmet = require("helmet");
 const https = require('https');
 const fs = require('fs');
 
@@ -66,6 +67,36 @@ app.use(
     preflightContinue: false,
     optionSuccessStatus: 204,
     credentials: true,
+  })
+);
+
+// Behind a reverse proxy, req.ip must come from X-Forwarded-For (login rate limit, logs).
+// TRUST_PROXY = number of proxies in front of the API (e.g. 1), or an Express trust-proxy value.
+if (process.env.TRUST_PROXY) {
+  const hops = Number(process.env.TRUST_PROXY);
+  app.set('trust proxy', Number.isNaN(hops) ? process.env.TRUST_PROXY : hops);
+}
+
+// Security headers. Adjusted for this API:
+// - files from /files/stream-file are shown in an <iframe> of the frontend, which may run on
+//   another origin (CORS_ORIGINS): framing is allowed for those origins with CSP
+//   frame-ancestors instead of X-Frame-Options (which cannot list several origins);
+// - no other CSP directive: the API serves JSON and files (a default-src would break PDFs
+//   opened inline), the frontend is served elsewhere;
+// - Cross-Origin-Resource-Policy "cross-origin": files are loaded by the frontend's origin;
+// - HSTS only when the API itself runs in HTTPS.
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      useDefaults: false,
+      directives: {
+        defaultSrc: helmet.contentSecurityPolicy.dangerouslyDisableDefaultSrc,
+        frameAncestors: ["'self'", ...corsOrigins],
+      },
+    },
+    xFrameOptions: false,
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+    strictTransportSecurity: useHttps ? { maxAge: 15552000, includeSubDomains: false } : false,
   })
 );
 
