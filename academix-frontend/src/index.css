@@ -1,10 +1,13 @@
 /* דרישת הגופן שלך */
 @font-face {
   font-family: "myFont";
+  /* The file is a TrueType font: the old format("woff2") hint did not match it */
   src: url("../src/fonts/NotoSansHebrew-VariableFont_wdth,wght.ttf")
-    format("woff2");
+    format("truetype");
   font-weight: normal;
   font-style: normal;
+  /* show the text right away with the fallback font, swap when the font is loaded */
+  font-display: swap;
 }
 
 html,

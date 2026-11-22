@@ -71,6 +71,9 @@ const LearningCarusel = ({ slides }: Props) => {
                       typeof="png"
                       src={slide?.image}
                       alt={slide.title}
+                      // the carousel renders every slide of the subject: fetch the off-screen ones lazily
+                      loading="lazy"
+                      decoding="async"
                       onClick={() => window.open(slide?.image, "_blank")}
                     />
                   </div>
