@@ -13,7 +13,9 @@ import {
 } from "../../../services/ApiServices";
 import Notification from "../../../UI/Notification/Notification";
 import AddCourseBatchesModal from "../../Modals/AddCourseBatches/AddCourseBatchesModal";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { courseBatchKeys } from "../../../api/queryKeys";
 import { usePermissionStore } from "../../../store/permissionStore";
 import { useTeamMembersStore } from "../../../store/teamMemberStore";
 import { useAddPermission } from "../../../hooks/useAddPermission";
@@ -46,20 +48,21 @@ const CourseBatchCard = (props: Props) => {
   const { filteredCourseBatches } = useFilteredDataStore();
   const [courseBatchModalOpen, setCourseBatchModalOpen] = useState<boolean>(false);
   const { selectedPermission, setSelectedPermission, permissions } = usePermissionStore();
-  const [count, setCount] = useState<number | null>(null);
   const { removePermissionById } = useAddPermission();
 
-  useEffect(() => {
-    const fetchCount = async () => {
+  const { data: count = null } = useQuery({
+    queryKey: courseBatchKeys.memberCount(Number(props.cbId)),
+    queryFn: async (): Promise<number | null> => {
       try {
         const countMembers = await getMemberByBatchId(Number(props.cbId));
-        setCount(countMembers.count);
+        return countMembers.count;
       } catch (err) {
         console.error("Failed to fetch member count", err);
+        return null;
       }
-    };
-    fetchCount();
-  }, [props.cbId]);
+    },
+    staleTime: 0, // refetch on every mount, like the former useEffect
+  });
 
   const handleActionClick = async (action: string, cbID: string | number) => {
     if (action === "delete") {
