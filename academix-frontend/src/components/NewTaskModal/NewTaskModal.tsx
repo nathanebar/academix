@@ -39,7 +39,7 @@ import { useSelectionsStore } from "../../store/selectionStore";
 import { useQueryClient } from "@tanstack/react-query";
 import { useFetchCheckListsByTaskId } from "../../hooks/useFetchCheckListsByTaskId";
 import { useFetchFilesByTaskId } from "../../hooks/useFetchFilesByTaskId";
-import _ from "lodash";
+import { isEqual } from "es-toolkit/compat";
 import CastingAssignments from "./CastingAssignments/CastingAssignments";
 import ColorPicker from "./Inputs/ColorPicker/ColorPicker";
 import { useFetchTagsByTaskId } from "../../hooks/useFetchTagsByTaskId";
@@ -1037,7 +1037,7 @@ const NewTaskModal = (props: NewMissionProps) => {
           }
         });
 
-        const bool = !_.isEqual(taskFromDBSynced, taskToUpload2Synced);
+        const bool = !isEqual(taskFromDBSynced, taskToUpload2Synced);
 
         const res = true
           ? await axios.put(

@@ -5,8 +5,8 @@ import { Tooltip } from "antd";
 import style from "./MissionDiv.module.css";
 import MissionProgressTimeline from "./HorizontalTimeline/HorizontalTimeline";
 import { usePermissionStore } from "../../store/permissionStore";
-import { formatDate } from "date-fns";
-import { he } from 'date-fns/locale';
+import dayjs from "dayjs";
+import "dayjs/locale/he";
 import { TeamOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 
@@ -150,7 +150,7 @@ const MissionDiv = ({
           {timelineVisible && <MissionProgressTimeline mission={mission} />}
           <span className={style.dateCompact}>
 
-            {formatDate(new Date(mission.start), "EEEE, d בMMMM yyyy, HH:mm", { locale: he })}
+            {dayjs(new Date(mission.start)).locale("he").format("[יום ]dddd, D [ב]MMMM YYYY, HH:mm")}
           </span>
         </div>
 

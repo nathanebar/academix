@@ -27,7 +27,6 @@ import { queryClient } from "../../../api/queryClient";
 import { usePermissionStore } from "../../../store/permissionStore";
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
-import { assign } from "lodash";
 import { useTaskTeamMemberRefreshStore } from "../../../store/taskTeamMemberRefreshStore";
 import { useSelectionsStore } from "../../../store/selectionStore";
 
