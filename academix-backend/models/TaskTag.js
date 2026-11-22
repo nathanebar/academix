@@ -25,7 +25,11 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'TaskTags',
-      timestamps: false,         
+      timestamps: false,
+      // (task_id, tag_id) is already the primary key; this covers lookups by tag.
+      indexes: [
+        { name: 'task_tags_tag_id_idx', fields: ['tag_id'] },
+      ],
     }
   );
 

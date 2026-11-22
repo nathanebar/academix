@@ -94,6 +94,11 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "TeamMember",
       tableName: "TeamMembers",
       timestamps: true,
+      indexes: [
+        { name: "team_members_user_id_idx", fields: ["user_id"] },
+        { name: "team_members_team_id_member_role_idx", fields: ["team_id", "member_role"] },
+        { name: "team_members_course_batch_id_idx", fields: ["course_batch_id"] },
+      ],
     }
   );
 

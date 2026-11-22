@@ -95,6 +95,10 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "FeedbackAnswer",
       tableName: "FeedbackAnswers",
+      indexes: [
+        { name: "feedback_answers_task_assignment_id_idx", fields: ["task_assignment_id"] },
+        { name: "feedback_answers_feedback_id_idx", fields: ["feedback_id"] },
+      ],
     }
   );
   return FeedbackAnswer;

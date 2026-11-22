@@ -49,6 +49,11 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "TeamCourseBatches",
       timestamps: true,
       updatedAt: false,
+      // Not unique on purpose: existing production data may contain duplicates.
+      indexes: [
+        { name: "team_course_batches_team_id_course_batch_id_idx", fields: ["team_id", "course_batch_id"] },
+        { name: "team_course_batches_course_batch_id_idx", fields: ["course_batch_id"] },
+      ],
     }
   );
   return TeamCourseBatch;

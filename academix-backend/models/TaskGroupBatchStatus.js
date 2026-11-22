@@ -35,6 +35,10 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: true,
       modelName: "TaskGroupBatchStatus",
       tableName: "TaskGroupBatchStatus",
+      // Not unique on purpose: existing production data may contain duplicates.
+      indexes: [
+        { name: "task_group_batch_status_task_group_id_course_batch_id_idx", fields: ["taskGroupId", "course_batch_id"] },
+      ],
     //   underscored: true,
     }
   );

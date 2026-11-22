@@ -46,6 +46,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "User",
+      indexes: [{ name: "users_militaryid_idx", fields: ["militaryid"] }],
       // Ne jamais renvoyer le hash du mot de passe dans les réponses API
       defaultScope: { attributes: { exclude: ["password"] } },
       scopes: { withPassword: { attributes: { include: ["password"] } } },

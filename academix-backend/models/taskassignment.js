@@ -123,6 +123,13 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "TaskAssignment",
       tableName: "TaskAssignments",
       //  paranoid: true,
+      // Composite indexes also serve lookups on their first column (task_id, team_id).
+      indexes: [
+        { name: "task_assignments_task_id_user_id_idx", fields: ["task_id", "user_id"] },
+        { name: "task_assignments_task_id_team_id_idx", fields: ["task_id", "team_id"] },
+        { name: "task_assignments_user_id_idx", fields: ["user_id"] },
+        { name: "task_assignments_team_id_start_end_idx", fields: ["team_id", "start", "end"] },
+      ],
     }
   );
 

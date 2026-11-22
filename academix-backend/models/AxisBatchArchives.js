@@ -43,6 +43,10 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: true,
       modelName: "AxisBatchArchives",
       tableName: "AxisBatchArchives",
+      // Not unique on purpose: existing production data may contain duplicates.
+      indexes: [
+        { name: "axis_batch_archives_axis_id_course_batch_id_idx", fields: ["axis_id", "course_batch_id"] },
+      ],
       //   underscored: true,
     }
   );

@@ -71,6 +71,10 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "Axis",
       paranoid: true,
+      indexes: [
+        { name: "axes_course_id_idx", fields: ["courseId"] },
+        { name: "axes_team_id_idx", fields: ["team_id"] },
+      ],
     }
   );
 

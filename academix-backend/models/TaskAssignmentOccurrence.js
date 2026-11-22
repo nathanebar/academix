@@ -38,6 +38,10 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: true,
       modelName: "TaskAssignmentOccurrence",
       tableName: "TaskAssignmentOccurrences",
+      indexes: [
+        { name: "task_assignment_occurrences_task_assignment_id_idx", fields: ["task_assignment_id"] },
+        { name: "task_assignment_occurrences_start_end_idx", fields: ["start", "end"] },
+      ],
     }
   );
 
