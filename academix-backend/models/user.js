@@ -36,7 +36,8 @@ module.exports = (sequelize, DataTypes) => {
       username: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        // Unique through the named index below, not `unique: true`: with `unique: true`,
+        // every `db:init -- --alter` adds one more duplicate UNIQUE constraint.
       },
       password: {
         type: DataTypes.STRING,
@@ -46,7 +47,12 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "User",
-      indexes: [{ name: "users_militaryid_idx", fields: ["militaryid"] }],
+      indexes: [
+        // Same name as the constraint PostgreSQL created for the former `unique: true`,
+        // so existing databases already have it and nothing is recreated.
+        { name: "Users_username_key", unique: true, fields: ["username"] },
+        { name: "users_militaryid_idx", fields: ["militaryid"] },
+      ],
       // Ne jamais renvoyer le hash du mot de passe dans les réponses API
       defaultScope: { attributes: { exclude: ["password"] } },
       scopes: { withPassword: { attributes: { include: ["password"] } } },
