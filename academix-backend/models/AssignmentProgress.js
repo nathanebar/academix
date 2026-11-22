@@ -51,7 +51,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: 'AssignmentProgress',
-      tableName: 'AssignmentProgress'
+      tableName: 'AssignmentProgress',
+      indexes: [
+        { name: 'assignment_progress_task_assignment_id_idx', fields: ['task_assignment_id'] },
+      ],
     }
   );
 

@@ -73,6 +73,10 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "FormSubmission",
       tableName: "FormSubmissions",
       timestamps: true,
+      indexes: [
+        { name: "form_submissions_task_assignment_id_idx", fields: ["task_assignment_id"] },
+        { name: "form_submissions_form_id_idx", fields: ["form_id"] },
+      ],
       createdAt: 'createdAt',
       updatedAt: 'updatedAt',
     }

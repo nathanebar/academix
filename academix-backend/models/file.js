@@ -119,6 +119,12 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: true,
       createdAt: true,
       updatedAt: false,
+      indexes: [
+        { name: "files_s3_key_idx", fields: ["s3Key"] },
+        { name: "files_task_id_idx", fields: ["task_id"] },
+        { name: "files_task_assignment_id_idx", fields: ["task_assignment_id"] },
+        { name: "files_feedback_answer_id_idx", fields: ["feedback_answer_id"] },
+      ],
     }
   );
   return File;

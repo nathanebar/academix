@@ -81,6 +81,11 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "RoleAssignment",
       tableName: "RoleAssignments",
+      indexes: [
+        { name: "role_assignments_user_id_idx", fields: ["user_id"] },
+        { name: "role_assignments_role_code_scope_id_idx", fields: ["role_code", "scope_id"] },
+        { name: "role_assignments_scope_type_scope_id_idx", fields: ["scope_type", "scope_id"] },
+      ],
     }
   );
   

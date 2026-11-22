@@ -176,6 +176,16 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "Task",
       paranoid: true,
+      indexes: [
+        { name: "tasks_task_group_id_idx", fields: ["taskGroupId"] },
+        { name: "tasks_team_id_idx", fields: ["team_id"] },
+        { name: "tasks_grade_stage_id_idx", fields: ["gradeStageId"] },
+        { name: "tasks_form_id_idx", fields: ["formId"] },
+        { name: "tasks_survey_id_idx", fields: ["surveyId"] },
+        { name: "tasks_feedback_id_idx", fields: ["feedbackId"] },
+        { name: "tasks_creator_id_idx", fields: ["creatorId"] },
+        { name: "tasks_color_idx", fields: ["color"] },
+      ],
     }
   );
 

@@ -45,7 +45,11 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "TaskGroup",
-       paranoid: true, 
+       paranoid: true,
+      indexes: [
+        { name: "task_groups_axis_id_idx", fields: ["axisId"] },
+        { name: "task_groups_team_id_idx", fields: ["team_id"] },
+      ],
     }
   );
 
