@@ -1,5 +1,5 @@
-const { Course, Axis, TaskGroup, Task, File } = require("../../models");
-const fileController = require("../controllers/file.controller");
+const { Course, Axis, TaskGroup, Task, sequelize } = require("../../models");
+const { deleteFileRecords, deleteUnreferencedObjects } = require("../services/fileCleanup.service");
 const logger = require('../utils/logger');
 const { catchError } = require('../utils/errorHandler');
 
@@ -67,45 +67,46 @@ module.exports = {
     }
   },
 
+  // Deletes the files of the course's tasks and the course in ONE transaction (the rest is
+  // removed by the database's ON DELETE CASCADE); S3 objects are removed after the commit.
   async remove(req, res) {
     const courseId = req.params.id;
     try {
-      const reletedAxes = await Axis.findAll({ where: { courseId: courseId } });
+      const s3Objects = [];
+      const ids = (rows) => rows.map((row) => row.id);
 
-      if (reletedAxes && reletedAxes?.length > 0) {
-        for (const a of reletedAxes) {
-          const reletedTaskGroups = await TaskGroup.findAll({
-            where: { axisId: a?.id },
-          });
-          if (reletedTaskGroups && reletedTaskGroups?.length > 0) {
-            for (const tg of reletedTaskGroups) {
-              const reletedTasks = await Task.findAll({
-                where: { taskGroupId: tg?.id },
-              });
-              if (reletedTasks && reletedTasks?.length > 0) {
-                for (const t of reletedTasks) {
-                  const reletedFiles = await File.findAll({
-                    where: { task_id: t?.id },
-                  });
-                  if (reletedFiles && reletedFiles?.length > 0) {
-                    for (const f of reletedFiles) {
-                      await fileController.deleteFile(f?.id);
-                    }
-                  }
-                }
-              }
+      const found = await sequelize.transaction(async (transaction) => {
+        const course = await Course.findByPk(courseId, { transaction });
+        if (!course) return false;
+
+        const axisIds = ids(await Axis.findAll({ where: { courseId }, attributes: ["id"], transaction }));
+        if (axisIds.length > 0) {
+          const taskGroupIds = ids(
+            await TaskGroup.findAll({ where: { axisId: axisIds }, attributes: ["id"], transaction })
+          );
+          if (taskGroupIds.length > 0) {
+            const taskIds = ids(
+              await Task.findAll({ where: { taskGroupId: taskGroupIds }, attributes: ["id"], transaction })
+            );
+            if (taskIds.length > 0) {
+              s3Objects.push(...(await deleteFileRecords({ task_id: taskIds }, transaction)));
             }
           }
         }
-      }
 
-      const course = await Course.findByPk(courseId);
-      if (!course) return res.status(404).json({ error: "Course not found" });
+        await course.destroy({ transaction });
+        return true;
+      });
 
-      await course.destroy();
+      if (!found) return res.status(404).json({ error: "Course not found" });
+
+      const s3Result = await deleteUnreferencedObjects(s3Objects);
 
       logger.info('Course deleted', {
         courseId,
+        s3ObjectsDeleted: s3Result.deleted,
+        s3ObjectsKept: s3Result.kept,
+        s3ObjectsFailed: s3Result.failed,
         userId: req.headers['x-user-id']
       });
 
