@@ -14,16 +14,20 @@ module.exports = (sequelize, DataTypes) => {
   Role.init(
     {
       code: {
-        type: DataTypes.ENUM(
-          'DOMAIN_MANAGER',
-          'COURSE_COMMANDER',
-          'TEAM_COMMANDER',
-          'STUDENT',
-          'OVERLAP',
-          'SYSTEM-ADMIN',
-          'DEVELOPER'
-        ),
-        primaryKey: true
+        // STRING (as in the original migration) so RoleAssignments.role_code (STRING) can reference it.
+        type: DataTypes.STRING,
+        primaryKey: true,
+        validate: {
+          isIn: [[
+            'DOMAIN_MANAGER',
+            'COURSE_COMMANDER',
+            'TEAM_COMMANDER',
+            'STUDENT',
+            'OVERLAP',
+            'SYSTEM-ADMIN',
+            'DEVELOPER'
+          ]]
+        }
       },
       name_he: {
         type: DataTypes.STRING,
