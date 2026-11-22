@@ -1160,7 +1160,6 @@ export async function getTasksByUser(
           startFilter,
           endFilter,
         },
-        headers: { selectedPermission },
       }
     );
     return response.data;

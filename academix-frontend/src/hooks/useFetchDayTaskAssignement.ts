@@ -44,9 +44,6 @@ export const useFetchDayTaskAssignement = (
     const { data } = await api.get(url, {
         params: {
           skipVisibility: skipVisibility
-        },
-         headers:{
-          selectedPermission:selectedPermission?.role_code
         }
       });
       return data.data;

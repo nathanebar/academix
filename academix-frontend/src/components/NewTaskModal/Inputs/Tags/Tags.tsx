@@ -1,3 +1,4 @@
+import { isBusinessConflict } from "../../../../utils/httpStatus";
 import React, { useState, useRef, useEffect } from "react";
 import { Tag, Select, Input, notification } from "antd";
 import type { SelectProps } from "antd";
@@ -107,7 +108,7 @@ const EditableTagGroup: React.FC<EditableTagGroupProps> = ({
         fireChange([...selectedTags, newTag]);
         queryClient.invalidateQueries({ queryKey: ["tags"] });
         setNewTagInput("");
-      } else if (res?.status === 401) {
+      } else if (isBusinessConflict(res)) {
         notification.error({
           message: "קיים כבר תיוג בשם זה בקורס זה!",
           duration: 1,

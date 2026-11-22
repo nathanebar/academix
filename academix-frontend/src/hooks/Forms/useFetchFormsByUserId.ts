@@ -22,7 +22,6 @@ export const useFetchFormsByUser = (
         `/forms/userId/${teamId},${userId},${courseBatchId}`,
         {
           params: { type },
-          headers: { selectedPermission },
         }
       );
 

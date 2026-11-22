@@ -1,3 +1,4 @@
+import { isBusinessConflict } from "../../utils/httpStatus";
 import { ConfigProvider, Button, Modal, Empty, Input, notification } from "antd";
 import style from "./DashboardCourseBatchBody.module.css";
 import PermmisionsCourseBatch from "./PermmisionsCurseBatch/PermmisionsCourseBatch";
@@ -120,7 +121,7 @@ const DashboardCourseBatchBody = () => {
         });
         queryClient.invalidateQueries({ queryKey: ["tags"] });
         setTagsInput("");
-      } else if (res?.status === 401) {
+      } else if (isBusinessConflict(res)) {
         notification.error({
           key: `key-${new Date()}`,
           message: "קיים כבר תיוג בשם זה!",

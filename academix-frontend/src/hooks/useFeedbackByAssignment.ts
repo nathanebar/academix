@@ -9,7 +9,6 @@ export const useFeedbackByAssignment = (
 ) => {
 
   const id = taskAssignmentId ? Number(taskAssignmentId) : undefined;
-  const headers: any = {selectedPermission};
   return useQuery({
 
     queryKey: feedbackKeys.byAssignment(id, selectedPermission),
@@ -17,7 +16,7 @@ export const useFeedbackByAssignment = (
     queryFn: async () => {
       if (id === undefined) return null;              
       const response = await api.get(
-        `/task-assignments/by-assignment/${id}` ,{headers:headers}              
+        `/task-assignments/by-assignment/${id}`              
       );
       return response.data;                       
     },

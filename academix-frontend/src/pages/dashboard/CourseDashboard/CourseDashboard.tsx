@@ -1,3 +1,4 @@
+import { isBusinessConflict } from "../../../utils/httpStatus";
 import { HeaderPermissionDisplay } from "../../../components/HeaderPermissionDisplay";
 import style from "./CourseDashboard.module.css";
 import CourseSetting from "../../../components/CourseSetting/CourseSetting";
@@ -163,7 +164,7 @@ const CourseDashboard = () => {
             queryKey: ["gradeStages"],
           });
           setGradeStagesInput("");
-        } else if (res?.status === 401) {
+        } else if (isBusinessConflict(res)) {
           notification.error({
             key: `key-${new Date()}`,
             message: "קיים כבר שלב הסמכה בשם זה בקורס זה!",
@@ -206,7 +207,7 @@ const CourseDashboard = () => {
             queryKey: ["tags"],
           });
           setTagsInput("");
-        } else if (res?.status === 401) {
+        } else if (isBusinessConflict(res)) {
           notification.error({
             key: `key-${new Date()}`,
             message: "קיים כבר שלב הסמכה בשם זה בקורס זה!",
