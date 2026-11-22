@@ -3,7 +3,9 @@ import {
   CaretRightFilled,
   CompressOutlined,
 } from "@ant-design/icons";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { taskKeys } from "../../../api/queryKeys";
 import DayCalendar from "../../../components/layout/Sidebar/DayCalendar/DayCalendar";
 import dayjs, { Dayjs } from "dayjs";
 import style from "./studentStatusCard.module.css";
@@ -170,6 +172,9 @@ const mergeTasksWithForms = (
     .filter((item): item is MergedTaskForm => item !== null);
 };
 
+// stable empty value: a new `[]` default on every render re-runs the memos / effects that depend on it
+const NO_TASKS: any[] = [];
+
 const StudentStatusCard: React.FC<Props> = ({
   student,
   color,
@@ -179,7 +184,6 @@ const StudentStatusCard: React.FC<Props> = ({
 
  
   
-  const [tasksByUser, setTasksByUser] = useState<Task[]>([]);
   const [selectedTaskId, setSelectedTaskId] = useState<number>(-1);
   const [openUserTask, setOpenUserTask] = useState<boolean>(false);
   const [date, setDate] = useState<Dayjs>(dayjs());
@@ -194,13 +198,69 @@ const StudentStatusCard: React.FC<Props> = ({
       console.log("date",date);
       console.log("date",date.format("YYYY-MM-DD"));
       
-  const { data: tasksData = [] ,refetch } = useFetchDayTaskAssignement(
+  const {
+    data: tasksData = NO_TASKS,
+    refetch,
+    dataUpdatedAt: dayTasksUpdatedAt,
+  } = useFetchDayTaskAssignement(
     date.format("YYYY-MM-DD"),
     selectedTeam?.id ?? -1,
     student?.id ?? -1,
     activeHeaderType === "teamMember",
     selectedCourseBatch?.id
   );
+
+  // The student's tasks: same key as StudentExpandedView, so both views share the cache.
+  const queryClient = useQueryClient();
+  const tasksByUserKey = taskKeys.byUser(
+    student?.user_id,
+    selectedTeam?.id,
+    selectedPermission?.role_code,
+    selectedCourseBatch?.id
+  );
+  const { data: tasksByUser = NO_TASKS } = useQuery({
+    queryKey: tasksByUserKey,
+    queryFn: async (): Promise<Task[]> => {
+      try {
+        return await getTasksByUser(
+          student.user_id,
+          selectedTeam!.id,
+          selectedPermission?.role_code,
+          selectedCourseBatch?.id
+        );
+      } catch (error) {
+        console.error("Failed to fetch tasks:", error);
+        return [];
+      }
+    },
+    enabled: !!student?.user_id && !!selectedTeam?.id,
+    staleTime: 0, // refetch on every mount, like the former useEffect
+  });
+
+  // Same signature as the former useState setter: the child views remove a task locally after
+  // approving it (optimistic update), now in the query cache.
+  const setTasksByUser: React.Dispatch<React.SetStateAction<Task[]>> = useCallback(
+    (update) =>
+      queryClient.setQueryData<Task[]>(tasksByUserKey, (old = []) =>
+        typeof update === "function" ? update(old) : update
+      ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [queryClient, ...tasksByUserKey]
+  );
+
+  // The former effect refetched the student's tasks whenever the day's tasks changed. It depended
+  // on `tasksData`, whose `= []` default was a new array on every render, so it also refetched on
+  // every render while the day's tasks were loading (3-5 requests per student). Keep the intent,
+  // but only on a real update of the day's tasks, and not on their first load.
+  const lastDayTasksUpdate = useRef(dayTasksUpdatedAt);
+  useEffect(() => {
+    if (lastDayTasksUpdate.current && dayTasksUpdatedAt !== lastDayTasksUpdate.current) {
+      // cancelRefetch: false → if the tasks are already being fetched, don't start a second request
+      queryClient.invalidateQueries({ queryKey: tasksByUserKey, exact: true }, { cancelRefetch: false });
+    }
+    lastDayTasksUpdate.current = dayTasksUpdatedAt;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dayTasksUpdatedAt]);
 
 
   
@@ -300,25 +360,9 @@ const StudentStatusCard: React.FC<Props> = ({
     setShowForms((prev) => !prev);
   }, []);
 
-  const handleGetTasksByStudent = useCallback(async () => {
-    if (student?.user_id && selectedTeam?.id) {
-      try {
-         const tasks = await getTasksByUser(student.user_id, selectedTeam.id,selectedPermission?.role_code,selectedCourseBatch.id);
-      setTasksByUser(tasks);
-      } catch (error) {
-        console.error("Failed to fetch tasks:", error);
-        setTasksByUser([]);
-      }
-    }
-  }, [student?.user_id, selectedTeam?.id]);
-
   useEffect(() => {
     setIsExpanded(expendedAll);
   }, [expendedAll]);
-
-  useEffect(() => {
-    handleGetTasksByStudent();
-  }, [handleGetTasksByStudent,tasksData]);
 
   useEffect(() => {
     if (student?.id && selectedTeam?.id) {
