@@ -3,7 +3,19 @@
 Academix is a course / training management platform (Moodle-like), Hebrew RTL UI.
 - `academix-backend/`: Express 5 + Sequelize 6 (PostgreSQL), S3/MinIO storage, NTLM or local auth.
 - `academix-frontend/`: React 18 + TypeScript 4.9 (Create React App), Ant Design 5, TanStack Query, Zustand.
-- How to run locally: see `README.md`. Full project review and performance roadmap: `RAPPORT.he.md` (Hebrew).
+- How to run locally: see `README.md` (English) / `README.he.md` (Hebrew). Full project review and performance roadmap: `RAPPORT.he.md` (Hebrew).
+
+## 0. Deployment target: a closed university network (always keep this in mind)
+
+Academix comes from a **closed university network that is cut off from the internet**. It is developed here, outside that network, and **the goal is to redeploy it there after all the changes and additions**. Every change must stay deployable and runnable offline. Before proposing or writing anything, check it against these rules:
+
+- **No internet at runtime.** No CDN scripts, styles or fonts (no Google Fonts), no external APIs, analytics, telemetry, error-reporting SaaS, map tiles, update checks, etc. Every asset must be bundled from npm packages or from files in the repo. Hosts and URLs come only from env vars (`.env`, `REACT_APP_*` at build time), never hard-coded.
+- **Dependencies must install offline.** They reach the target as a transferred `node_modules` or through an internal npm registry. Prefer pure-JS packages. Avoid packages that download something at install or first run (browsers for puppeteer / playwright, prebuilt binaries, `node-gyp` builds); if one is unavoidable, make the binary path configurable by env var (like `FFMPEG_PATH`) and document it. Every dependency goes in `package.json` + the lock file: no global installs, no `npx <pkg>` at runtime.
+- **No new external service** that cannot be installed on the closed network. If new infrastructure is needed (e.g. Redis for caching), make it optional with an in-process fallback, and document it. Docker is for local development only: production must not depend on Docker or Docker Hub.
+- **Keep the closed-network modes working.** The target uses `AUTH_MODE=ntlm`, `HTTPS=true` with a `.pfx` certificate and an internal directory API (`PEOPLE_API_URL`). `AUTH_MODE=local` exists only for development outside. Never remove or break NTLM, HTTPS or the env-based configuration.
+- **The production database already exists and holds real data.** Schema changes must apply to it without data loss (`npm run db:init -- --alter` or an explicit, idempotent migration); never require `--force` or a manual data fix that isn't scripted. Data that existing rows rely on (role codes, enum values) must stay compatible.
+- **Node.js:** the version available on the target is not confirmed. Stay compatible with Node 20 (no APIs or syntax that need a newer Node).
+- **Document every deployment impact.** If a change adds an env var, a binary, a service, a database step or a build change, say so in the PR's "Closed-network deployment impact" section. The root owner (@nathanebar) adds it to the "Redeploying on the closed network" checklist in `README.md` / `README.he.md`.
 
 Two developers work on this repo in parallel, each with their own Claude Code session.
 The rules below exist so that **there are never merge conflicts**. Follow them strictly.
@@ -14,7 +26,7 @@ The rules below exist so that **there are never merge conflicts**. Follow them s
 |---|---|---|
 | Backend | @nathanebar | `academix-backend/**` (including its `package.json` / `package-lock.json`) |
 | Frontend | @shneorshr1 | `academix-frontend/**` (including its `package.json` / `package-lock.json`) |
-| Root / config | @nathanebar | `CLAUDE.md`, `README.md`, `CHANGES.he.md`, `RAPPORT.he.md`, `docker-compose.yml`, `.gitattributes`, `.gitignore`, `.github/**`, `.claude/**` |
+| Root / config | @nathanebar | `CLAUDE.md`, `README.md`, `README.he.md`, `CHANGES.he.md`, `RAPPORT.he.md`, `docker-compose.yml`, `.gitattributes`, `.gitignore`, `.github/**`, `.claude/**` |
 
 - **Only edit files inside the zone of the developer you are working for.** If you don't know which zone that is, ask before editing anything.
 - If a change outside the zone is needed: **stop, tell the user**, and propose an issue for the other owner. Do not make the change yourself.
