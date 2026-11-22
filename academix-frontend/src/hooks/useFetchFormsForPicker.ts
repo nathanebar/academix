@@ -11,7 +11,7 @@ export const useFetchFormsForPicker = (
     queryKey: ["formsForPicker", courseId, teamId, type],
     queryFn: async () => {
       const { data } = await api.get(
-        `${process.env.REACT_APP_API_BASE_URL}/forms/getFormsForPicker/${courseId}`,
+        `/forms/getFormsForPicker/${courseId}`,
         { params: { teamId, type } }
       );
       return data;

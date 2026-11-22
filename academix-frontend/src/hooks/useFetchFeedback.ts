@@ -10,7 +10,7 @@ export const useFetchFeedback = (courseId:number,teamId:number) => {
                
                 
                 const {data} = await api.get(
-                    `${process.env.REACT_APP_API_BASE_URL}/feedback/getAll/${courseId}/${teamId}`
+                    `/feedback/getAll/${courseId}/${teamId}`
                 );
                 
         

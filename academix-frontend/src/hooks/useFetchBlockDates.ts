@@ -20,7 +20,7 @@ export const useFetchBlockDates = (
     queryFn: async () => {
       if (permission === "STUDENT") return;
       const { data } = await api.get(
-        `${process.env.REACT_APP_API_BASE_URL}/teamCourseBatch/getByTeamAndCourseBatchIds/${teamId}/${courseBatchId}`
+        `/teamCourseBatch/getByTeamAndCourseBatchIds/${teamId}/${courseBatchId}`
       );
       const result: BlockedDatesResponse = {
         blockFromDate: data.data[0]?.blockFromDate || null,
