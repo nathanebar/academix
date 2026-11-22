@@ -261,12 +261,12 @@ exports.uploadFile = async (req, res) => {
     });
     res.status(200).json(savedFile);
   } catch (error) {
-    logger.error("Failed to upload file", {
-      bucket: req.body.bucket,
-      key: req.body.key,
-      taskId: req.body.taskId,
-      error: error.message,
-      userId: req.headers["x-user-id"],
+    // catchError logs the error and answers 500 (the request used to hang here).
+    catchError(error, req, res, {
+      function: "uploadFile",
+      bucket: req.body?.bucket,
+      key: req.body?.key,
+      taskId: req.body?.taskId,
     });
   }
 };

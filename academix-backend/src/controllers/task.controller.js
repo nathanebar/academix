@@ -2540,7 +2540,7 @@ exports.confirmTask = async (req, res) => {
       msg: "Task updated successfully!",
     });
   } catch (error) {
-    console.log(error);
+    catchError(error, req, res, { function: "confirmTask" });
   }
 };
 //TASK BY COLOR

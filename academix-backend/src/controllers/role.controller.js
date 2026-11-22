@@ -1,4 +1,5 @@
 const { Role } = require('../../models');
+const { catchError } = require('../utils/errorHandler');
 
 exports.getAll = async (req, res) => {  
   try {
@@ -7,8 +8,7 @@ exports.getAll = async (req, res) => {
     res.json(roles);
 
   } catch (error) {
-    console.log(error);
-    
+    catchError(error, req, res, { function: "role.getAll" });
   }
 };
 exports.create = async (req, res) => {

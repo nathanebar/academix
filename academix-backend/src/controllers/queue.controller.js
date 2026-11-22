@@ -23,6 +23,7 @@ const { Op } = require("sequelize");
 const { sequelize } = require("../../models/index");
 const { QueryTypes } = require("sequelize");
 const logger = require("../utils/logger");
+const { catchError } = require("../utils/errorHandler");
 
 
 
@@ -252,7 +253,7 @@ exports.assignedTeamQueueRange = async (req, res) => {
     res.status(200).json({ success: true, data: filteredResults });
 
   } catch (err) {
-    console.log(err);
+    catchError(err, req, res, { function: "assignedTeamQueueRange" });
   }
 };
 
@@ -423,7 +424,7 @@ exports.assignedTeamQueueRangeByMember = async (req, res) => {
 
     res.status(200).json({ success: true, data: results });
   } catch (err) {
-    console.log(err);
+    catchError(err, req, res, { function: "assignedTeamQueueRangeByMember" });
   }
 };
 

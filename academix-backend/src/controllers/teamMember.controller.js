@@ -272,7 +272,7 @@ exports.update = async (req, res) => {
         .json({ success: true, msg: "User updated succsessfully!" })
       : res.status(404).json({ error: "Not found" });
   } catch (error) {
-    console.log(error);
+    catchError(error, req, res, { function: "teamMember.update" });
   }
 };
 
