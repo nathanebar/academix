@@ -1,10 +1,10 @@
 const { User } = require("../../models");
-const request = require("request");
 const logger = require('../utils/logger');
 const { catchError } = require('../utils/errorHandler');
-
 // API annuaire interne (réseau fermé). Non configurée => réponses vides.
-const PEOPLE_API_URL = (process.env.PEOPLE_API_URL || "").replace(/\/$/, "");
+// TLS and certificate options: see src/utils/peopleApi.js.
+const { PEOPLE_API_URL, peopleRequest } = require('../utils/peopleApi');
+
 const cookie = process.env.PEOPLE_API_COOKIE || "";
 
 exports.getUserData = async (req, res) => {
@@ -13,11 +13,12 @@ exports.getUserData = async (req, res) => {
     res.status(200).json({ data: [] });
     return;
   }
-  request(
-    {
+
+  let search;
+  try {
+    search = await peopleRequest({
       method: "POST",
-      url: `${PEOPLE_API_URL}/search`,
-      followRedirect: false,
+      path: "/search",
       headers: {
         "Content-Type": "application/json",
         Cookie: cookie,
@@ -27,92 +28,76 @@ exports.getUserData = async (req, res) => {
         hierarchies: [],
         dargot: [],
         exact: false,
-        rules
-          :
-          [{ field: "name", operator: "contains", value: username }]
-
-        ,
+        rules: [{ field: "name", operator: "contains", value: username }],
         ignoreReleased: false,
       }),
-      rejectUnauthorized: false,
-    },
-    async (error, response, body) => {
-      if (error) {
-        res.status(500).json({ error: "Failed to search user" });
-        return;
-      }
+    });
+  } catch (error) {
+    logger.warn("Directory search failed", {
+      username,
+      originalError: error.message || error.code,
+    });
+    res.status(500).json({ error: "Failed to search user" });
+    return;
+  }
 
-      try {
-        const persons = JSON.parse(body) || [];
+  try {
+    const persons = JSON.parse(search.body) || [];
 
-        if (persons.length === 0) {
-
-          res.status(200).json({ data: [] });
-          return;
-        }
-        const personsWithCourses = await Promise.all(
-          persons.map(async (person) => {
-            return new Promise((resolve) => {
-              request(
-                {
-                  method: "GET",
-                  url: `${PEOPLE_API_URL}/custom-badges?userId=${person._id}`,
-                  headers: {
-                    "Content-Type": "application/json",
-                    Cookie: cookie,
-                  },
-                  rejectUnauthorized: false,
-                },
-                (badgeError, badgeResponse, badgeBody) => {
-                  let basicCourse = null;
-
-                  if (!badgeError && badgeBody) {
-                    try {
-                      const badges = JSON.parse(badgeBody) || [];
-                      const courseBadge = badges.find((badge) =>
-                        badge.label && badge.label.includes("קורס")
-                      );
-
-                      if (courseBadge) {
-                        basicCourse = courseBadge.label;
-                      }
-                    } catch (e) {
-                      console.log("Couldn't parse badges");
-                    }
-                  }
-                  resolve({
-                    ...person,
-                    basicCourse: basicCourse,
-                  });
-                }
-              );
-            });
-          })
-        );
-
-
-        res.status(200).json({
-          data: personsWithCourses,
-        });
-
-      } catch (e) {
-        res.status(400).json({ error: "Couldn't find this person!" });
-      }
+    if (persons.length === 0) {
+      res.status(200).json({ data: [] });
+      return;
     }
-  );
+
+    const personsWithCourses = await Promise.all(
+      persons.map(async (person) => {
+        let basicCourse = null;
+        try {
+          const badgeResult = await peopleRequest({
+            method: "GET",
+            path: `/custom-badges?userId=${person._id}`,
+            headers: {
+              "Content-Type": "application/json",
+              Cookie: cookie,
+            },
+            followRedirect: true,
+          });
+          if (badgeResult.body) {
+            try {
+              const badges = JSON.parse(badgeResult.body) || [];
+              const courseBadge = badges.find((badge) =>
+                badge.label && badge.label.includes("קורס")
+              );
+              if (courseBadge) {
+                basicCourse = courseBadge.label;
+              }
+            } catch (e) {
+              logger.debug("Couldn't parse badges", { personId: person._id });
+            }
+          }
+        } catch (badgeError) {
+          // Same as before: without badges, basicCourse stays null.
+        }
+        return {
+          ...person,
+          basicCourse: basicCourse,
+        };
+      })
+    );
+
+    res.status(200).json({
+      data: personsWithCourses,
+    });
+  } catch (e) {
+    res.status(400).json({ error: "Couldn't find this person!" });
+  }
 };
 
 exports.getUserPhoto = (req, res) => {
   const username = req.params.username;
 
-  const makeRequest = (options) => {
-    return new Promise((resolve, reject) => {
-      request(options, (error, response, body) => {
-        if (error) reject({ error, response, body });
-        else resolve({ error, response, body });
-      });
-    });
-  };
+  // Rejects on network / TLS errors (handled by fetchPhoto().catch below), like before.
+  const makeRequest = (options) => peopleRequest(options);
 
   const fetchPhoto = async () => {
     if (!PEOPLE_API_URL) {
@@ -120,7 +105,7 @@ exports.getUserPhoto = (req, res) => {
     }
     const searchResult = await makeRequest({
       method: "POST",
-      url: `${PEOPLE_API_URL}/search`,
+      path: "/search",
       followRedirect: true,
       headers: { "Content-Type": "application/json", Cookie: cookie },
       body: JSON.stringify({
@@ -130,7 +115,6 @@ exports.getUserPhoto = (req, res) => {
         exact: false,
         ignoreReleased: false,
       }),
-      rejectUnauthorized: false,
     });
 
     if (searchResult.error) {
@@ -189,7 +173,7 @@ exports.getUserPhoto = (req, res) => {
 
     const photoResult = await makeRequest({
       method: "GET",
-      url: `${PEOPLE_API_URL}/user/image?userId=${photoId}`,
+      path: `/user/image?userId=${photoId}`,
       followRedirect: true,
       headers: {
         Accept: "image/*,*/*;q=0.8",
@@ -197,8 +181,7 @@ exports.getUserPhoto = (req, res) => {
         "accept-language": "en-US,en;q=0.9",
         Cookie: cookie,
       },
-      rejectUnauthorized: false,
-      encoding: null,
+      binary: true,
     });
 
     if (photoResult.error) {

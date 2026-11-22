@@ -99,6 +99,7 @@ The target has **no internet access**: everything it needs must be brought in.
    - `S3_*` (plus `S3_STORAGE_CLASS=STANDARD_IA` if that was the case before)
    - `CORS_ORIGINS=<frontend URL>`
    - `PEOPLE_API_URL` / `PEOPLE_API_COOKIE` for the directory search (use a service account; do not reuse the cookie that used to be hard-coded)
+   - Directory API certificate: it is now **verified**. If it is signed by an internal authority, set `PEOPLE_API_CA_FILE=<CA certificate, PEM>` (or `NODE_EXTRA_CA_CERTS`). Only if that CA cannot be provided, `PEOPLE_API_INSECURE_TLS=true` restores the old behavior (no verification). Check that user search and photos work after deploying.
 4. **Existing database**: take a `pg_dump` first. Never run `db:init -- --force`. `db:init` without options only creates missing tables; `db:init -- --alter` applies model changes.
 5. **Frontend**: build with the target's variables, for example:
    `REACT_APP_API_BASE_URL=https://<api>:8007/api REACT_APP_S3_BASE_URL=https://<minio> REACT_APP_PHOTO_API_URL=... REACT_APP_CHAT_URL=... npm run build:prod`
