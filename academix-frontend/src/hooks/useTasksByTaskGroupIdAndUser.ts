@@ -25,7 +25,6 @@ export const useGroupTasks = (
       selectedPermission,
     ],
     queryFn: async () => {
-      const headers = { selectedPermission: selectedPermission };
       if (!groupId || !selectedCourseBatch)
         return { operational: [], assignment_bank: [], archives: [] };
       const params: Record<string, any> = {
@@ -40,7 +39,7 @@ export const useGroupTasks = (
 
       const { data } = await api.get(
         `/tasks/getTaskByGroupIdAnd${isTeamMemberView ? "User" : "Team"}`,
-        { params, headers }
+        { params }
       );
       return data.data;
     },

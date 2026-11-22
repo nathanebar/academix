@@ -17,7 +17,7 @@ export const useFetchFeedbackByUserId = (teamMemberId: number | undefined,select
 
       let url = `/feedback/getFeedbacksByUserId/${teamMemberId}`;
 
-      const { data } = await api.get(url,{["headers"]:{selectedPermission}});
+      const { data } = await api.get(url);
 
       return data.data;
     },

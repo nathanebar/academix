@@ -274,4 +274,7 @@ export const AppRoutes = createBrowserRouter([
       { path: "*", element: <ErrorPage code={404} /> },
      ],
   },
+  // Session could not be renewed (closed network, silent NTLM re-authentication failed): outside
+  // Layout, which needs a valid session to load the permissions. See SESSION_ERROR_PATH (api/axios.ts).
+  { path: "/session-error", element: <ErrorPage code={401} /> },
 ]);

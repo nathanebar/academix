@@ -1,3 +1,4 @@
+import { isBusinessConflict } from "../../../../utils/httpStatus";
 import React, { ReactElement, useEffect, useState } from "react";
 import style from "./GradeStage.module.css";
 import { CaretDownFilled, CaretUpFilled } from "@ant-design/icons";
@@ -67,7 +68,7 @@ const GradeStage = (props: GradeStageProps) => {
 
       queryClient.invalidateQueries({ queryKey: ["gradeStages"] });
       setNewGradeStageName("");
-    } else if (res?.status === 401) {
+    } else if (isBusinessConflict(res)) {
       notification.error({
         message: "קיים כבר שלב הסמכה בשם זה בקורס זה!",
         duration: 1,

@@ -1,3 +1,4 @@
+import { isBusinessConflict } from "../../utils/httpStatus";
 import { useNavigate } from "react-router-dom";
 import { useFilteredDataStore } from "../../store/filteredDataStore";
 import { useSelectionsStore } from "../../store/selectionStore";
@@ -173,7 +174,7 @@ const DashboardTeamBody = () => {
         });
         queryClient.invalidateQueries({ queryKey: ["tags"] });
         setTagsInput("");
-      } else if (res?.status === 401) {
+      } else if (isBusinessConflict(res)) {
         notification.error({
           key: `key-${new Date()}`,
           message: "קיים כבר תיוג בשם זה!",

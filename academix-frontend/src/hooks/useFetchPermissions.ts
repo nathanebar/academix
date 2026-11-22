@@ -38,7 +38,8 @@ export const useFetchPermissions = (id?: string | number) => {
       if (!userId) {
         throw new Error("No user ID available");
       }
-      const { data } = await api.get(`/permissions/my/${userId}`);
+      // the user comes from the session cookie (#13); userId only keys the cache
+      const { data } = await api.get(`/permissions/my`);
       return data;
     },
     enabled: !!userId,

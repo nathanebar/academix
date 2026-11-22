@@ -39,7 +39,8 @@ export const usePermissionStore = create<PermissionState>()(
         set({ loading: true, error: null });
 
         try {
-          const response = await api.get(`/permissions/my/${userId}`);
+          // the user comes from the session cookie (#13)
+          const response = await api.get(`/permissions/my`);
           const fetchedPermissions: Assignment[] = response.data;
 
           set({
