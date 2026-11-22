@@ -532,7 +532,7 @@ const Task: React.FC<TaskProps> = ({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["group-tasks"] });
       queryClient.invalidateQueries({ queryKey: ["team-queue-tasks"] });
-      queryClient.refetchQueries({ queryKey: ["task-users"] });
+      queryClient.invalidateQueries({ queryKey: ["task-users"] });
       queryClient.invalidateQueries({
         queryKey: ["assignments-completed-by-team"],
       });

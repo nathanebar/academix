@@ -43,5 +43,7 @@ export const useFetchDomains = (allowedDomainsIds: number[] | number) => {
       },
     },
     enabled: !!allowedDomainsIds,
+    // reference data: refetched only when invalidated (or when the allowed ids change)
+    staleTime: Infinity,
   });
 };

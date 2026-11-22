@@ -207,11 +207,11 @@ export const EventContent = ({
 
     if (result.success) {
       message.success(result.message);
-      queryClient.refetchQueries({
+      queryClient.invalidateQueries({
         queryKey: ["hoefs", "team", selectedTeam?.id],
       });
 
-      queryClient.refetchQueries({
+      queryClient.invalidateQueries({
         queryKey: ["tasks-range"],
       });
     } else {

@@ -31,8 +31,8 @@ const CastingAssignments = (props: NewMissionProps) => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["group-tasks"] });
-      queryClient.refetchQueries({ queryKey: ["task-users"] });
-      queryClient.refetchQueries({ queryKey: ["taskAssignments"] });
+      queryClient.invalidateQueries({ queryKey: ["task-users"] });
+      queryClient.invalidateQueries({ queryKey: ["taskAssignments"] });
     },
   });
 

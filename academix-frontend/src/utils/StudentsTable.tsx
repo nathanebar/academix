@@ -119,7 +119,7 @@ const StudentsTable: React.FC<dataSourceProps> = ({ filterdTeamsMembers, assignm
         }
 
         Notification({ type: "success", msg: "מחיקת החניך בוצעה בהצלחה!" });
-        queryClient.refetchQueries({
+        queryClient.invalidateQueries({
           queryKey: ["teamMembers"],
         });
       }

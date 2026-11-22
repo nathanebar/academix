@@ -22,8 +22,13 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: shouldRetryQuery,
+      // Data is fresh for 60 s; after that, coming back to a page refetches it in the background
+      // (cached data stays on screen, the top progress bar shows). Invalidated queries refetch when
+      // they mount again, so invalidateQueries is enough after a mutation (#11).
+      // Reference data (domains, course tags / grade stages) overrides this with Infinity.
+      staleTime: 60 * 1000,
+      refetchOnMount: true,
       refetchOnWindowFocus: false,
-      refetchOnMount: false,
       refetchOnReconnect: false,
     },
   },

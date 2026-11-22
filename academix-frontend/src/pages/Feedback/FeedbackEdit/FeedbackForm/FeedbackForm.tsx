@@ -494,16 +494,16 @@ const FeedbackForm: React.FC<Props> = (props) => {
       message.error("Failed to save feedback");
     } finally {
       setIsSaving(false);
-      queryClient.refetchQueries({
+      queryClient.invalidateQueries({
         queryKey: ["feedbackForm"],
       });
-      queryClient.refetchQueries({
+      queryClient.invalidateQueries({
         queryKey: ["feedbackcourseId"],
       });
-      queryClient.refetchQueries({
+      queryClient.invalidateQueries({
         queryKey: feedbackKeys.memberLists(),
       });
-      queryClient.refetchQueries({
+      queryClient.invalidateQueries({
         queryKey: feedbackKeys.byAssignmentAll(),
       });
       setTimeout(() => {

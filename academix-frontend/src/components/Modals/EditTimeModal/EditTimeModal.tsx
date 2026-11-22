@@ -69,10 +69,10 @@ const EditTimeModal: React.FC<EditTimeModalProps> = ({
     if (res.status === 200) {
       setIsOpen(false);
       Notification({ type: "success", msg: "שינוי הזמנים בוצע בהצלחה!" });
-      queryClient.refetchQueries({
+      queryClient.invalidateQueries({
         queryKey: ["tasks-day"],
       });
-      queryClient.refetchQueries({
+      queryClient.invalidateQueries({
         queryKey: ["task-users"],
       });
     }

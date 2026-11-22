@@ -28,7 +28,7 @@ const GrdaeStageCard = ({ name, id }: { name: string; id: number }) => {
           placement: "top",
           style: { direction: "rtl" },
         });
-        queryClient.refetchQueries({
+        queryClient.invalidateQueries({
           queryKey: ["gradeStages"],
         });
       }
@@ -72,7 +72,7 @@ const GrdaeStageCard = ({ name, id }: { name: string; id: number }) => {
           placement: "top",
           style: { direction: "rtl" },
         });
-        queryClient.refetchQueries({
+        queryClient.invalidateQueries({
           queryKey: ["gradeStages"],
         });
       }

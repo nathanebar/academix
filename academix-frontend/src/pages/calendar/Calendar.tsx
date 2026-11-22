@@ -815,7 +815,7 @@ const MyCalendar: React.FC = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["group-tasks"] });
-      queryClient.refetchQueries({ queryKey: ["task-users"] });
+      queryClient.invalidateQueries({ queryKey: ["task-users"] });
       queryClient.invalidateQueries({
         queryKey: ["assignments-completed-by-team"],
       });
@@ -1036,7 +1036,7 @@ const MyCalendar: React.FC = () => {
           );
           await refetch();
           queryClient.invalidateQueries({ queryKey: ["group-tasks"] });
-          queryClient.refetchQueries({
+          queryClient.invalidateQueries({
             queryKey: ["hoefs", "team", selectedTeam?.id],
           });
 
@@ -1055,7 +1055,7 @@ const MyCalendar: React.FC = () => {
             info.event.extendedProps.occurrence_id
           );
           await refetch();
-          queryClient.refetchQueries({
+          queryClient.invalidateQueries({
             queryKey: ["hoefs", "team", selectedTeam?.id],
           });
           queryClient.invalidateQueries({ queryKey: ["group-tasks"] });
@@ -1074,7 +1074,7 @@ const MyCalendar: React.FC = () => {
       removeTeamEventAssignmentMutation.mutate(info.event.id, {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["teamEventsAssignment"] });
-          queryClient.refetchQueries({
+          queryClient.invalidateQueries({
             queryKey: ["hoefs", "team", selectedTeam?.id],
           });
           resolve({ status: "confirmed" });
@@ -1114,7 +1114,7 @@ const MyCalendar: React.FC = () => {
           );
           await refetch();
           queryClient.invalidateQueries({ queryKey: ["group-tasks"] });
-          queryClient.refetchQueries({
+          queryClient.invalidateQueries({
             queryKey: ["hoefs", "team", selectedTeam?.id],
           });
 

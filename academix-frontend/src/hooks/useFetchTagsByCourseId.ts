@@ -34,5 +34,7 @@ export const useFetchTagsByCourseId = (
       },
     },
     enabled: userId !== undefined || courseId !== undefined,
+    // reference data: refetched only when invalidated after a change
+    staleTime: Infinity,
   });
 };

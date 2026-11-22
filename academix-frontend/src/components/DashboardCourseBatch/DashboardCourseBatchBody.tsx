@@ -118,7 +118,7 @@ const DashboardCourseBatchBody = () => {
           placement: "top",
           style: { direction: "rtl" },
         });
-        queryClient.refetchQueries({ queryKey: ["tags"] });
+        queryClient.invalidateQueries({ queryKey: ["tags"] });
         setTagsInput("");
       } else if (res?.status === 401) {
         notification.error({

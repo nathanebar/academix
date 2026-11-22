@@ -48,7 +48,7 @@ const TeamCourseBatch = () => {
             type: "success",
             msg: "!מחיקת הצוות בוצעה בהצלחה",
           });
-          queryClient.refetchQueries({
+          queryClient.invalidateQueries({
             queryKey: ["teams"],
           });
         }

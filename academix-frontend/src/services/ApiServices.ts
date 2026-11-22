@@ -986,7 +986,7 @@ export async function updateFeedbackIsViewable(
       }
     );
     if (response.status === 200) {
-      queryClient.refetchQueries({ queryKey: feedbackKeys.memberLists() });
+      queryClient.invalidateQueries({ queryKey: feedbackKeys.memberLists() });
     }
     return { success: true, data: response.data };
   } catch (error: any) {
@@ -1420,7 +1420,7 @@ export async function confirmTaskById(id: number) {
     const req = await axios.put(
       `${process.env.REACT_APP_API_BASE_URL}/tasks/confirmTask/${id}`
     );
-    queryClient.refetchQueries({
+    queryClient.invalidateQueries({
       queryKey: ["tasksByTeamIds"],
     });
     return req;

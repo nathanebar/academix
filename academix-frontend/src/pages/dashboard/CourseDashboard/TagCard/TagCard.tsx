@@ -25,7 +25,7 @@ const TagCard = ({ name, id }: { name: string; id: number }) => {
           placement: "top",
           style: { direction: "rtl" },
         });
-        queryClient.refetchQueries({
+        queryClient.invalidateQueries({
           queryKey: ["tags"],
         });
       }
@@ -69,7 +69,7 @@ const TagCard = ({ name, id }: { name: string; id: number }) => {
           placement: "top",
           style: { direction: "rtl" },
         });
-        queryClient.refetchQueries({
+        queryClient.invalidateQueries({
           queryKey: ["tags"],
         });
       }

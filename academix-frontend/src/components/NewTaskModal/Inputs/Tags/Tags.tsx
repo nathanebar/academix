@@ -105,7 +105,7 @@ const EditableTagGroup: React.FC<EditableTagGroupProps> = ({
         };
 
         fireChange([...selectedTags, newTag]);
-        queryClient.refetchQueries({ queryKey: ["tags"] });
+        queryClient.invalidateQueries({ queryKey: ["tags"] });
         setNewTagInput("");
       } else if (res?.status === 401) {
         notification.error({

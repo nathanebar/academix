@@ -159,7 +159,7 @@ const CourseDashboard = () => {
             placement: "top",
             style: { direction: "rtl" },
           });
-          queryClient.refetchQueries({
+          queryClient.invalidateQueries({
             queryKey: ["gradeStages"],
           });
           setGradeStagesInput("");
@@ -202,7 +202,7 @@ const CourseDashboard = () => {
             placement: "top",
             style: { direction: "rtl" },
           });
-          queryClient.refetchQueries({
+          queryClient.invalidateQueries({
             queryKey: ["tags"],
           });
           setTagsInput("");

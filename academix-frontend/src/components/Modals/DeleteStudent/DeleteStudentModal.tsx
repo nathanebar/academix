@@ -92,7 +92,7 @@ const DeleteStudentModal: React.FC<DeleteStudentModalProps> = ({
         setIsOpen(false);
         setDeleteReason("");
 
-        queryClient.refetchQueries({
+        queryClient.invalidateQueries({
           queryKey: ["teamMembers"],
         });
       }

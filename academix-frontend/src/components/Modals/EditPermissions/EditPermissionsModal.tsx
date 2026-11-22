@@ -244,7 +244,7 @@ const EditPermissionsModal: React.FC<AddCourseModalProps> = ({
             type: "success",
             msg: "המשתמש עודכן בהצלחה!",
           });
-          queryClient.refetchQueries({
+          queryClient.invalidateQueries({
             queryKey: ["teamMembers"],
           });
 
@@ -386,7 +386,7 @@ const EditPermissionsModal: React.FC<AddCourseModalProps> = ({
 
               addNewPermission(newPermission);
 
-              queryClient.refetchQueries({
+              queryClient.invalidateQueries({
                 queryKey:
                   role !== "COURSE_COMMANDER"
                     ? ["teamMembers"]
@@ -463,7 +463,7 @@ const EditPermissionsModal: React.FC<AddCourseModalProps> = ({
         style: { direction: "rtl" },
       });
 
-      queryClient.refetchQueries({
+      queryClient.invalidateQueries({
         queryKey: isCourseCommander ? ["roleAssignments"] : ["teamMembers"],
       });
     } catch (error) {
