@@ -3,6 +3,7 @@ require("dotenv").config({ quiet: true });
 const express = require("express");
 const app = express();
 const cookieParser = require("cookie-parser");
+const compression = require("compression");
 const https = require('https');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
@@ -66,6 +67,15 @@ app.use(
     preflightContinue: false,
     optionSuccessStatus: 204,
     credentials: true,
+  })
+);
+
+// gzip/deflate for API responses (JSON compresses ~10x). File streams are left alone:
+// media is already compressed, and they must keep their byte ranges (see #7).
+app.use(
+  compression({
+    filter: (req, res) =>
+      !/\/(stream|download)-file$/.test(req.path) && compression.filter(req, res),
   })
 );
 
