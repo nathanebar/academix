@@ -11,6 +11,7 @@ import { queryClient } from "./api/queryClient";
 import { useQueryDebugger } from "./hooks/useQueryDebugger";
 import { useEffect, useRef } from "react";
 import { useDateValidation } from "./hooks/useDateValidation";
+import { TopProgressBar } from "./loading/TopProgressBar";
 
 function App() {
   const authStatus = useUserAuth();
@@ -99,6 +100,7 @@ function App() {
         <Login />
       ) : (
         <QueryClientProvider client={queryClient}>
+          <TopProgressBar />
           <RouterProvider router={AppRoutes} />
           {process.env.NODE_ENV === "development" && <ReactQueryDevtools initialIsOpen={false} />}
         </QueryClientProvider>
