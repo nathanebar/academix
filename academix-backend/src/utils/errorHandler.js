@@ -32,7 +32,7 @@ const catchError = (error, req, res, extra = {}) => {
     userSource = 'ntlm';
   }
 
-  logger.error(`${functionName}`, {
+  const errorId = logger.error(`${functionName}`, {
     stack: error.stack,
     functionName,
     endpoint: req.originalUrl,
@@ -47,10 +47,15 @@ const catchError = (error, req, res, extra = {}) => {
     ...extra
   });
 
+  // In production the client never sees the internal error message (SQL, file paths, stack
+  // details): `error` stays a string the frontend can display, with a reference to find the
+  // full error in the logs. Development keeps the real message.
+  const isProduction = process.env.NODE_ENV === 'production';
   res.status(500).json({
     success: false,
     message: 'שגיאה בשרת',
-    error: error.message
+    error: isProduction ? `שגיאה בשרת (אסמכתא: ${errorId})` : error.message,
+    errorId,
   });
 };
 
