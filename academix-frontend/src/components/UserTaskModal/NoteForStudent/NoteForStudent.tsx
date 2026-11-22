@@ -1,7 +1,7 @@
+import api from "../../../api/axios";
 import React, { useState, useEffect } from "react";
 import { Input, Button, message } from "antd";
 import { CheckOutlined, CloseOutlined, LockOutlined } from "@ant-design/icons";
-import axios from "axios";
 
 interface NoteForStudentProps {
   taskAssignmentId: number;
@@ -27,8 +27,8 @@ const NoteForStudent: React.FC<NoteForStudentProps> = ({
   useEffect(() => {
     const fetchNote = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/task-assignments/note/${taskAssignmentId}`
+        const response = await api.get(
+          `/task-assignments/note/${taskAssignmentId}`
         );
 
         const fetchedNote = response.data.note_for_student || "";
@@ -67,8 +67,8 @@ const NoteForStudent: React.FC<NoteForStudentProps> = ({
 
     setIsLoading(true);
     try {
-      await axios.patch(
-        `${process.env.REACT_APP_API_BASE_URL}/task-assignments/note/${taskAssignmentId}`,
+      await api.patch(
+        `/task-assignments/note/${taskAssignmentId}`,
         {
           note_for_student: note.trim(),
         }
@@ -89,8 +89,8 @@ const NoteForStudent: React.FC<NoteForStudentProps> = ({
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      await axios.patch(
-        `${process.env.REACT_APP_API_BASE_URL}/task-assignments/note/${taskAssignmentId}`,
+      await api.patch(
+        `/task-assignments/note/${taskAssignmentId}`,
         {
           note_for_student: null,
         }

@@ -1,3 +1,4 @@
+import api from "../../api/axios";
 import React, { useEffect, useState } from "react";
 import style from "./NewTaskModal.module.css";
 
@@ -33,7 +34,6 @@ import GradeStage from "./Inputs/GradeStage/GradeStage";
 import Survey from "./Inputs/Survey/Survey";
 import UploadFiles from "./Inputs/UploadFiles/UploadFiles";
 import ResponseFile from "./Inputs/ResponseFile/ResponseFile";
-import axios from "axios";
 import { useUserStore } from "../../store/userStore";
 import { useSelectionsStore } from "../../store/selectionStore";
 import { useQueryClient } from "@tanstack/react-query";
@@ -273,8 +273,8 @@ const NewTaskModal = (props: NewMissionProps) => {
 
   const fetchChecklistsForOverlap = async (taskId: number) => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/task-checklist-overlap/by-task/${taskId}`
+      const response = await api.get(
+        `/task-checklist-overlap/by-task/${taskId}`
       );
       if (response.data && response.data.length > 0) {
         setChecklistsForOverlap(
@@ -290,8 +290,8 @@ const NewTaskModal = (props: NewMissionProps) => {
   const fetchSchedulingData = async (taskId: number) => {
     if (!selectedTeam?.id) return;
     try {
-      const visibilityRes = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/task-visibility-overrides/${taskId}/${selectedTeam.id}`,
+      const visibilityRes = await api.get(
+        `/task-visibility-overrides/${taskId}/${selectedTeam.id}`,
         { withCredentials: true }
       );
       if (visibilityRes.data?.data) {
@@ -308,8 +308,8 @@ const NewTaskModal = (props: NewMissionProps) => {
 
     if (hadSchedulingOverride && !schedulingEnabled) {
       try {
-        await axios.delete(
-          `${process.env.REACT_APP_API_BASE_URL}/task-visibility-overrides/${taskId}/${selectedTeam.id}`,
+        await api.delete(
+          `/task-visibility-overrides/${taskId}/${selectedTeam.id}`,
           { withCredentials: true }
         );
       } catch (e: any) {
@@ -327,8 +327,8 @@ const NewTaskModal = (props: NewMissionProps) => {
       endMinutesAfter: endMinutesAfter ?? 0,
     };
     try {
-      await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/task-visibility-overrides`,
+      await api.post(
+        `/task-visibility-overrides`,
         data,
         { withCredentials: true }
       );
@@ -344,8 +344,8 @@ const NewTaskModal = (props: NewMissionProps) => {
   ) => {
     try {
       setIsLoading(true);
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/tasks/getById/${props.editingTask?.id}`
+      const response = await api.get(
+        `/tasks/getById/${props.editingTask?.id}`
       );
 
       const taskData = response.data;
@@ -960,15 +960,15 @@ const NewTaskModal = (props: NewMissionProps) => {
       const newTags = tags.filter((t) => t.id).map((t) => t.id!);
 
       if (taskId) {
-        await axios.delete(
-          `${process.env.REACT_APP_API_BASE_URL}/tasks/${taskId}/tags`,
+        await api.delete(
+          `/tasks/${taskId}/tags`,
           { withCredentials: true }
         );
 
         // ex. POST /tasks/:id/tags  body: [{ tagId: 1 }, { tagId: 2 }]
         if (newTags.length > 0) {
-          await axios.post(
-            `${process.env.REACT_APP_API_BASE_URL}/tasks/${taskId}/tags`,
+          await api.post(
+            `/tasks/${taskId}/tags`,
             newTags.map((id) => ({ tagId: id })),
             { withCredentials: true }
           );
@@ -1040,8 +1040,8 @@ const NewTaskModal = (props: NewMissionProps) => {
         const bool = !isEqual(taskFromDBSynced, taskToUpload2Synced);
 
         const res = true
-          ? await axios.put(
-            `${process.env.REACT_APP_API_BASE_URL}/tasks/${taskInStore.id}`,
+          ? await api.put(
+            `/tasks/${taskInStore.id}`,
             {
               ...taskToUpload,
               courseBatchId: selectedCourseBatch.id,
@@ -1057,8 +1057,8 @@ const NewTaskModal = (props: NewMissionProps) => {
         if (res?.status === 200 || res?.status === 201 || res?.status === 777) {
           savedTaskId = res.data.id ?? res.data.dataValues.id;
 
-          await axios.post(
-            `${process.env.REACT_APP_API_BASE_URL}/task-checklist-overlap`,
+          await api.post(
+            `/task-checklist-overlap`,
             {
               taskId: savedTaskId,
               checklists: checklistsForOverlap.map((item, index) => ({
@@ -1087,8 +1087,8 @@ const NewTaskModal = (props: NewMissionProps) => {
           handleClose();
         }
       } else {
-        const res = await axios.post(
-          `${process.env.REACT_APP_API_BASE_URL}/tasks/${selectedCourseBatch.id}`,
+        const res = await api.post(
+          `/tasks/${selectedCourseBatch.id}`,
           taskToUpload,
           { withCredentials: true }
         );
@@ -1096,8 +1096,8 @@ const NewTaskModal = (props: NewMissionProps) => {
           savedTaskId = res.data.id;
 
           if (cleanOverlapChecklists.length > 0) {
-            await axios.post(
-              `${process.env.REACT_APP_API_BASE_URL}/task-checklist-overlap`,
+            await api.post(
+              `/task-checklist-overlap`,
               {
                 taskId: savedTaskId,
                 checklists: cleanOverlapChecklists,

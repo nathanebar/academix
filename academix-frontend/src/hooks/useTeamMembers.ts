@@ -1,5 +1,5 @@
+import api from "../api/axios";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { User } from "../types/types";
 
 interface TeamMember {
@@ -24,8 +24,8 @@ export const useTeamMembers = (
     setError(null);
 
     try {
-      const response = await axios.get<TeamMember[]>(
-        `${process.env.REACT_APP_API_BASE_URL}/teamMembers/getUsersTeam/${teamId}/${courseBatchId}`
+      const response = await api.get<TeamMember[]>(
+        `/teamMembers/getUsersTeam/${teamId}/${courseBatchId}`
       );
       setTeamMembers(response.data);
     } catch (err) {

@@ -7,7 +7,7 @@ export const useFetchFormsTitle = (courseId: number, teamId: number,selectedCour
     queryFn: async () => {
       try {
         const { data } = await api.get(
-          `${process.env.REACT_APP_API_BASE_URL}/forms/getAllByCourseIdAndTeamId/${courseId}`,
+          `/forms/getAllByCourseIdAndTeamId/${courseId}`,
           { params: { teamId ,courseBatch:selectedCourseBatch,type} }
         );
 

@@ -80,7 +80,7 @@ export const useSurveyDashboard = (
     queryKey: ["surveyDashboard", courseId, teamId, courseBatch],
     queryFn: async () => {
       const { data } = await api.get(
-        `${process.env.REACT_APP_API_BASE_URL}/forms/getSurveyDashboard/${courseId}`,
+        `/forms/getSurveyDashboard/${courseId}`,
         {
           params: { teamId, courseBatch },
         }

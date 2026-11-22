@@ -30,7 +30,7 @@ export const useSurveyMembers = (
       if (!surveyId) return { success: true, data: [] };
 
       const { data } = await api.get(
-        `${process.env.REACT_APP_API_BASE_URL}/forms/survey/${surveyId}/members`,
+        `/forms/survey/${surveyId}/members`,
         {
           params: { taskId },
         }
