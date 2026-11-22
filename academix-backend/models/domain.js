@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        // Unique through the named index in the options (see models/user.js for why).
       },
       systemId: {
         type: DataTypes.INTEGER,
@@ -41,6 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Domain",
+      indexes: [{ name: "Domains_name_key", unique: true, fields: ["name"] }],
     }
   );
 

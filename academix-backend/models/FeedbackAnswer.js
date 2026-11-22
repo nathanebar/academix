@@ -61,7 +61,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       team_member_id: {
         type: DataTypes.INTEGER,
-        defaultValue: null,
+        // No `defaultValue: null` here (NULL is already the default): combined with
+        // `references`, Sequelize generates invalid SQL for `db:init -- --alter`.
         references: {
           model: "TeamMembers",
           key: "id",

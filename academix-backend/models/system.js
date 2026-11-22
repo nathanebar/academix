@@ -13,10 +13,11 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        // Unique through the named index below (see models/user.js for why).
       },
     },
     {
+      indexes: [{ name: "Systems_name_key", unique: true, fields: ["name"] }],
       sequelize,
       modelName: "System",
     }
