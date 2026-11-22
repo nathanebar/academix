@@ -1,3 +1,4 @@
+import api from "../../../../api/axios";
 // src/components/Forms/QuestionsComponents/FileQuestion/FileQuestion.tsx
 import React, { useCallback, useEffect, useState } from "react";
 import style from "./FileQuestion.module.css";
@@ -18,7 +19,6 @@ import FormGrade from "../../../../UI/FormGrade/FormGrade";
 import { ReactComponent as EditIcon } from "../../../../media/icons/Edit Icon.svg";
 import { useSearchParams } from "react-router-dom";
 import { uploadFilesToS3 } from "../../../../store/taskStore";
-import axios from "axios";
 
 const FileQuestion = (props: any) => {
   const [downloading, setDownloading] = useState<number | null>(null);
@@ -140,8 +140,8 @@ const FileQuestion = (props: any) => {
 
       console.log("📥 Downloading:", { key, fileName, downloadType });
 
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/files/download-file`,
+      const response = await api.get(
+        `/files/download-file`,
         {
           params: {
             key: key,

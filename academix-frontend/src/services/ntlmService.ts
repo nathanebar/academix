@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../api/axios";
 
 const API = `${process.env.REACT_APP_API_BASE_URL}`;
 
@@ -15,7 +15,7 @@ export type AuthUser = {
 // Si le backend ne connaît pas /auth/mode, on garde le comportement historique (NTLM).
 export const getAuthMode = async (): Promise<AuthMode> => {
   try {
-    const res = await axios.get(`${API}/auth/mode`, { withCredentials: true });
+    const res = await api.get(`/auth/mode`, { withCredentials: true });
     return res.data?.mode === "local" ? "local" : "ntlm";
   } catch {
     return "ntlm";
@@ -24,7 +24,7 @@ export const getAuthMode = async (): Promise<AuthMode> => {
 
 export const fetchUser = async () => {
   try {
-    const res = await axios.get(`${API}/auth/ntlm`, {
+    const res = await api.get(`/auth/ntlm`, {
       withCredentials: true,
     });
 
@@ -37,7 +37,7 @@ export const fetchUser = async () => {
 // Utilisateur de la session courante (cookie JWT), ou null.
 export const fetchMe = async (): Promise<AuthUser | null> => {
   try {
-    const res = await axios.get(`${API}/auth/me`, { withCredentials: true });
+    const res = await api.get(`/auth/me`, { withCredentials: true });
     return res.data?.user ?? null;
   } catch {
     return null;
@@ -45,8 +45,8 @@ export const fetchMe = async (): Promise<AuthUser | null> => {
 };
 
 export const login = async (username: string, password: string): Promise<AuthUser> => {
-  const res = await axios.post(
-    `${API}/auth/login`,
+  const res = await api.post(
+    `/auth/login`,
     { username, password },
     { withCredentials: true }
   );
@@ -55,7 +55,7 @@ export const login = async (username: string, password: string): Promise<AuthUse
 
 export const logout = async () => {
   try {
-    await axios.post(`${API}/auth/logout`, {}, { withCredentials: true });
+    await api.post(`/auth/logout`, {}, { withCredentials: true });
   } finally {
     localStorage.removeItem("userInfo");
   }
