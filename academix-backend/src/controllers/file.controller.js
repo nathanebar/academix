@@ -22,6 +22,8 @@ const logger = require("../utils/logger");
 const { catchError } = require("../utils/errorHandler");
 const { fileStream } = require("../middlewares/upload");
 const { sendS3Object } = require("../utils/s3Stream");
+const { canUserAccessKey, canUserAccessFolderFile } = require("../services/fileAccess.service");
+const { CourseBatchFolderFile } = require("../../models");
 
 config({ quiet: true });
 
@@ -42,6 +44,45 @@ const s3Client = new S3Client({
   forcePathStyle: true,
 });
 
+/**
+ * Access check shared by streamFile and downloadFile. Returns:
+ * - { status: "ok", fileRecord, bucket } (bucket: from the DB for authenticated requests),
+ * - { status: "not_found" }: no Files row and no accessible folder file,
+ * - { status: "forbidden" }: a Files row exists but the user may not read it.
+ * Authenticated requests (#13) use fileAccess.service: the teamId / teamMemberId params
+ * are only hints there. Requests without a token keep the old checks.
+ */
+const authorizeFile = async (req, key, { teamMemberId, teamId }) => {
+  if (req.user) {
+    const { found, allowed, file } = await canUserAccessKey(req, key, { teamMemberId });
+    if (found) {
+      return allowed ? { status: "ok", fileRecord: file, bucket: file.s3BucketName } : { status: "forbidden" };
+    }
+    if (await canUserAccessFolderFile(req, key, { teamMemberId })) {
+      const folderFile = await CourseBatchFolderFile.findOne({ where: { s3_key: key }, raw: true });
+      return { status: "ok", fileRecord: null, bucket: folderFile?.s3_bucket_name };
+    }
+    return { status: "not_found" };
+  }
+
+  // Old behavior (no token)
+  const fileRecord = await File.findOne({ where: { s3Key: key } });
+  if (!fileRecord) {
+    const hasFolderAccess = await canAccessCustomFolderFile(
+      key,
+      teamMemberId ? Number(teamMemberId) : null,
+      teamId ? Number(teamId) : null
+    );
+    return hasFolderAccess ? { status: "ok", fileRecord: null, bucket: null } : { status: "not_found" };
+  }
+  const hasAccess = await canAccessFile(
+    fileRecord,
+    teamMemberId ? Number(teamMemberId) : null,
+    teamId ? Number(teamId) : null
+  );
+  return hasAccess ? { status: "ok", fileRecord, bucket: null } : { status: "forbidden" };
+};
+
 exports.streamFile = async (req, res) => {
   const { bucket, key, teamMemberId, teamId } = req.query;
 
@@ -50,41 +91,16 @@ exports.streamFile = async (req, res) => {
   }
 
   try {
-    // 1. ננסה קובץ רגיל
-    let fileRecord = await File.findOne({ where: { s3Key: key } });
-
-    // 2. אם לא נמצא – ננסה קובץ מתיקייה מותאמת
-    if (!fileRecord) {
-      const hasFolderAccess = await canAccessCustomFolderFile(
-        key,
-        teamMemberId ? Number(teamMemberId) : null,
-        teamId ? Number(teamId) : null
-      );
-
-      if (!hasFolderAccess) {
-        return res.status(404).json({ message: "File not found or access denied" });
-      }
-
-      return await sendS3Object(s3Client, req, res, {
-        bucket,
-        key,
-        headers: { "Content-Disposition": "inline" },
-      });
+    const access = await authorizeFile(req, key, { teamMemberId, teamId });
+    if (access.status === "not_found") {
+      return res.status(404).json({ message: "File not found or access denied" });
     }
-
-    // 3. קובץ רגיל – בדיקת הרשאות רגילה
-    const hasAccess = await canAccessFile(
-      fileRecord,
-      teamMemberId ? Number(teamMemberId) : null,
-      teamId ? Number(teamId) : null
-    );
-
-    if (!hasAccess) {
+    if (access.status === "forbidden") {
       return res.status(403).json({ message: "Access denied" });
     }
 
     await sendS3Object(s3Client, req, res, {
-      bucket,
+      bucket: access.bucket || bucket,
       key,
       headers: { "Content-Disposition": "inline" },
     });
@@ -447,45 +463,19 @@ exports.downloadFile = async (req, res) => {
       return res.status(400).json({ error: "Missing key parameter" });
     }
 
-    // 1. ננסה קובץ רגיל
-    let fileRecord = await File.findOne({ where: { s3Key: key } });
-
-    // 2. אם לא נמצא – ננסה קובץ מתיקייה מותאמת
-    if (!fileRecord) {
-      const hasFolderAccess = await canAccessCustomFolderFile(
-        key,
-        teamMemberId ? Number(teamMemberId) : null,
-        teamId ? Number(teamId) : null
-      );
-
-      if (!hasFolderAccess) {
-        return res.status(404).json({ error: "File not found or access denied" });
-      }
-
-      const s3Bucket = process.env.S3_BUCKET_NAME || "academix";
-      const originalFileName = fileName || key.split("/").pop() || "file";
-      return await sendS3Object(s3Client, req, res, {
-        bucket: s3Bucket,
-        key,
-        headers: downloadHeaders(originalFileName),
-      });
+    const access = await authorizeFile(req, key, { teamMemberId, teamId });
+    if (access.status === "not_found") {
+      return res.status(404).json({ error: "File not found or access denied" });
     }
-
-    // 3. קובץ רגיל – בדיקת הרשאות רגילה
-    const hasAccess = await canAccessFile(
-      fileRecord,
-      teamMemberId ? Number(teamMemberId) : null,
-      teamId ? Number(teamId) : null
-    );
-
-    if (!hasAccess) {
+    if (access.status === "forbidden") {
       return res.status(403).json({ error: "Access denied" });
     }
 
-    let originalFileName =
-      fileRecord.name || fileName || key.split("/").pop() || "file";
-    let s3Bucket =
-      fileRecord.s3BucketName || process.env.S3_BUCKET_NAME || "academix";
+    const fileRecord = access.fileRecord;
+    const originalFileName =
+      fileRecord?.name || fileName || key.split("/").pop() || "file";
+    const s3Bucket =
+      access.bucket || fileRecord?.s3BucketName || process.env.S3_BUCKET_NAME || "academix";
 
     await sendS3Object(s3Client, req, res, {
       bucket: s3Bucket,
