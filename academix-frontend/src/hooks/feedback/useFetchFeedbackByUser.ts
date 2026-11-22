@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../../api/axios";
+import { feedbackKeys } from "../../api/queryKeys";
 import { notification } from "antd";
 
 export const useFetchFeedbackByUserId = (teamMemberId: number | undefined,selectedPermission:string |undefined) => {
   return useQuery({
-    queryKey: ["feedbackByUserId", teamMemberId,selectedPermission],
+    queryKey: feedbackKeys.byMember(teamMemberId, selectedPermission),
     queryFn: async () => {
       // Check if at least one ID is valid
       const isValidUserId = teamMemberId && !isNaN(teamMemberId) && teamMemberId !== 0;

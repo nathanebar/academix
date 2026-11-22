@@ -1,3 +1,4 @@
+import { teamEventKeys } from "../../../api/queryKeys";
 import {
   CalendarOutlined,
   CloseOutlined,
@@ -273,7 +274,7 @@ const TeamEventBank = (props: Props) => {
         },
         {
           onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["teamEvents"] });
+            queryClient.invalidateQueries({ queryKey: teamEventKeys.all });
             queryClient.invalidateQueries({
               queryKey: ["teamEventAssignment"],
             });
@@ -304,7 +305,7 @@ const TeamEventBank = (props: Props) => {
         },
         {
           onSuccess: (data) => {
-            queryClient.invalidateQueries({ queryKey: ["teamEvents"] });
+            queryClient.invalidateQueries({ queryKey: teamEventKeys.all });
             if (isConstant) {
               props.generateConstantTeamEvent(
                 startDate,
@@ -767,7 +768,7 @@ const TeamEventBank = (props: Props) => {
                                 removeTeamEventMutation.mutate(event.id, {
                                   onSuccess: () => {
                                     queryClient.invalidateQueries({
-                                      queryKey: ["teamEvents"],
+                                      queryKey: teamEventKeys.all,
                                     });
                                     resetEdit();
                                   },
@@ -836,7 +837,7 @@ const TeamEventBank = (props: Props) => {
                               removeTeamEventMutation.mutate(event.id, {
                                 onSuccess: () => {
                                   queryClient.invalidateQueries({
-                                    queryKey: ["teamEvents"],
+                                    queryKey: teamEventKeys.all,
                                   });
                                 },
                               });

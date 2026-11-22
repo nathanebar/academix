@@ -41,7 +41,6 @@ export const useFetchTasksByTagId = (
       return data.data.byTag ?? [];
     },
 
-    retry: 2,
     // staleTime: 5 * 60 * 1000,
   });
 };

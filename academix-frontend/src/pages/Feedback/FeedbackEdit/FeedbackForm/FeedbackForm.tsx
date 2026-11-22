@@ -25,6 +25,7 @@ import { UserTaskModal } from "../../../../components/LazyTaskModals";
 import dayjs from "dayjs";
 import { useSelectionsStore } from "../../../../store/selectionStore";
 import { useUserStore } from "../../../../store/userStore";
+import { feedbackKeys } from "../../../../api/queryKeys";
 
 interface Category {
   id: number;
@@ -500,10 +501,10 @@ const FeedbackForm: React.FC<Props> = (props) => {
         queryKey: ["feedbackcourseId"],
       });
       queryClient.refetchQueries({
-        queryKey: ["feedbackByUserId"],
+        queryKey: feedbackKeys.memberLists(),
       });
       queryClient.refetchQueries({
-        queryKey: ["feedbackByAssignment"],
+        queryKey: feedbackKeys.byAssignmentAll(),
       });
       setTimeout(() => {
         navigate("/feedbackDashboard");
