@@ -21,7 +21,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import BlackButton from "../../../../UI/Button/BlackButton";
 import { usePermissionStore } from "../../../../store/permissionStore";
-import UserTaskModal from "../../../../components/UserTaskModal/UserTaskModal";
+import { UserTaskModal } from "../../../../components/LazyTaskModals";
 import dayjs from "dayjs";
 import { useSelectionsStore } from "../../../../store/selectionStore";
 import { useUserStore } from "../../../../store/userStore";

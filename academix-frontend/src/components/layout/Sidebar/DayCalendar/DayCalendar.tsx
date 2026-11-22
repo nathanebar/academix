@@ -60,7 +60,7 @@ import {
   TeamMember,
 } from "../../../../utils/filterStudentMembers";
 import { useRefreshStore } from "../../../../store/selectionStore";
-import UserTaskModal from "../../../UserTaskModal/UserTaskModal";
+import { UserTaskModal } from "../../../LazyTaskModals";
 import BlockDatesModal from "../../../Modals/BlockDatesModal/BlockDatesModal";
 import { useBlockedDatesStore } from "../../../../store/blockedDatesStore";
 import { useFetchBlockDates } from "../../../../hooks/useFetchBlockDates";

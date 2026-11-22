@@ -69,7 +69,7 @@ import {
   updateToTeam,
   updateToUser,
 } from "../../services/ApiServices";
-import UserTaskModal from "../../components/UserTaskModal/UserTaskModal";
+import { UserTaskModal } from "../../components/LazyTaskModals";
 import { useFilteredDataStore } from "../../store/filteredDataStore";
 import { useCalendarStore } from "../../store/calendarStore";
 import { usePermissionStore } from "../../store/permissionStore";
@@ -99,7 +99,7 @@ import { showAssignHoefModal } from "../../components/layout/Sidebar/AssignHoefM
 import CreateTaskFromCalendar from "./CreateTaskFromCalendar/CreateTaskFromCalendar";
 import { useCourseBatchStore } from "../../store/courseBatchStore";
 import { useTaskGroupsByAxisId } from "../../hooks/useTaskGroupsByAxisId";
-import NewTaskModal from "../../components/NewTaskModal/NewTaskModal";
+import { NewTaskModal } from "../../components/LazyTaskModals";
 
 interface TaskEvent {
   id?: string;

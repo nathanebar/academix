@@ -16,7 +16,7 @@ import { useFetchFormsByUser } from "../../../hooks/Forms/useFetchFormsByUserId"
 import { useFetchDayTaskAssignement } from "../../../hooks/useFetchDayTaskAssignement";
 import CoincidenceView from "../CoincidenceView/CoincidenceView";
 import { useMissedFetchFeedbackByMemberId } from "../../../hooks/feedback/useFetchMissedFeedbacksByMemberId";
-import UserTaskModal from "../../../components/UserTaskModal/UserTaskModal";
+import { UserTaskModal } from "../../../components/LazyTaskModals";
 import { usePermissionStore } from "../../../store/permissionStore";
 import { TaskList } from "../TaskList/TaskList";
 

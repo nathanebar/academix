@@ -1,6 +1,5 @@
 import { Outlet, useLocation } from "react-router-dom";
 import "./Layout.css";
-import Sidebar from "./Sidebar/Sidebar";
 import Topbar from "./Topbar";
 import { useFetchPermissions } from "../../hooks/useFetchPermissions";
 import { usePermissionStore } from "../../store/permissionStore";
@@ -8,7 +7,8 @@ import { useFetchDomains } from "../../hooks/useFetchDomains";
 import { useFetchTeams } from "../../hooks/useFetchTeams";
 import { useFetchCourses } from "../../hooks/useFetchCourses";
 import { useFetchCourseBatches } from "../../hooks/useFetchCourseBatch";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
+import { Spin } from "antd";
 import { useRoleNavigation } from "../../hooks/useRoleNavigation";
 import { useDomainStore } from "../../store/domainStore";
 import { useTeamStore } from "../../store/teamStore";
@@ -23,6 +23,10 @@ import { useFetchTeamMembers } from "../../hooks/useFetchTeamMembers";
 import { useFetchAxesBatchArchives } from "../../hooks/useFetchAxesBatchArchives";
 import { useFetchCourseCommanders } from "../../hooks/useFetchCourseCommanders";
 import { useBlockColorEnabled } from "../../hooks/useTeamBlockColor";
+
+// The sidebar (calendars, day view, task modal) is only shown on /calendar and /courseContent:
+// load it on demand instead of on every page.
+const Sidebar = lazy(() => import("./Sidebar/Sidebar"));
 
 export default function Layout() {
   useRoleNavigation();
@@ -128,11 +132,24 @@ export default function Layout() {
   // maybe need to make save the block color by team store here
   return (
     <div className="layout">
-      {isSidebarVisible && <Sidebar />}
+      {isSidebarVisible && (
+        <Suspense fallback={null}>
+          <Sidebar />
+        </Suspense>
+      )}
       <div className="main-content">
         <Topbar isSidebarVisible={isSidebarVisible} />
         <div className="page-content">
-          <Outlet />
+          {/* Pages are lazy-loaded (routes/AppRoutes.tsx): fallback while a page chunk loads */}
+          <Suspense
+            fallback={
+              <div style={{ display: "flex", justifyContent: "center", padding: "15vh 0" }}>
+                <Spin size="large" />
+              </div>
+            }
+          >
+            <Outlet />
+          </Suspense>
         </div>
       </div>
     </div>

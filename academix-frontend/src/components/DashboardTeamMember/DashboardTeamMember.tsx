@@ -10,7 +10,7 @@ import { useCallback, useEffect, useState, useMemo } from "react";
 import MissionDiv from "../../utils/MissionDiv/MissionDiv";
 import { useFetchFeedbackByUserId } from "../../hooks/feedback/useFetchFeedbackByUser";
 import FeedbackCardByUser from "../../pages/Feedback/FeedbackDashboardByUser/FeedbackCardByUser/FeedbackCardByUser";
-import UserTaskModal from "../UserTaskModal/UserTaskModal";
+import { UserTaskModal } from "../LazyTaskModals";
 import dayjs, { Dayjs } from "dayjs";
 import { usePermissionStore } from "../../store/permissionStore";
 import FeedbackCategoryChar from "../FeedbackCategoryChar/FeedbackCategoryChar";

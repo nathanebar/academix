@@ -22,7 +22,7 @@ import TaskUserTag from "../../components/Task/TaskTag/TaskUserTag";
 import NextTaskView from "../studentStatus/nextTaskView/NextTaskView";
 import Photo from "../../UI/Photo/Photo";
 import { useTeamMembers } from "../../hooks/useTeamMembers";
-import UserTaskModal from "../../components/UserTaskModal/UserTaskModal";
+import { UserTaskModal } from "../../components/LazyTaskModals";
 
 
 

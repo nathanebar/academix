@@ -22,14 +22,14 @@ import {
 import { useLocation } from "react-router-dom";
 import TaskUserTag from "./TaskTag/TaskUserTag";
 import TaskTeamTag from "./TaskTag/TaskTeamTag";
-import UserTaskModal from "../UserTaskModal/UserTaskModal";
+import { UserTaskModal } from "../LazyTaskModals";
 import { useState } from "react";
 import { useEffect } from "react";
 import api from "../../api/axios";
 import { ItemType } from "antd/es/menu/interface";
 import { useSelectionsStore } from "../../store/selectionStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import NewTaskModal from "../NewTaskModal/NewTaskModal";
+import { NewTaskModal } from "../LazyTaskModals";
 import TeamTaskModal from "../Modals/TeamTaskModal/TeamTaskModal";
 import { usePermissionStore } from "../../store/permissionStore";
 import { useCalendarStore } from "../../store/calendarStore";

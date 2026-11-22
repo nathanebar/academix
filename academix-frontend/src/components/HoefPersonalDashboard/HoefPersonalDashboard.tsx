@@ -44,7 +44,7 @@ import { useHoefTeamSummary } from "../../hooks/useHoefAssignment";
 import { useSelectionsStore } from "../../store/selectionStore";
 import { usePermissionStore } from "../../store/permissionStore";
 import { useFilteredDataStore } from "../../store/filteredDataStore";
-import UserTaskModal from "../UserTaskModal/UserTaskModal";
+import { UserTaskModal } from "../LazyTaskModals";
 import TaskUserTag from "../Task/TaskTag/TaskUserTag";
 
 dayjs.locale("he");
