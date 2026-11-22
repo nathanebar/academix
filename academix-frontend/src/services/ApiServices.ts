@@ -16,18 +16,6 @@ import { feedbackKeys } from "../api/queryKeys";
 import { message } from "antd";
 import api from "../api/axios";
 
-axios.interceptors.request.use((config) => {
-  try {
-    const userInfoStr = localStorage.getItem("userInfo");
-    if (userInfoStr) {
-      const userInfo = JSON.parse(userInfoStr);
-      config.headers["X-User-Id"] = userInfo.id || "";
-      config.headers["X-User-Name"] = userInfo.name || userInfo.username || "";
-    }
-  } catch (e) {}
-  return config;
-});
-
 export async function GetUserData(username: string): Promise<any> {
   if (username.trim() === "") {
     return;
@@ -35,8 +23,8 @@ export async function GetUserData(username: string): Promise<any> {
 
   let res: any;
   try {
-    res = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/users/getUserData/${username}`,
+    res = await api.get(
+      `/users/getUserData/${username}`,
       {
         withCredentials: true,
       }
@@ -49,8 +37,8 @@ export async function GetUserData(username: string): Promise<any> {
 
 export async function getUserByUsername(username: string): Promise<any> {
   try {
-    const req = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/users/by-username/${username}`,
+    const req = await api.get(
+      `/users/by-username/${username}`,
       {
         withCredentials: true,
       }
@@ -63,8 +51,8 @@ export async function getUserByUsername(username: string): Promise<any> {
 
 export async function createUser(data: any) {
   try {
-    const req = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/users`,
+    const req = await api.post(
+      `/users`,
       data,
       {
         withCredentials: true,
@@ -78,8 +66,8 @@ export async function createUser(data: any) {
 
 export async function getAllRoleAssigments() {
   try {
-    const req = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/roleAssignments`
+    const req = await api.get(
+      `/roleAssignments`
     );
 
     return req.data;
@@ -91,8 +79,8 @@ export async function getAllRoleAssigments() {
 
 export async function createRoleAssigment(data: any) {
   try {
-    const req = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/roleAssignments`,
+    const req = await api.post(
+      `/roleAssignments`,
       data,
       {
         withCredentials: true,
@@ -108,8 +96,8 @@ export async function createRoleAssigment(data: any) {
 
 export async function deleteRoleAssigment(userId: number, scopeId: number) {
   try {
-    const req = await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/roleAssignments/${userId}/${scopeId}`
+    const req = await api.delete(
+      `/roleAssignments/${userId}/${scopeId}`
     );
     return req;
   } catch (error: any) {
@@ -120,7 +108,7 @@ export async function deleteRoleAssigment(userId: number, scopeId: number) {
 
 export async function getAllUsers() {
   try {
-    const req = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/users`, {
+    const req = await api.get(`/users`, {
       withCredentials: true,
     });
     return req.data;
@@ -132,8 +120,8 @@ export async function getAllUsers() {
 
 export async function addTeamMember(data: any) {
   try {
-    const req = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/teamMembers`,
+    const req = await api.post(
+      `/teamMembers`,
       data,
       {
         withCredentials: true,
@@ -150,8 +138,8 @@ export async function deleteTeamMember(teamId: number, userId: number) {
   const params = [teamId, userId];
 
   try {
-    const req = await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/teamMembers/${params}`
+    const req = await api.delete(
+      `/teamMembers/${params}`
     );
 
     return req;
@@ -170,8 +158,8 @@ export async function updateTeamMember(
 ) {
   const params = [teamId, userId, courseId, course_batch_id];
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/teamMembers/${params}`,
+    const req = await api.put(
+      `/teamMembers/${params}`,
       data
     );
 
@@ -184,8 +172,8 @@ export async function updateTeamMember(
 
 export async function createCourse(data: any) {
   try {
-    const req = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/courses`,
+    const req = await api.post(
+      `/courses`,
       data,
       {
         withCredentials: true,
@@ -200,8 +188,8 @@ export async function createCourse(data: any) {
 
 export async function updateCourse(data: any, courseId: any) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/courses/${courseId}`,
+    const req = await api.put(
+      `/courses/${courseId}`,
       data,
       {
         withCredentials: true,
@@ -216,8 +204,8 @@ export async function updateCourse(data: any, courseId: any) {
 
 export async function deleteCourse(courseId: any) {
   try {
-    const req = await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/courses/${courseId}`
+    const req = await api.delete(
+      `/courses/${courseId}`
     );
     return req;
   } catch (error: any) {
@@ -227,8 +215,8 @@ export async function deleteCourse(courseId: any) {
 }
 export async function updateDomain(data: any, domainId: any) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/domains/${domainId}`,
+    const req = await api.put(
+      `/domains/${domainId}`,
       data,
       {
         withCredentials: true,
@@ -243,8 +231,8 @@ export async function updateDomain(data: any, domainId: any) {
 
 export async function createCourseBatch(data: any) {
   try {
-    const req = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/courseBatch`,
+    const req = await api.post(
+      `/courseBatch`,
       data,
       {
         withCredentials: true,
@@ -259,8 +247,8 @@ export async function createCourseBatch(data: any) {
 
 export async function updateCourseBatch(data: any, courseId: any) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/courseBatch/${courseId}`,
+    const req = await api.put(
+      `/courseBatch/${courseId}`,
       data,
       {
         withCredentials: true,
@@ -275,8 +263,8 @@ export async function updateCourseBatch(data: any, courseId: any) {
 
 export async function deleteCourseBatch(courseBatchId: any) {
   try {
-    const req = await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/courseBatch/${courseBatchId}`
+    const req = await api.delete(
+      `/courseBatch/${courseBatchId}`
     );
     return req;
   } catch (error: any) {
@@ -287,8 +275,8 @@ export async function deleteCourseBatch(courseBatchId: any) {
 
 export async function createTeam(data: any) {
   try {
-    const req = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/teams`,
+    const req = await api.post(
+      `/teams`,
       data,
       {
         withCredentials: true,
@@ -303,8 +291,8 @@ export async function createTeam(data: any) {
 
 export async function updateAxis(axisId: number | null, axisData: any) {
   try {
-    const response = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/axes/${axisId}`,
+    const response = await api.put(
+      `/axes/${axisId}`,
       axisData,
       {
         withCredentials: true,
@@ -320,8 +308,8 @@ export async function updateAxis(axisId: number | null, axisData: any) {
 
 export async function addDomain(data: any) {
   try {
-    const req = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/domains`,
+    const req = await api.post(
+      `/domains`,
       data,
       {
         withCredentials: true,
@@ -336,8 +324,8 @@ export async function addDomain(data: any) {
 
 export async function updateTeam(data: any) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/teams/${data.id}`,
+    const req = await api.put(
+      `/teams/${data.id}`,
       data,
       {
         withCredentials: true,
@@ -352,8 +340,8 @@ export async function updateTeam(data: any) {
 
 export async function deleteTeam(data: any) {
   try {
-    const req = await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/teams/${data}`
+    const req = await api.delete(
+      `/teams/${data}`
     );
     return req;
   } catch (error: any) {
@@ -367,8 +355,8 @@ export async function createAxisData(
   selectedCourseBatch: number
 ) {
   try {
-    const response = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/axes/${selectedCourseBatch}`,
+    const response = await api.post(
+      `/axes/${selectedCourseBatch}`,
       axisData,
       {
         withCredentials: true,
@@ -388,8 +376,8 @@ export async function createTaskGroup(
   axisId: number | undefined
 ) {
   try {
-    const response = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/taskGroup/${selectedCourseBatch}/${axisId}`,
+    const response = await api.post(
+      `/taskGroup/${selectedCourseBatch}/${axisId}`,
       taskGroup,
       {
         withCredentials: true,
@@ -404,8 +392,8 @@ export async function createTaskGroup(
 
 export async function deleteAxis(id: any) {
   try {
-    const req = await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/axes/${id}`
+    const req = await api.delete(
+      `/axes/${id}`
     );
     return req;
   } catch (error: any) {
@@ -416,8 +404,8 @@ export async function deleteAxis(id: any) {
 
 export async function deleteDomain(id: any) {
   try {
-    const req = await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/domains/${id}`
+    const req = await api.delete(
+      `/domains/${id}`
     );
     return req;
   } catch (error: any) {
@@ -431,8 +419,8 @@ export async function getTeamMemberByUserIdAndTeamId(
   teamId: number| undefined
 ) {
   try {
-    const req = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/teamMembers/getTeamMemberByUserIdAndTeamId/${userId}/${teamId}`
+    const req = await api.get(
+      `/teamMembers/getTeamMemberByUserIdAndTeamId/${userId}/${teamId}`
     );
     return req;
   } catch (error: any) {
@@ -442,8 +430,8 @@ export async function getTeamMemberByUserIdAndTeamId(
 }
 export async function assignToProgress(data: any) {
   try {
-    const req = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/assignmen_progress/create`,
+    const req = await api.post(
+      `/assignmen_progress/create`,
       { data }
     );
 
@@ -455,8 +443,8 @@ export async function assignToProgress(data: any) {
 }
 export async function updateMissionCompleted(id: number) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/assignmen_progress/updateMissionCompleted/${id}`
+    const req = await api.put(
+      `/assignmen_progress/updateMissionCompleted/${id}`
     );
 
     queryClient.invalidateQueries({
@@ -472,8 +460,8 @@ export async function updateMissionCompleted(id: number) {
 
 export async function removeMissionCompleted(id: number) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/assignmen_progress/removeMissionCompleted/${id}`
+    const req = await api.put(
+      `/assignmen_progress/removeMissionCompleted/${id}`
     );
 
     return req;
@@ -484,8 +472,8 @@ export async function removeMissionCompleted(id: number) {
 }
 export async function updateTaskAssignmentsCompleted(id: any) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/assignmen_progress/updateTaskAssignmentCompleted/${id}`
+    const req = await api.put(
+      `/assignmen_progress/updateTaskAssignmentCompleted/${id}`
     );
 
     return req;
@@ -499,8 +487,8 @@ export async function TaskAssignmentsCompletedByCommander(
   action?: string
 ) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/assignmen_progress/TaskAssignmentsCompletedByCommander/${task_ass_id}`,
+    const req = await api.put(
+      `/assignmen_progress/TaskAssignmentsCompletedByCommander/${task_ass_id}`,
       { action }
     );
 
@@ -516,8 +504,8 @@ export async function AllTaskAssignmentsCompletedByCommander(
   memberId?: number
 ) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/assignmen_progress/AllTaskAssignmentsCompletedByCommander/${task_id}`,
+    const req = await api.put(
+      `/assignmen_progress/AllTaskAssignmentsCompletedByCommander/${task_id}`,
       memberId ? { memberId } : {}
     );
 
@@ -530,8 +518,8 @@ export async function AllTaskAssignmentsCompletedByCommander(
 
 export async function ApproveTaskAssignment(task_id: number, memberId: number) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/assignmen_progress/AllTaskAssignmentsCompletedByCommander/${task_id}`,
+    const req = await api.put(
+      `/assignmen_progress/AllTaskAssignmentsCompletedByCommander/${task_id}`,
       { memberId }
     );
     return req;
@@ -543,8 +531,8 @@ export async function ApproveTaskAssignment(task_id: number, memberId: number) {
 
 export async function CancelTaskApproval(task_id: number) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/assignmen_progress/cancelApproval/${task_id}`
+    const req = await api.put(
+      `/assignmen_progress/cancelApproval/${task_id}`
     );
     return req;
   } catch (error: any) {
@@ -557,8 +545,8 @@ export async function GetAssignmentsCompletedByUser(
   task_assignment_id: number
 ) {
   try {
-    const req = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/assignmen_progress/GetAssignmentsCompletedByUser?task_assignment_id=${task_assignment_id}`
+    const req = await api.get(
+      `/assignmen_progress/GetAssignmentsCompletedByUser?task_assignment_id=${task_assignment_id}`
     );
 
     return req;
@@ -572,8 +560,8 @@ export async function GetAssignmentsCompletedByTeam(
   team_id: any
 ) {
   try {
-    const req = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/assignmen_progress/GetAssignmentsCompletedByTeam?task_id=${task_id}&team_id=${team_id}`
+    const req = await api.get(
+      `/assignmen_progress/GetAssignmentsCompletedByTeam?task_id=${task_id}&team_id=${team_id}`
     );
 
     return req;
@@ -585,8 +573,8 @@ export async function GetAssignmentsCompletedByTeam(
 
 export async function assignProgressCompleted(task_assignment_id: any) {
   try {
-    const req = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/assignmen_progress/getByAssId?task_assignment_id=${task_assignment_id}`
+    const req = await api.get(
+      `/assignmen_progress/getByAssId?task_assignment_id=${task_assignment_id}`
     );
 
     return req;
@@ -606,8 +594,8 @@ export async function assignToTeam(
   isQueueTask: boolean = false 
 ) {
   try {
-    const req = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/task-assignments/${taskId}/team/${teamId}`,
+    const req = await api.post(
+      `/task-assignments/${taskId}/team/${teamId}`,
       {
         start:  start,
 
@@ -633,8 +621,8 @@ export async function assignToTeamNew(
   isQueueTask: boolean = false
 ) {
   try {
-    const req = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/task-assignments/${taskId}/team_new/${teamId}`,
+    const req = await api.post(
+      `/task-assignments/${taskId}/team_new/${teamId}`,
       {
         start: start,
         end: end,
@@ -660,8 +648,8 @@ export async function assignToUserNew(
   isQueueTask: boolean = false 
 ) {
   try {
-    const req = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/task-assignments/${taskId}/user_new/${userId}`,
+    const req = await api.post(
+      `/task-assignments/${taskId}/user_new/${userId}`,
       {
         start: start,
         end: end,
@@ -687,8 +675,8 @@ export async function assignToUser(
   isQueueTask: boolean = false 
 ) {
   try {
-    const req = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/task-assignments/${taskId}/user/${userId}`,
+    const req = await api.post(
+      `/task-assignments/${taskId}/user/${userId}`,
       {
         start: start,
         end: end,
@@ -711,8 +699,8 @@ export async function updateToTeam(
   end: string
 ) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/task-assignments/${taskId}/team/${teamId}`,
+    const req = await api.put(
+      `/task-assignments/${taskId}/team/${teamId}`,
       { start: start, end: end }
     );
     return req;
@@ -728,8 +716,8 @@ export async function updateToTeamOccurrence(
   end: string
 ) {
   try {
-    const { data } = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/task-assignment/occurrence/${occurrenceId}/team/${teamId}`,
+    const { data } = await api.put(
+      `/task-assignment/occurrence/${occurrenceId}/team/${teamId}`,
       { start, end } 
     );
     return data;
@@ -745,8 +733,8 @@ export async function updateToUser(
   end: string
 ) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/task-assignments/${task_assignement_id}`,
+    const req = await api.put(
+      `/task-assignments/${task_assignement_id}`,
       { start: start, end: end }
     );
     return req;
@@ -761,8 +749,8 @@ export async function updateOccurrence(
   end: string
 ) {
   try {
-    const res = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/task-assignments/occurrences/${occurrenceId}`,
+    const res = await api.put(
+      `/task-assignments/occurrences/${occurrenceId}`,
       { start, end }
     );
     return res;
@@ -778,8 +766,8 @@ export async function deleteTaskAssignmentTeam(
   assignment_ids?: number[] 
 ) {
   try {
-    const req = await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/task-assignments/taskId/${taskId}/teamId/${teamId}`,
+    const req = await api.delete(
+      `/task-assignments/taskId/${taskId}/teamId/${teamId}`,
       {
         data: assignment_ids ? { assignment_ids } : {},
       }
@@ -800,8 +788,8 @@ export async function deleteTaskAssignmentOccurrencesTeam(
   teamId: number
 ) {
   try {
-    const { data } = await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/task-assignments/occurrences/${occurrenceId}/team/${teamId}`
+    const { data } = await api.delete(
+      `/task-assignments/occurrences/${occurrenceId}/team/${teamId}`
     );
     return data;
   } catch (err: any) {
@@ -816,8 +804,8 @@ export async function deleteTaskAssignmentByUserId(
   userId: any
 ) {
   try {
-    const req = await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/task-assignments/taskId/${taskId}/teamId/${teamId}/userId/${userId}`
+    const req = await api.delete(
+      `/task-assignments/taskId/${taskId}/teamId/${teamId}/userId/${userId}`
     );
 
     return req;
@@ -828,8 +816,8 @@ export async function deleteTaskAssignmentByUserId(
 }
 export async function createForm(form: Form, questions: QuestionType[]) {
   try {
-    const req = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/forms/create`,
+    const req = await api.post(
+      `/forms/create`,
       { form, questions: questions }
     );
     return req.data;
@@ -843,8 +831,8 @@ export async function updateeForm(
   formId: number
 ) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/forms/update/${formId}`,
+    const req = await api.put(
+      `/forms/update/${formId}`,
       { form, questions: questions }
     );
     return req.data;
@@ -854,8 +842,8 @@ export async function updateeForm(
 }
 export async function deleteTaskAssignmentUser(id: any) {
   try {
-    const req = await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/task-assignments/${id}`
+    const req = await api.delete(
+      `/task-assignments/${id}`
     );
     return req;
   } catch (error: any) {
@@ -865,8 +853,8 @@ export async function deleteTaskAssignmentUser(id: any) {
 }
 export async function deleteTaskAssignmentOccurrence(id: number) {
   try {
-    const res = await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/task-assignments/occurrence/${id}`
+    const res = await api.delete(
+      `/task-assignments/occurrence/${id}`
     );
     return res.data;
   } catch (err: any) {
@@ -876,8 +864,8 @@ export async function deleteTaskAssignmentOccurrence(id: number) {
 }
 export async function createFeedback(feedbackData: any) {
   try {
-    const response = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/feedback`,
+    const response = await api.post(
+      `/feedback`,
       feedbackData
     );
     return { success: true, data: response.data };
@@ -894,8 +882,8 @@ export async function createFeedback(feedbackData: any) {
 }
 export async function updateFeedaback(feedbackData: any, feedbackId: number) {
   try {
-    const response = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/feedback/${feedbackId}`,
+    const response = await api.put(
+      `/feedback/${feedbackId}`,
       feedbackData
     );
     return { success: true, data: response.data };
@@ -912,8 +900,8 @@ export async function updateFeedaback(feedbackData: any, feedbackId: number) {
 }
 export async function getFeedbackByFeedbackId(feedbackId: number) {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/feedback/${feedbackId}`
+    const response = await api.get(
+      `/feedback/${feedbackId}`
     );
     return { success: true, data: response.data };
   } catch (error: any) {
@@ -930,8 +918,8 @@ export async function getFeedbackByFeedbackId(feedbackId: number) {
 
 export const getFeedbackStatus = async (taskAssignmentId: number | string) => {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/feedback/feedback-status/${taskAssignmentId}`
+    const response = await api.get(
+      `/feedback/feedback-status/${taskAssignmentId}`
     );
     return { success: true, data: response.data };
   } catch (error: any) {
@@ -953,8 +941,8 @@ export async function updateFeedbackAnswer(
   }
 ) {
   try {
-    const response = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/feedback/updateFeedbackComplete/${feedbackId}`,
+    const response = await api.put(
+      `/feedback/updateFeedbackComplete/${feedbackId}`,
       feedbackData,
       { params: dataToTeamMemberId }
     );
@@ -977,8 +965,8 @@ export async function updateFeedbackIsViewable(
   isViewable: boolean
 ) {
   try {
-    const response = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/feedback/updateFeedbackAnswerViewable/${feedbackId}`,
+    const response = await api.put(
+      `/feedback/updateFeedbackAnswerViewable/${feedbackId}`,
       {
         task_assignment_id: taskAssignementId,
         team_member_id: teamMemberId,
@@ -1003,8 +991,8 @@ export async function updateFeedbackIsViewable(
 
 export async function createFormSubmission(data: any) {
   try {
-    const req = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/formSubmissions`,
+    const req = await api.post(
+      `/formSubmissions`,
       data,
       {
         withCredentials: true,
@@ -1018,8 +1006,8 @@ export async function createFormSubmission(data: any) {
 }
 export async function putFormSubmission(data: any, id: number) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/formSubmissions/${id}`,
+    const req = await api.put(
+      `/formSubmissions/${id}`,
       data
     );
     return req;
@@ -1030,8 +1018,8 @@ export async function putFormSubmission(data: any, id: number) {
 }
 export async function getFormSubmissionsAnswers(id: number) {
   try {
-    const req = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/formSubmissionsAnswers/${id}`
+    const req = await api.get(
+      `/formSubmissionsAnswers/${id}`
     );
 
     return req.data;
@@ -1043,8 +1031,8 @@ export async function getFormSubmissionsAnswers(id: number) {
 
 export async function createFormSubmissionsAnswer(data: any) {
   try {
-    const req = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/formSubmissionsAnswers`,
+    const req = await api.post(
+      `/formSubmissionsAnswers`,
       data,
       {
         withCredentials: true,
@@ -1059,8 +1047,8 @@ export async function createFormSubmissionsAnswer(data: any) {
 
 export async function putFormSubmissionsAnswer(data: any, id: number) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/formSubmissionsAnswers/${id}`,
+    const req = await api.put(
+      `/formSubmissionsAnswers/${id}`,
       data
     );
     return req;
@@ -1075,8 +1063,8 @@ export async function createGradeStage(data: {
   courseid: number;
 }) {
   try {
-    const req = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/gradeStages/create`,
+    const req = await api.post(
+      `/gradeStages/create`,
       data
     );
     return req;
@@ -1088,8 +1076,8 @@ export async function createGradeStage(data: {
 
 export async function deleteGradeStage(data: { id: number }) {
   try {
-    const req = await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/gradeStages/delete`,
+    const req = await api.delete(
+      `/gradeStages/delete`,
       { headers: data }
     );
     return req;
@@ -1101,8 +1089,8 @@ export async function deleteGradeStage(data: { id: number }) {
 
 export async function updateGradeStage(data: { id: number; name: string }) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/gradeStages/update`,
+    const req = await api.put(
+      `/gradeStages/update`,
       data
     );
     return req;
@@ -1113,8 +1101,8 @@ export async function updateGradeStage(data: { id: number; name: string }) {
 }
 export async function createTag(data: { name: string; courseid: number }) {
   try {
-    const req = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/tag/create`,
+    const req = await api.post(
+      `/tag/create`,
       data
     );
     return req;
@@ -1126,8 +1114,8 @@ export async function createTag(data: { name: string; courseid: number }) {
 
 export async function deleteTag(data: { id: number }) {
   try {
-    const req = await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/tag/delete`,
+    const req = await api.delete(
+      `/tag/delete`,
       { headers: data }
     );
     return req;
@@ -1139,8 +1127,8 @@ export async function deleteTag(data: { id: number }) {
 
 export async function updateTag(data: { id: number; name: string }) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/tag/update`,
+    const req = await api.put(
+      `/tag/update`,
       data
     );
     return req;
@@ -1160,8 +1148,8 @@ export async function getTasksByUser(
   endFilter?: Dayjs
 ) {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/tasks/getTasksByUser`,
+    const response = await api.get(
+      `/tasks/getTasksByUser`,
       {
         params: {
           userId: userId,
@@ -1186,8 +1174,8 @@ export async function getTasksBySemester(
   selectedCourseBatch: number
 ) {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/tasks/getTasksBySemester`,
+    const response = await api.get(
+      `/tasks/getTasksBySemester`,
       {
         params: {
           teamId: teamId,
@@ -1206,8 +1194,8 @@ export async function getTasksByTeam(
   selectedCourseBatch: number
 ) {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/tasks/getTasksByTeam`,
+    const response = await api.get(
+      `/tasks/getTasksByTeam`,
       {
         params: {
           teamId: teamId,
@@ -1228,8 +1216,8 @@ export async function getOpenFeedbackBySemester(
   selectedCourseBatchId: number
 ) {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/feedback/getOpenFeedback/bySemester`,
+    const response = await api.get(
+      `/feedback/getOpenFeedback/bySemester`,
       {
         params: {
           teamId: teamId,
@@ -1250,8 +1238,8 @@ export async function getOpenFeedbackByTeam(
   selectedCourseBatchId: number
 ) {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/feedback/getOpenFeedback/byTeam`,
+    const response = await api.get(
+      `/feedback/getOpenFeedback/byTeam`,
       {
         params: {
           teamId: teamId,
@@ -1272,8 +1260,8 @@ export async function getGradeStageProgressByTeam(
   selectedCourseBatch: number
 ) {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/tasks/getGradeStageProgressByTeam`,
+    const response = await api.get(
+      `/tasks/getGradeStageProgressByTeam`,
       {
         params: {
           teamId: teamId,
@@ -1291,8 +1279,8 @@ export async function getGradeStageProgressByTeam(
 }
 export async function deleteTask(taskId: number): Promise<any> {
   try {
-    const response = await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/tasks/${taskId}`,
+    const response = await api.delete(
+      `/tasks/${taskId}`,
       {
         withCredentials: true,
       }
@@ -1316,8 +1304,8 @@ export async function deleteTask(taskId: number): Promise<any> {
 }
 export async function duplicateTask(taskId: number): Promise<any> {
   try {
-    const response = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/tasks/duplicate/${taskId}`,
+    const response = await api.post(
+      `/tasks/duplicate/${taskId}`,
       {
         withCredentials: true,
       }
@@ -1341,8 +1329,8 @@ export async function duplicateTask(taskId: number): Promise<any> {
 
 export async function updateTemplateAxis(template: AxisTemplate) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/axisTemplate/update`,
+    const req = await api.put(
+      `/axisTemplate/update`,
       template
     );
     return req;
@@ -1353,8 +1341,8 @@ export async function updateTemplateAxis(template: AxisTemplate) {
 }
 export async function createTemplateAxis(template: AxisTemplate) {
   try {
-    const req = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/axisTemplate/create`,
+    const req = await api.post(
+      `/axisTemplate/create`,
       { ...template, createdAt: new Date(), updatedAt: new Date() }
     );
     return req;
@@ -1365,8 +1353,8 @@ export async function createTemplateAxis(template: AxisTemplate) {
 }
 export async function getTemplateAxisByAxisId(axisId: number) {
   try {
-    const req = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/axisTemplate/get-by-axisId`,
+    const req = await api.get(
+      `/axisTemplate/get-by-axisId`,
       { params: { axisId } }
     );
     return req;
@@ -1377,8 +1365,8 @@ export async function getTemplateAxisByAxisId(axisId: number) {
 }
 export async function getMemberByBatchId(courseBatchId: number) {
   try {
-    const req = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/teamMembers/getMembersByCourseBatch/${courseBatchId}`
+    const req = await api.get(
+      `/teamMembers/getMembersByCourseBatch/${courseBatchId}`
     );
     return req.data;
   } catch (error: any) {
@@ -1390,8 +1378,8 @@ export async function getTemplateByAxisId(
   axisId: number
 ): Promise<AxisTemplate[] | undefined> {
   try {
-    const response = await axios.get<AxisTemplate[]>(
-      `${process.env.REACT_APP_API_BASE_URL}/axisTemplate/get-by-axisId`,
+    const response = await api.get<AxisTemplate[]>(
+      `/axisTemplate/get-by-axisId`,
       {
         params: { axisId },
       }
@@ -1417,8 +1405,8 @@ export async function getTemplateByAxisId(
 
 export async function confirmTaskById(id: number) {
   try {
-    const req = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/tasks/confirmTask/${id}`
+    const req = await api.put(
+      `/tasks/confirmTask/${id}`
     );
     queryClient.invalidateQueries({
       queryKey: ["tasksByTeamIds"],
@@ -1431,8 +1419,8 @@ export async function confirmTaskById(id: number) {
 }
 export async function markTaskAsCompleted(taskAssignmentId: number | string) {
   try {
-    const response = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/task-assignments/${taskAssignmentId}/complete`
+    const response = await api.put(
+      `/task-assignments/${taskAssignmentId}/complete`
     );
 
     return {
@@ -1453,8 +1441,8 @@ export const cancelTaskSubmission = async (
   taskAssignmentId: number | string
 ) => {
   try {
-    const response = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/task-assignments/${taskAssignmentId}/cancel`
+    const response = await api.put(
+      `/task-assignments/${taskAssignmentId}/cancel`
     );
     return { success: true, data: response.data };
   } catch (error: any) {
@@ -1468,8 +1456,8 @@ export const cancelTaskSubmission = async (
 
 export const toggleFeedbackActive = async (feedbackId: number | string) => {
   try {
-    const response = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/feedback/${feedbackId}/toggle-active`
+    const response = await api.put(
+      `/feedback/${feedbackId}/toggle-active`
     );
 
     return {
@@ -1487,8 +1475,8 @@ export const toggleFeedbackActive = async (feedbackId: number | string) => {
 };
 export const toggleFormActive = async (formId: number | string) => {
   try {
-    const response = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/forms/${formId}/toggle-active`
+    const response = await api.put(
+      `/forms/${formId}/toggle-active`
     );
 
     return {
@@ -1507,22 +1495,22 @@ export const toggleFormActive = async (formId: number | string) => {
 export const createTeamEventAssignment = async (
   teamEventAssignment: Omit<TeamEventAssignment, "id">
 ) => {
-  const response = await axios.post(
-    `${process.env.REACT_APP_API_BASE_URL}/teamEventsAssignment`,
+  const response = await api.post(
+    `/teamEventsAssignment`,
     teamEventAssignment
   );
   return response.data;
 };
 export const removeTeamEventAssignment = async (id: number) => {
-  const response = await axios.delete(
-    `${process.env.REACT_APP_API_BASE_URL}/teamEventsAssignment/${id}`
+  const response = await api.delete(
+    `/teamEventsAssignment/${id}`
   );
   return response.data;
 };
 export const toggleFormDuplicate = async (formId: number | string) => {
   try {
-    const response = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/forms/duplicate/${formId}`
+    const response = await api.post(
+      `/forms/duplicate/${formId}`
     );
 
     return {
@@ -1547,8 +1535,8 @@ export const blockTasksForStudents = async (
 ) => {
   const payload = { teamId, courseBatchId, fromISO, toISO };
   try {
-    const response = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/teamCourseBatch/updateDate`,
+    const response = await api.put(
+      `/teamCourseBatch/updateDate`,
       payload
     );
     return {
@@ -1569,8 +1557,8 @@ export const fetchBlockedDates = async (
   courseBatchId: number
 ) => {
   try {
-    const resp = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/teamCourseBatch/getByTeamAndCourseBatchIds/${teamId}/${courseBatchId}`
+    const resp = await api.get(
+      `/teamCourseBatch/getByTeamAndCourseBatchIds/${teamId}/${courseBatchId}`
     );
     const record = resp.data?.data?.[0] ?? null;
     return record;
@@ -1586,8 +1574,8 @@ export const resetBlockedPeriod = async (
   teamId: number,
   courseBatchId: number
 ) => {
-  await axios.delete(
-    `${process.env.REACT_APP_API_BASE_URL}/teamCourseBatch/removeDates`,
+  await api.delete(
+    `/teamCourseBatch/removeDates`,
     {
       data: { teamId, courseBatchId },
     }
@@ -1598,8 +1586,8 @@ export async function getTeamCompletedTasks(
   courseBatchId: number
 ) {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/task-assignments/getTeamCompletedTasks`,
+    const response = await api.get(
+      `/task-assignments/getTeamCompletedTasks`,
       {
         params: {
           teamId: teamId,
@@ -1621,8 +1609,8 @@ export async function getDuplicatedTasks(
   courseBatchId: number
 ) {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/task-assignments/getDuplicatedTasks`,
+    const response = await api.get(
+      `/task-assignments/getDuplicatedTasks`,
       {
         params: {
           teamId: teamId,
@@ -1644,8 +1632,8 @@ export const fetchBlockColorSetting = async (
   batchId: string
 ): Promise<BlockColorResponse> => {
   try {
-    const response = await axios.get<BlockColorResponse>(
-      `${process.env.REACT_APP_API_BASE_URL}/teamCourseBatch/byTeam/${teamId}/batch/${batchId}`
+    const response = await api.get<BlockColorResponse>(
+      `/teamCourseBatch/byTeam/${teamId}/batch/${batchId}`
     );
     return response.data;
   } catch (error) {
@@ -1665,8 +1653,8 @@ export const updateBlockColorSetting = async ({
   isBlockColorDto,
 }: BlockColorUpdateParams): Promise<void> => {
   try {
-    await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/teamCourseBatch/updateBlockColorByTeam`,
+    await api.put(
+      `/teamCourseBatch/updateBlockColorByTeam`,
       { teamId, courseBatchId, isBlockColorDto },
       {
         headers: {
@@ -1716,8 +1704,8 @@ export const getTeamAxisOrder = async (
   courseBatchId: number,
   teamId: number
 ) => {
-  const response = await axios.get(
-    `${process.env.REACT_APP_API_BASE_URL}/team-axis-order`,
+  const response = await api.get(
+    `/team-axis-order`,
     {
       params: { courseBatchId, teamId },
     }
@@ -1730,7 +1718,7 @@ export const updateAxisOrder = async (
   teamId: number,
   axisIds: number[]
 ): Promise<void> => {
-  await axios.post(`${process.env.REACT_APP_API_BASE_URL}/team-axis-order`, {
+  await api.post(`/team-axis-order`, {
     courseBatchId,
     teamId,
     axisIds,
@@ -1771,16 +1759,16 @@ export const fetchTeamQueueTasks = async (
     let url = "";
 
     if (isTeamMemberV && selectedTeamMember) {
-      url = `${process.env.REACT_APP_API_BASE_URL}/queue/team/${teamId}/${course_batch_id}/member/${selectedTeamMember}`;
+      url = `/queue/team/${teamId}/${course_batch_id}/member/${selectedTeamMember}`;
     } else {
-      url = `${process.env.REACT_APP_API_BASE_URL}/queue/team/${teamId}/${course_batch_id}`;
+      url = `/queue/team/${teamId}/${course_batch_id}`;
 
       if (startDate && endDate) {
         url += `/${startDate}/${endDate}`;
       }
     }
 
-    const response = await axios.get(url);
+    const response = await api.get(url);
 
     return response.data;
   } catch (error) {
@@ -1792,8 +1780,8 @@ export const checkTaskAssignmentExists = async (
   taskId: number,
   teamId: number
 ): Promise<boolean> => {
-  const response = await axios.get(
-    `${process.env.REACT_APP_API_BASE_URL}/task-assignments/exists`,
+  const response = await api.get(
+    `/task-assignments/exists`,
     {
       params: {
         taskId,
@@ -1808,8 +1796,8 @@ export const checkUserTaskAssignmentExists = async (
   teamId: number,
   teamMemberId: number
 ): Promise<boolean> => {
-  const response = await axios.get(
-    `${process.env.REACT_APP_API_BASE_URL}/task-assignments/UserExists`,
+  const response = await api.get(
+    `/task-assignments/UserExists`,
     {
       params: {
         taskId,
@@ -1823,8 +1811,8 @@ export const checkUserTaskAssignmentExists = async (
 
 export async function saveHoefsForTask(taskAssignmentId: any, hoefs: any[]) {
   try {
-    const req = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/hoefs/${taskAssignmentId}`,
+    const req = await api.post(
+      `/hoefs/${taskAssignmentId}`,
       { hoefs },
       { withCredentials: true }
     );
@@ -1835,8 +1823,8 @@ export async function saveHoefsForTask(taskAssignmentId: any, hoefs: any[]) {
   }
 }
 export const fetchCourseBatchFiles = async (courseBatchId: number) => {
-  const response = await axios.get(
-    `${process.env.REACT_APP_API_BASE_URL}/files/filesByCourseBatchId`,
+  const response = await api.get(
+    `/files/filesByCourseBatchId`,
     {
       headers: {
         courseBatchId,
@@ -1871,8 +1859,8 @@ export const createCourseBatchFolder = async (payload: {
 };
 export async function deleteCourseBatchFolder(folderId: number) {
   try {
-    const response = await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/course-batch-folders/${folderId}`
+    const response = await api.delete(
+      `/course-batch-folders/${folderId}`
     );
     return response.data;
   } catch (error: any) {
@@ -1882,8 +1870,8 @@ export async function deleteCourseBatchFolder(folderId: number) {
 }
 export async function getFolderFiles(folderId: number) {
   try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/course-batch-folder-files/folder/${folderId}`
+    const response = await api.get(
+      `/course-batch-folder-files/folder/${folderId}`
     );
     return response.data;
   } catch (error) {
@@ -1907,8 +1895,8 @@ export async function uploadFileToFolder(
     formData.append("bucket", bucket);
     formData.append("original_filename", encodeURIComponent(file.name));
 
-    const response = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/course-batch-folder-files`,
+    const response = await api.post(
+      `/course-batch-folder-files`,
       formData,
       {
         headers: {
@@ -1933,8 +1921,8 @@ export async function uploadFileToFolder(
 
 export async function deleteFolderFile(fileId: number) {
   try {
-    const response = await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/course-batch-folder-files/${fileId}`
+    const response = await api.delete(
+      `/course-batch-folder-files/${fileId}`
     );
     return response.data;
   } catch (error) {
@@ -1944,8 +1932,8 @@ export async function deleteFolderFile(fileId: number) {
 }
 
 export const getHoefTeamSummary = async (teamId: number): Promise<any[]> => {
-  const response = await axios.get(
-    `${process.env.REACT_APP_API_BASE_URL}/hoefs/team/${teamId}/summary`
+  const response = await api.get(
+    `/hoefs/team/${teamId}/summary`
   );
   return response.data.data;
 };
@@ -1976,8 +1964,8 @@ export async function GetNoteBookFolders(params: {
 }): Promise<any> {
   let res: any;
   try {
-    res = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/notebook/folders`,
+    res = await api.get(
+      `/notebook/folders`,
       {
         params,
         withCredentials: true,
@@ -1991,8 +1979,8 @@ export async function GetNoteBookFolders(params: {
 export async function GetNoteBookNotes(folderId: number): Promise<any> {
   let res: any;
   try {
-    res = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/notebook/folders/${folderId}/notes`,
+    res = await api.get(
+      `/notebook/folders/${folderId}/notes`,
       {
         withCredentials: true,
       }
@@ -2009,8 +1997,8 @@ export const UpdateNoteBookNote = async (
 ): Promise<any> => {
   let res: any;
   try {
-    res = await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/notebook-notes/${noteId}`,
+    res = await api.put(
+      `/notebook-notes/${noteId}`,
       payload,
       {
         withCredentials: true,
@@ -2032,8 +2020,8 @@ export const CreateNoteBookNote = async (payload: {
 }): Promise<any> => {
   let res: any;
   try {
-    res = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/notebook-notes`,
+    res = await api.post(
+      `/notebook-notes`,
       payload,
       {
         withCredentials: true,
@@ -2048,8 +2036,8 @@ export const CreateNoteBookNote = async (payload: {
 export const DeleteNoteBookFolder = async (folderId: number): Promise<any> => {
   let res: any;
   try {
-    res = await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/notebook/folders/${folderId}`,
+    res = await api.delete(
+      `/notebook/folders/${folderId}`,
       {
         withCredentials: true,
       }
@@ -2070,8 +2058,8 @@ export const CreateNoteBookFolder = async (payload: {
 }): Promise<any> => {
   let res: any;
   try {
-    res = await axios.post(
-      `${process.env.REACT_APP_API_BASE_URL}/notebook/folders`,
+    res = await api.post(
+      `/notebook/folders`,
       payload,
       {
         withCredentials: true,
@@ -2085,8 +2073,8 @@ export const CreateNoteBookFolder = async (payload: {
 export const DeleteNoteBookNote = async (noteId: number): Promise<any> => {
   let res: any;
   try {
-    res = await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/notebook-notes/${noteId}`,
+    res = await api.delete(
+      `/notebook-notes/${noteId}`,
       {
         withCredentials: true,
       }

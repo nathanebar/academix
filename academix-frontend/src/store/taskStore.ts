@@ -1,5 +1,5 @@
+import api from "../api/axios";
 import { notification } from "antd";
-import axios from "axios";
 import { sha256 } from "js-sha256";
 import { create } from "zustand";
 import { getAudioDurationFromFile } from "../utils/getFileLength";
@@ -80,8 +80,8 @@ export const deleteFilesByFeedbackId = async (
 ): Promise<void> => {
   if (feedback_answer_id === null) return; // אין מה למחוק
 
-  await axios.delete(
-    `${process.env.REACT_APP_API_BASE_URL}/files/by-feedback`,
+  await api.delete(
+    `/files/by-feedback`,
     {
       data: { feedback_answer_id }, // שליחה ב‑body של DELETE
       headers: { "Content-Type": "application/json" },
@@ -168,8 +168,8 @@ export const uploadFilesToS3 = async (
         formData.append("fileLength", String(fileLength));
       formData.append("key", fileHash);
 
-      const red = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/files/upload-file`,
+      const red = await api.post(
+        `/files/upload-file`,
         formData
         // requestOptions
       );
@@ -194,8 +194,8 @@ export const updateFiles = async (
   feedback_answer_id?: number | null
 ) => {
   if (files?.length === 0 && prevFiles?.length > 0) {
-    await axios.delete(
-      `${process.env.REACT_APP_API_BASE_URL}/files/deleteAllFilesByTaskId`,
+    await api.delete(
+      `/files/deleteAllFilesByTaskId`,
       {
         headers: {
           taskid: taskId,
@@ -262,8 +262,8 @@ export const deleteFiles = async (ids: (string | number)[]) => {
   const deletePromises = ids.map(async (id) => {
     // i remove file and i have error
     try {
-      await axios.delete(
-        `${process.env.REACT_APP_API_BASE_URL}/files/delete-file`,
+      await api.delete(
+        `/files/delete-file`,
         { headers: { id: id } }
       );
     } catch (error) {
@@ -289,8 +289,8 @@ export const uploadCheckListToDB = async (
 
   for (const item of checkList!!) {
     try {
-      await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/checklists/create`,
+      await api.post(
+        `/checklists/create`,
         { taskid: taskId, todo: item.toDo },
         { withCredentials: true }
       );
@@ -313,8 +313,8 @@ export const updateCheckListToDB = async (
     return;
   }
   try {
-    await axios.put(
-      `${process.env.REACT_APP_API_BASE_URL}/checklists/update`,
+    await api.put(
+      `/checklists/update`,
       { checkList, taskId },
       { withCredentials: true }
     );

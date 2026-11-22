@@ -1,5 +1,6 @@
 // QuestionsComponents/FileUploadQuestion/FileUploadQuestion.tsx
 import React, { useCallback, useEffect, useState } from "react";
+import api from "../../../../api/axios";
 import { Upload, Button, message, Tooltip } from "antd";
 import {
   UploadOutlined,
@@ -160,12 +161,10 @@ const FileUploadQuestion: React.FC<FileUploadQuestionProps> = (props) => {
   const handleDownload = async (file: any) => {
     try {
       const key = file.s3Key || file.key;
-      const res = await fetch(
-        `${
-          process.env.REACT_APP_API_BASE_URL
-        }/files/download-file?key=${encodeURIComponent(key)}`
+      const { data: blob } = await api.get<Blob>(
+        `/files/download-file?key=${encodeURIComponent(key)}`,
+        { responseType: "blob" }
       );
-      const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
