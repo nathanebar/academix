@@ -6,7 +6,6 @@ const cookieParser = require("cookie-parser");
 const compression = require("compression");
 const https = require('https');
 const fs = require('fs');
-const jwt = require('jsonwebtoken');
 
 const logger = require('./src/utils/logger');
 const { notFoundHandler, globalErrorHandler } = require('./src/middlewares/errorHandler');
@@ -81,46 +80,6 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
-
-app.use((req, res, next) => {
-  const start = Date.now();
-
-  res.on('finish', () => {
-    if (res.statusCode >= 400) {
-      const duration = Date.now() - start;
-
-      let userId = null;
-      let userName = null;
-      let userSource = 'none';
-
-      if (req.headers['x-user-id'] || req.headers['x-user-name']) {
-        userId = req.headers['x-user-id'];
-        userName = req.headers['x-user-name'];
-        userSource = 'localStorage';
-      }
-
-      if (!userName && req.cookies?.token) {
-        try {
-          const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
-          userId = decoded.id;
-          userName = decoded.name;
-          userSource = 'jwt';
-        } catch (e) { }
-      }
-
-      if (!userName && req.ntlm?.UserName) {
-        userName = req.ntlm.UserName;
-        userSource = 'ntlm';
-        userId = req.ntlm.UserName;
-      }
-
-      const logLevel = res.statusCode >= 500 ? 'error' : 'warn';
-
-    }
-  });
-
-  next();
-});
 
 // Optionnel : exiger un JWT valide sur toutes les routes /api sauf /api/auth
 if (process.env.REQUIRE_AUTH === 'true') {
