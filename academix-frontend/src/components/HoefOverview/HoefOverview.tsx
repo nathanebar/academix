@@ -59,7 +59,7 @@ import {
 import { HeaderPermissionDisplay } from "../HeaderPermissionDisplay";
 import { useSelectionsStore } from "../../store/selectionStore";
 import Photo from "../../UI/Photo/Photo";
-import UserTaskModal from "../UserTaskModal/UserTaskModal";
+import { UserTaskModal } from "../LazyTaskModals";
 import HoefTaskPool from "./HoefTaskPool";
 import { HoefData, HoefTaskItem, TaskItem } from "../../types/types";
 import { queryClient } from "../../api/queryClient";

@@ -55,7 +55,7 @@ import {
   AuditOutlined
 } from "@ant-design/icons";
 import { Input } from "antd";
-import UserTaskModal from "../UserTaskModal/UserTaskModal";
+import { UserTaskModal } from "../LazyTaskModals";
 import CheckListForOverlap from "./Inputs/CheckListForOverlap/CheckListForOverlap";
 import BlackButton from "../../UI/Button/BlackButton";
 import { useBlockColorStore } from "../../store/blockColorStore";

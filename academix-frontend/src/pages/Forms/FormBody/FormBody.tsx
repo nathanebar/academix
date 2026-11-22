@@ -37,7 +37,7 @@ import { Button, Modal, notification } from "antd";
 import { queryClient } from "../../../api/queryClient";
 import { useSelectionsStore } from "../../../store/selectionStore";
 import FileQuestion from "../QuestionsComponents/FileQuestion/FileQuestion";
-import UserTaskModal from "../../../components/UserTaskModal/UserTaskModal";
+import { UserTaskModal } from "../../../components/LazyTaskModals";
 import dayjs from "dayjs";
 import { usePermissionStore } from "../../../store/permissionStore";
 import MatchingPairs from "../QuestionsComponents/Matrix_single/Matrix_single";

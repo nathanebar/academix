@@ -4,7 +4,7 @@ import { useSelectionsStore } from "../../store/selectionStore";
 import { useFetchGradeStagesByCourseId } from "../../hooks/useFetchGradeStagesByCourseId";
 import { useFetchTasksByGradeStageId } from "../../hooks/useFetchTasksByGradeStageId";
 import Task from "../Task/Task";
-import NewTaskModal from "../NewTaskModal/NewTaskModal";
+import { NewTaskModal } from "../LazyTaskModals";
 import { Button, Card, Empty } from "antd";
 import { Draggable } from "@fullcalendar/interaction";
 import { useRefreshStore } from "../../store/selectionStore";

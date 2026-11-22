@@ -19,7 +19,7 @@ import {
   CloseOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import NewTaskModal from "../NewTaskModal/NewTaskModal";
+import { NewTaskModal } from "../LazyTaskModals";
 import { Gradient, schemaMap, SchemaName } from "../../types/types";
 import Task from "../Task/Task";
 import { useSelectionsStore } from "../../store/selectionStore";

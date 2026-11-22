@@ -1,39 +1,44 @@
+import { lazy } from "react";
 import { createBrowserRouter, Outlet, useRouteError } from "react-router-dom";
 import Layout from "../components/layout/Layout";
-import Calendar from "../pages/calendar/Calendar";
-import CourseContent from "../pages/courseContent/CourseContent";
 import ProtectedRoute from "../components/ProtectedRoute";
-import CourseDashboard from "../pages/dashboard/CourseDashboard/CourseDashboard";
-import TeamDashboard from "../pages/dashboard/TeamDashboard/TeamDashboard";
-import DomainDashboard from "../pages/dashboard/DomainDashboard/DomainDashboard";
-import CourseBatchDashboard from "../pages/dashboard/CourseBatchDashboard/courseBatchDashboard";
-import TeamMemberDashboard from "../pages/dashboard/TeamMemberDashboard/TeamMemberDashboard";
-import Forms from "../pages/Forms/Forms";
-import CreateForms from "../components/Forms/CreateForms/CreateForms";
-import FeedbackCreate from "../pages/Feedback/FeedbackCreate/FeedbackCreate";
-import FeedbackDashboard from "../pages/Feedback/FeedbackDashboard/FeedbackDashboard";
-import FeedbackEdit from "../pages/Feedback/FeedbackEdit/FeedbackEdit";
-import ShowForm from "../pages/Forms/ShowForm/ShowForm";
-import FormBody from "../pages/Forms/FormBody/FormBody";
-import AnswerForms from "../pages/Forms/AnswerForm/AnswerForm";
-import GradingForm from "../pages/Forms/GradingForm/GradingForm";
-import FormsDashboard from "../pages/dashboard/FormsDashboard/FormsDashboard";
-import DevDashboard from "../pages/dashboard/DevDashboard/DevDashboard";
-import CreateSystem from "../pages/dashboard/CreateSystem/CreateSystem";
-import EditForm from "../pages/Forms/EditForm/EditForm";
-import StudentsStatus from "../pages/studentStatus/StudentsStatus";
-import SurveyDashboard from "../pages/dashboard/SurveyDashboard/SurveyDashboard";
-import SurveyMembersPage from "../pages/dashboard/SurveyDashboard/SurveyMembers/SurveyMembersPage";
-import HoefOverview from "../components/HoefOverview/HoefOverview";
-import HoefPersonalDashboard from "../components/HoefPersonalDashboard/HoefPersonalDashboard";
-import KnowledgeRetention from "../pages/knowledgeRetention/KnowledgeRetention";
 import {
   createProtectedRoute,
   createProtectedGroup,
 } from "../utils/routeUtils";
-import Notebook from "../pages/Notebook/Notebook";
-import FormsLayout from "../pages/Forms/FormsLayout";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
+
+// Pages are loaded on demand (one chunk per page). The <Suspense> boundary is around the
+// <Outlet /> in Layout, so the top bar / sidebar stay visible while a page chunk loads.
+// Layout, ProtectedRoute and ErrorPage stay static: they are needed on every route.
+const Calendar = lazy(() => import("../pages/calendar/Calendar"));
+const CourseContent = lazy(() => import("../pages/courseContent/CourseContent"));
+const CourseDashboard = lazy(() => import("../pages/dashboard/CourseDashboard/CourseDashboard"));
+const TeamDashboard = lazy(() => import("../pages/dashboard/TeamDashboard/TeamDashboard"));
+const DomainDashboard = lazy(() => import("../pages/dashboard/DomainDashboard/DomainDashboard"));
+const CourseBatchDashboard = lazy(() => import("../pages/dashboard/CourseBatchDashboard/courseBatchDashboard"));
+const TeamMemberDashboard = lazy(() => import("../pages/dashboard/TeamMemberDashboard/TeamMemberDashboard"));
+const Forms = lazy(() => import("../pages/Forms/Forms"));
+const CreateForms = lazy(() => import("../components/Forms/CreateForms/CreateForms"));
+const FeedbackCreate = lazy(() => import("../pages/Feedback/FeedbackCreate/FeedbackCreate"));
+const FeedbackDashboard = lazy(() => import("../pages/Feedback/FeedbackDashboard/FeedbackDashboard"));
+const FeedbackEdit = lazy(() => import("../pages/Feedback/FeedbackEdit/FeedbackEdit"));
+const ShowForm = lazy(() => import("../pages/Forms/ShowForm/ShowForm"));
+const FormBody = lazy(() => import("../pages/Forms/FormBody/FormBody"));
+const AnswerForms = lazy(() => import("../pages/Forms/AnswerForm/AnswerForm"));
+const GradingForm = lazy(() => import("../pages/Forms/GradingForm/GradingForm"));
+const FormsDashboard = lazy(() => import("../pages/dashboard/FormsDashboard/FormsDashboard"));
+const DevDashboard = lazy(() => import("../pages/dashboard/DevDashboard/DevDashboard"));
+const CreateSystem = lazy(() => import("../pages/dashboard/CreateSystem/CreateSystem"));
+const EditForm = lazy(() => import("../pages/Forms/EditForm/EditForm"));
+const StudentsStatus = lazy(() => import("../pages/studentStatus/StudentsStatus"));
+const SurveyDashboard = lazy(() => import("../pages/dashboard/SurveyDashboard/SurveyDashboard"));
+const SurveyMembersPage = lazy(() => import("../pages/dashboard/SurveyDashboard/SurveyMembers/SurveyMembersPage"));
+const HoefOverview = lazy(() => import("../components/HoefOverview/HoefOverview"));
+const HoefPersonalDashboard = lazy(() => import("../components/HoefPersonalDashboard/HoefPersonalDashboard"));
+const KnowledgeRetention = lazy(() => import("../pages/knowledgeRetention/KnowledgeRetention"));
+const Notebook = lazy(() => import("../pages/Notebook/Notebook"));
+const FormsLayout = lazy(() => import("../pages/Forms/FormsLayout"));
 
 const ADMIN_ROLES = ["SYSTEM-ADMIN", "ADMIN"] as any;
 

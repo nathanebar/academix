@@ -18,7 +18,7 @@ import {
 import { useSelectionsStore } from "../../../store/selectionStore";
 import { getTasksByUser } from "../../../services/ApiServices";
 import { schemaMap, SchemaName } from "../../../types/types";
-import UserTaskModal from "../../UserTaskModal/UserTaskModal";
+import { UserTaskModal } from "../../LazyTaskModals";
 import { notification, Tooltip } from "antd";
 import { usePermissionStore } from "../../../store/permissionStore";
 import { useTeamEventAssignment } from "../../../hooks/useFetchTeamEventAssignments";
