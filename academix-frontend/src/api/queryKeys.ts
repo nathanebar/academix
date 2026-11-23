@@ -38,6 +38,21 @@ export const feedbackKeys = {
     [...feedbackKeys.all, "open", "teams", teamIds, courseBatchId] as const,
 };
 
+export const teamAxisOrderKeys = {
+  all: ["teamAxisOrder"] as const,
+  byTeamAndBatch: (teamId: number | undefined, courseBatchId: number | undefined) =>
+    [...teamAxisOrderKeys.all, teamId, courseBatchId] as const,
+};
+
+export const notebookKeys = {
+  all: ["notebook"] as const,
+  folders: (
+    courseBatchId: number | undefined,
+    teamId: number | undefined,
+    teamMemberId: number | undefined
+  ) => [...notebookKeys.all, "folders", courseBatchId, teamId, teamMemberId] as const,
+};
+
 export const axisTemplateKeys = {
   all: ["axisTemplate"] as const,
   byAxis: (axisId: number | undefined) => [...axisTemplateKeys.all, axisId] as const,

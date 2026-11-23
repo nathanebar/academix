@@ -23,7 +23,8 @@ import {
 } from "../../../services/ApiServices";
 import { usePermissionStore } from "../../../store/permissionStore";
 import { useSelectionsStore } from "../../../store/selectionStore";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { teamAxisOrderKeys } from "../../../api/queryKeys";
 import GradeStageCard from "../../GradeStageCard/GradeStageCard";
 import TagGroup from "../../TagGroup/TagGroup";
 import ColorGroup from "../../ColorGroup/ColorGroup";
@@ -168,7 +169,6 @@ const AxisBoard = ({
   const [onAddAxis, setOnAddAxis] = useState(false);
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const [selectedColor, setSelectedColor] = useState<SchemaName>("coral");
-  const [orderData, setOrderData] = useState<OrderData | null>(null);
   const [orderedAxes, setOrderedAxes] = useState<Axis[]>([]);
 
   const queryClient = useQueryClient();
@@ -270,27 +270,20 @@ const AxisBoard = ({
   // ============================================
   // 🔥 Step 2: Fetch order from server
   // ============================================
-  const fetchOrder = useCallback(async () => {
-    if (!selectedTeam?.id || !selectedCourseBatch?.id) {
-      setOrderData(null);
-      return;
-    }
-
-    try {
-      const data = await getTeamAxisOrder(
-        selectedCourseBatch.id,
-        selectedTeam.id
-      );
-      setOrderData(data);
-    } catch (error) {
-      console.error("Error fetching order:", error);
-      setOrderData(null);
-    }
-  }, [selectedTeam?.id, selectedCourseBatch?.id]);
-
-  useEffect(() => {
-    fetchOrder();
-  }, [fetchOrder]);
+  // React Query (#17). Without a team / batch the query is disabled and orderData is null, as before.
+  const { data: orderData = null, refetch: fetchOrder } = useQuery({
+    queryKey: teamAxisOrderKeys.byTeamAndBatch(selectedTeam?.id, selectedCourseBatch?.id),
+    queryFn: async (): Promise<OrderData | null> => {
+      try {
+        return await getTeamAxisOrder(selectedCourseBatch!.id, selectedTeam!.id);
+      } catch (error) {
+        console.error("Error fetching order:", error);
+        return null;
+      }
+    },
+    enabled: !!selectedTeam?.id && !!selectedCourseBatch?.id,
+    staleTime: 0, // refetch on every mount, like the former useEffect
+  });
 
   // ============================================
   // 🔥 Step 3: Apply order to filtered axes
