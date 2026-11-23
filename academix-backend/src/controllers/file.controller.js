@@ -13,8 +13,6 @@ const {
   getFilesByFeedbackAnswerId,
   getFilesBySolutionFileId,
   getFilesByCourseBatchId,
-  canAccessFile,
-  canAccessCustomFolderFile,
 } = require("../services/file.service");
 
 const { encodeBuffer } = require("../utils/encodeVideo");
@@ -49,38 +47,21 @@ const s3Client = new S3Client({
  * - { status: "ok", fileRecord, bucket } (bucket: from the DB for authenticated requests),
  * - { status: "not_found" }: no Files row and no accessible folder file,
  * - { status: "forbidden" }: a Files row exists but the user may not read it.
- * Authenticated requests (#13) use fileAccess.service: the teamId / teamMemberId params
- * are only hints there. Requests without a token keep the old checks.
+ * Access is decided by fileAccess.service from the authenticated user (#13): the
+ * teamMemberId param is only a "view as student" hint, teamId is ignored. Without a user
+ * (only possible with REQUIRE_AUTH=false) nothing is readable.
  */
-const authorizeFile = async (req, key, { teamMemberId, teamId }) => {
-  if (req.user) {
-    const { found, allowed, file } = await canUserAccessKey(req, key, { teamMemberId });
-    if (found) {
-      return allowed ? { status: "ok", fileRecord: file, bucket: file.s3BucketName } : { status: "forbidden" };
-    }
-    if (await canUserAccessFolderFile(req, key, { teamMemberId })) {
-      const folderFile = await CourseBatchFolderFile.findOne({ where: { s3_key: key }, raw: true });
-      return { status: "ok", fileRecord: null, bucket: folderFile?.s3_bucket_name };
-    }
-    return { status: "not_found" };
+const authorizeFile = async (req, key, { teamMemberId }) => {
+  if (!req.user) return { status: "forbidden" };
+  const { found, allowed, file } = await canUserAccessKey(req, key, { teamMemberId });
+  if (found) {
+    return allowed ? { status: "ok", fileRecord: file, bucket: file.s3BucketName } : { status: "forbidden" };
   }
-
-  // Old behavior (no token)
-  const fileRecord = await File.findOne({ where: { s3Key: key } });
-  if (!fileRecord) {
-    const hasFolderAccess = await canAccessCustomFolderFile(
-      key,
-      teamMemberId ? Number(teamMemberId) : null,
-      teamId ? Number(teamId) : null
-    );
-    return hasFolderAccess ? { status: "ok", fileRecord: null, bucket: null } : { status: "not_found" };
+  if (await canUserAccessFolderFile(req, key, { teamMemberId })) {
+    const folderFile = await CourseBatchFolderFile.findOne({ where: { s3_key: key }, raw: true });
+    return { status: "ok", fileRecord: null, bucket: folderFile?.s3_bucket_name };
   }
-  const hasAccess = await canAccessFile(
-    fileRecord,
-    teamMemberId ? Number(teamMemberId) : null,
-    teamId ? Number(teamId) : null
-  );
-  return hasAccess ? { status: "ok", fileRecord, bucket: null } : { status: "forbidden" };
+  return { status: "not_found" };
 };
 
 exports.streamFile = async (req, res) => {
@@ -337,7 +318,7 @@ exports.createBucket = async (req, res) => {
 exports.deleteFile = async (id) => {
   if (!id) {
     return {
-      status: 401,
+      status: 409,
       error: "no id provided",
     };
   }
@@ -345,7 +326,7 @@ exports.deleteFile = async (id) => {
     const file = await File.findByPk(id);
     if (!file) {
       return {
-        status: 401,
+        status: 409,
         error: "no file with that id to delete",
       };
     } else {
@@ -437,7 +418,7 @@ exports.deleteAllFilesByTaskId = async (req, res) => {
 
       res.status(200).json({ msg: `deleted all files releted to task ${taskid}` });
     } else {
-      res.status(401).json({ error: `problem with deleting files` });
+      res.status(409).json({ error: `problem with deleting files` });
     }
   } catch (error) {
     catchError(error, req, res, {

@@ -75,7 +75,7 @@ MINIO_CONSOLE_PORT=9001
 | `local` | מחוץ לרשת הסגורה (פיתוח) | ‏`POST /api/auth/login` בודק את `Users.password` (hash מסוג scrypt של Node) ומגדיר את העוגיות `token` ‏(JWT מסוג httpOnly) ו-`userInfo`. ה-Frontend מציג דף כניסה וכפתור יציאה. |
 | `ntlm` | ברשת הסגורה | ‏`GET /api/auth/ntlm` ‏(express-ntlm עם `NTLM_DOMAIN` / `NTLM_DOMAIN_CONTROLLER`), ההתנהגות המקורית. במצב הזה `/api/auth/login` לא קיים. |
 
-ה-Frontend קורא את המצב דרך `GET /api/auth/mode`. ‏`REQUIRE_AUTH=true` מחייב JWT תקין בכל נתיבי `/api`. ברירת המחדל כבויה, כדי לא לשנות את ההתנהגות המקורית.
+ה-Frontend קורא את המצב דרך `GET /api/auth/mode`. כל שאר נתיבי `/api` מחייבים את העוגייה `token`; בלעדיה ה-API מחזיר `401 { "error": "unauthenticated" }`. המשתמש והתפקיד הפעיל נקבעים תמיד בשרת: ה-token קובע את המשתמש, והכותרת `X-Role-Assignment-Id` מציינת אחד משיבוצי התפקיד שלו, שנבדק בשרת ([#13](https://github.com/nathanebar/academix/issues/13)). ‏`REQUIRE_AUTH=false` מבטל את הבדיקה לפיתוח מקומי בלבד (הבקשות רצות אז כאנונימיות).
 
 ### בסיס נתונים
 
@@ -108,6 +108,7 @@ MINIO_CONSOLE_PORT=9001
 3. **‏`.env` של ה-Backend**:
    - `NODE_ENV=production`
    - `AUTH_MODE=ntlm`, ‏`NTLM_DOMAIN`, ‏`NTLM_DOMAIN_CONTROLLER`
+   - `REQUIRE_AUTH` לא מוגדר או `true` (**לעולם לא `false` בייצור**); ‏`JWT_EXPIRES_IN` (ברירת מחדל `12h`) קובע את משך החיבור. אחרי הפריסה, לוודא שחיבור שפג תוקפו מתחדש מעצמו דרך NTLM (ה-Frontend קורא פעם אחת ל-`GET /api/auth/ntlm` אחרי 401): אי אפשר לבדוק את זה מחוץ לרשת הסגורה.
    - `HTTPS=true`, ‏`CERT_PATH=certificate/cert.pfx`, ‏`PASSWORD=<passphrase>`
    - `DB_*`: לפי הלוגים, בסיס הנתונים הישן רץ כנראה על פורט **5433**
    - `S3_*` (ובנוסף `S3_STORAGE_CLASS=STANDARD_IA` אם כך היה בעבר)
@@ -135,9 +136,9 @@ REACT_APP_API_BASE_URL=https://<api>:8007/api REACT_APP_S3_BASE_URL=https://<min
 
 מנוהלות בתוכנית העבודה ([#23](https://github.com/nathanebar/academix/issues/23)):
 
-- בלי `REQUIRE_AUTH=true`, אף נתיב `/api/*` לא דורש אימות, וזהות המשתמש נלקחת מכותרות שהלקוח שולח ([#13](https://github.com/nathanebar/academix/issues/13)).
-- הזרקת SQL אפשרית: ‏`teamId` משורשר לשאילתה ב-`src/controllers/taskAssignment.controller.js` (בערך שורה 1948) ([#8](https://github.com/nathanebar/academix/issues/8)).
-- ‏`errorHandler` מחזיר `error.message` ללקוח; קריאות HTTPS פנימיות משתמשות ב-`rejectUnauthorized: false` ([#15](https://github.com/nathanebar/academix/issues/15)).
-- לוגים מהייצור (`academix-backend/logs/`, ‏git מתעלם מהם) מכילים כתובות IP, שמות משתמשים ותוכן בקשות: למחוק אותם לפני שמשתפים משהו.
+- כ-30 handlers עדיין בונים בעצמם תשובות 5xx עם `error.message` ([#53](https://github.com/nathanebar/academix/issues/53)); ‏`catchError` וה-handler הגלובלי כבר מסתירים אותו בייצור.
+- לוגים מהייצור שנכתבו **לפני** הלוגר החדש (`academix-backend/logs/errors.log`, ‏`info.log`, ‏`debug.log`, ‏git מתעלם מהם) מכילים כתובות IP, שמות משתמשים ותוכן בקשות: למחוק אותם לפני שמשתפים משהו. הלוגר הנוכחי כבר לא כותב את תוכן הבקשות.
+
+תוקן מאז הסקירה: זהות והרשאות שנקבעו בצד הלקוח ([#13](https://github.com/nathanebar/academix/issues/13)), הזרקת SQL ‏([#8](https://github.com/nathanebar/academix/issues/8)), כותרות אבטחה, הגבלת ניסיונות התחברות, הודעות שגיאה פנימיות ו-TLS לא מאומת מול האלפון ([#15](https://github.com/nathanebar/academix/issues/15)).
 
 </div>

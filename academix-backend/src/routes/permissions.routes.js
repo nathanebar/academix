@@ -15,19 +15,6 @@ router.get("/my", async (req, res) => {
   }
 });
 
-// Legacy (removed in step 3 of #13): with a valid token, the token's user wins over :userId,
-// so nobody can read another user's permissions anymore.
-router.get("/my/:userId", async (req, res) => {
-  try {
-    const userId = req.user?.id ?? (Number(req.params.userId) || 3);
-    const detailedAssignments = await getPermissionsForUser(userId);
-    
-    res.json(detailedAssignments);
-  } catch (err) {
-    catchError(err, req, res, { function: 'getMyPermissions', userId: req.params.userId });
-  }
-});
-
 router.post("/system", async (req, res) => {
   try {
     const { name } = req.body;

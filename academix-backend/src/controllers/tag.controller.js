@@ -30,7 +30,7 @@ module.exports = {
       const tag = await createTag(courseid, name);
 
       if (tag?.error) {
-        res.status(401).json(tag);
+        res.status(409).json(tag);
       } else {
         logger.info("Tag created", {
           tagId: tag?.id,
@@ -51,7 +51,7 @@ module.exports = {
     try {
       const updatedTag = await updateTag(id, name);
       if (updatedTag?.error) {
-        res.status(401).json(updatedTag);
+        res.status(409).json(updatedTag);
       } else {
         logger.info("Tag updated", {
           tagId: id,
@@ -74,7 +74,7 @@ module.exports = {
     try {
       const deletedTag = await deleteTag(id);
       if (deletedTag?.error) {
-        res.status(401).json(deletedTag);
+        res.status(409).json(deletedTag);
       } else {
         logger.info("Tag deleted", {
           tagId: id,

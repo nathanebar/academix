@@ -61,7 +61,7 @@ The MinIO image is `cgr.dev/chainguard/minio`, pinned by digest in `docker-compo
 | `local` | outside the closed network (development) | `POST /api/auth/login` checks `Users.password` (native Node scrypt hash) and sets the `token` (httpOnly JWT) and `userInfo` cookies. The frontend shows a login page and a logout button. |
 | `ntlm` | on the closed network | `GET /api/auth/ntlm` (express-ntlm with `NTLM_DOMAIN` / `NTLM_DOMAIN_CONTROLLER`), the original behavior. `/api/auth/login` does not exist in this mode. |
 
-The frontend reads the mode from `GET /api/auth/mode`. `REQUIRE_AUTH=true` requires a valid JWT on every `/api` route. It is off by default so that the original behavior does not change.
+The frontend reads the mode from `GET /api/auth/mode`. Every other `/api` route requires the `token` cookie; without it the API answers `401 { "error": "unauthenticated" }`. The user and the active role always come from the server: the token gives the user, and the `X-Role-Assignment-Id` header names one of their role assignments, checked server-side ([#13](https://github.com/nathanebar/academix/issues/13)). `REQUIRE_AUTH=false` disables the check for local development only (requests then run anonymously).
 
 ### Database
 
@@ -94,6 +94,7 @@ The target has **no internet access**: everything it needs must be brought in.
 3. **Backend `.env`**:
    - `NODE_ENV=production`
    - `AUTH_MODE=ntlm`, `NTLM_DOMAIN`, `NTLM_DOMAIN_CONTROLLER`
+   - `REQUIRE_AUTH` left unset or `true` (**never `false` in production**); `JWT_EXPIRES_IN` (default `12h`) sets how long a session lasts. After deploying, check that an expired session silently logs back in through NTLM (the frontend calls `GET /api/auth/ntlm` once on a 401): this path cannot be tested outside the closed network.
    - `HTTPS=true`, `CERT_PATH=certificate/cert.pfx`, `PASSWORD=<passphrase>`
    - `DB_*`: according to the logs, the old database probably ran on port **5433**
    - `S3_*` (plus `S3_STORAGE_CLASS=STANDARD_IA` if that was the case before)
@@ -112,7 +113,7 @@ The target has **no internet access**: everything it needs must be brought in.
 
 Tracked in the work plan ([#23](https://github.com/nathanebar/academix/issues/23)):
 
-- Without `REQUIRE_AUTH=true`, no `/api/*` route requires authentication; the user identity comes from client headers ([#13](https://github.com/nathanebar/academix/issues/13)).
-- Possible SQL injection: `teamId` is interpolated into the query in `src/controllers/taskAssignment.controller.js` (~line 1948) ([#8](https://github.com/nathanebar/academix/issues/8)).
-- `errorHandler` returns `error.message` to the client; internal HTTPS calls use `rejectUnauthorized: false` ([#15](https://github.com/nathanebar/academix/issues/15)).
-- Production logs (`academix-backend/logs/`, ignored by git) contain IPs, usernames and request bodies: purge them before sharing anything.
+- About 30 handlers still build their 5xx responses with `error.message` themselves ([#53](https://github.com/nathanebar/academix/issues/53)); `catchError` and the global error handler already hide it in production.
+- Production logs written **before** the new logger (`academix-backend/logs/errors.log`, `info.log`, `debug.log`, ignored by git) contain IPs, usernames and request bodies: purge them before sharing anything. The current logger no longer writes request bodies.
+
+Fixed since the review: client-trusted identity and permissions ([#13](https://github.com/nathanebar/academix/issues/13)), SQL injection ([#8](https://github.com/nathanebar/academix/issues/8)), security headers, login rate limit, internal error messages and the unverified directory TLS ([#15](https://github.com/nathanebar/academix/issues/15)).

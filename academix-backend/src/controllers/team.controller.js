@@ -188,8 +188,8 @@ exports.remove = async (req, res) => {
 
     res.send("Deleted successfully");
   } catch (error) {
-    console.log(error);
-    res.status(401).json(error);
+    // Was 401 + the raw error object: an unexpected error, not an authentication or business one.
+    catchError(error, req, res, { function: "team.delete" });
   }
 };
 
