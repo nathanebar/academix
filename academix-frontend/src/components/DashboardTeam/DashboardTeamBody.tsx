@@ -1,6 +1,6 @@
 import { isBusinessConflict } from "../../utils/httpStatus";
 import { useNavigate } from "react-router-dom";
-import { useFilteredDataStore } from "../../store/filteredDataStore";
+import { useFilteredData } from "../../hooks/useFilteredData";
 import { useSelectionsStore } from "../../store/selectionStore";
 import CourseMission from "../CourseMission/TeamMission";
 import PermmisionsCourseBatch from "../DashboardCourseBatch/PermmisionsCurseBatch/PermmisionsCourseBatch";
@@ -57,19 +57,7 @@ const DashboardTeamBody = () => {
         member?.member_role === "STUDENT"
     );
   }, [teamMembers, selectedTeam?.id, selectedCourseBatch?.id]);
-  const {
-    filteredDomains,
-    setFilteredDomains,
-    filteredCourses,
-    setFilteredCourses,
-    filteredCourseBatches,
-    setFilteredCourseBatches,
-    filteredTeams,
-    setFilteredTeams,
-    setFilteredTeamMembers,
-    filteredTeamMembers,
-    setFilteredAxis,
-  } = useFilteredDataStore();
+  const { filteredDomains, filteredCourses, filteredCourseBatches, filteredTeams, filteredTeamMembers } = useFilteredData();
   const domains = useDomainsData();
   const teams = useTeamsData();
   const courses = useCoursesData();

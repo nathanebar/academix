@@ -4,7 +4,7 @@ import { HeaderPermissionDisplay } from "../../components/HeaderPermissionDispla
 import CircularSelect from "../../components/CircularSelect/CircularSelect";
 import { GenericOptionSwitch } from "../../UI/GenericOptionSwitch/GenericOptionSwitch";
 import AxisBoard from "../../components/Axis/AxisBoard/AxisBoard";
-import { useFilteredDataStore } from "../../store/filteredDataStore";
+import { useFilteredData } from "../../hooks/useFilteredData";
 import { useSelectionsStore } from "../../store/selectionStore";
 import { usePermissionStore } from "../../store/permissionStore";
 import { Condition, QueryField, QueryGroup } from "../../types/types";
@@ -94,7 +94,7 @@ const CourseContent = () => {
 
   const { setTasks, next, prev, reset, currentIndex, taskIds } = useSearchNavStore();
 
-  const { filteredCourses } = useFilteredDataStore();
+  const { filteredCourses } = useFilteredData();
   const axisBatchArchive = useAxisBatchArchiveData();
 
  

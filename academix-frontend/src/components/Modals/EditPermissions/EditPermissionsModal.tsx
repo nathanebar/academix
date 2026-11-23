@@ -25,7 +25,7 @@ import {
 import Notification from "../../../UI/Notification/Notification";
 import { useSelectionsStore } from "../../../store/selectionStore";
 import { usePermissionStore } from "../../../store/permissionStore";
-import { useFilteredDataStore } from "../../../store/filteredDataStore";
+import { useFilteredData } from "../../../hooks/useFilteredData";
 import { useLocation } from "react-router-dom";
 import RegularInput from "../../../UI/Input/Input/RegularInput";
 import { useQueryClient } from "@tanstack/react-query";
@@ -111,7 +111,7 @@ const EditPermissionsModal: React.FC<AddCourseModalProps> = ({
         "updatedAt": "2025-08-17T12:29:30.169Z"
     }
 ]);
-  const { filteredTeams } = useFilteredDataStore();
+  const { filteredTeams } = useFilteredData();
   const { selectedPermission, permissions } = usePermissionStore();
   const { selectedCourse, selectedTeam, selectedCourseBatch, selectedDomain } =
     useSelectionsStore();

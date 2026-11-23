@@ -6,7 +6,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useFetchSameUsersInTeamAndTask } from "../../../hooks/Forms/useFetchSameUsersInTeamAndTask";
 import { useSelectionsStore } from "../../../store/selectionStore";
 import { User } from "../../../types/types";
-import { useFilteredDataStore } from "../../../store/filteredDataStore";
 import Photo from "../../../UI/Photo/Photo";
 import { Avatar, Button } from "antd";
 import { RightOutlined } from "@ant-design/icons";

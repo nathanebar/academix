@@ -18,7 +18,7 @@ import {
 import { queryClient } from "../../../api/queryClient";
 import { usePermissionStore } from "../../../store/permissionStore";
 
-import { useFilteredDataStore } from "../../../store/filteredDataStore";
+import { useFilteredData } from "../../../hooks/useFilteredData";
 import { useLocation } from "react-router-dom";
 import {
   filterStudentMembers,
@@ -72,7 +72,7 @@ const TaskTeamTag: React.FC<TaskProps> = ({
   const { selectedPermission } = usePermissionStore();
   const { selectedTeam, selectedDate, selectedTeamMember } =
     useSelectionsStore();
-  const { filteredTeamMembers } = useFilteredDataStore();
+  const { filteredTeamMembers } = useFilteredData();
   const { pathname } = useLocation();
 
   const isCalendarPage = pathname.includes("calendar");

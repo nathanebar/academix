@@ -43,7 +43,7 @@ import styles from "./HoefPersonalDashboard.module.css";
 import { useHoefTeamSummary } from "../../hooks/useHoefAssignment";
 import { useSelectionsStore } from "../../store/selectionStore";
 import { usePermissionStore } from "../../store/permissionStore";
-import { useFilteredDataStore } from "../../store/filteredDataStore";
+import { useFilteredData } from "../../hooks/useFilteredData";
 import { UserTaskModal } from "../LazyTaskModals";
 import TaskUserTag from "../Task/TaskTag/TaskUserTag";
 
@@ -377,7 +377,7 @@ const HoefPersonalDashboard: React.FC = () => {
   const selectedPermission = usePermissionStore(
     (state) => state.selectedPermission
   );
-  const { filteredTeamMembers } = useFilteredDataStore();
+  const { filteredTeamMembers } = useFilteredData();
 
   // ✅ הוסף - State למודל משימה
   const [selectedTaskForModal, setSelectedTaskForModal] = useState<any>(null);

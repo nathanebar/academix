@@ -4,20 +4,33 @@ import TeamCard from "./TeamCard/TeamCard";
 import styles from "./DashboardAdminBody.module.css";
 import HeaderCard from "./HeaderCard/HeaderCard";
 import { Button } from "antd";
-import { useFilteredDataStore } from "../../store/filteredDataStore";
+import { useFilteredData } from "../../hooks/useFilteredData";
 import { useSelectionsStore } from "../../store/selectionStore";
 import AddCourseModal from "../Modals/AddCourse/AddCourseModal";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import stringCheckAndToolTip from "../../utils/stringCheck";
 import { queryClient } from "../../api/queryClient";
 import { useCourseBatchesData, useTeamsData } from "../../hooks/useHierarchyData";
+import { useAdminCourseSearchStore } from "../../store/adminCourseSearchStore";
 
 const DashboardAdminBody = () => {
   const teams = useTeamsData();
   const courseBatches = useCourseBatchesData();
   const [courseModalOpen, setCourseModalOpen] = useState<boolean>(false);
-  const { filteredCourses, filteredDomains, filteredTeams } = useFilteredDataStore();
+  const { filteredCourses: domainCourses, filteredDomains, filteredTeams } = useFilteredData();
+  // "חיפוש קורס" of DashboardAdminHeader (#17: UI state, applied here instead of being written
+  // into the shared filtered courses). Same rule as before: name contains the text, any case.
+  const courseSearch = useAdminCourseSearchStore((s) => s.courseSearch);
+  const filteredCourses = useMemo(
+    () =>
+      courseSearch.trim()
+        ? domainCourses.filter((item) =>
+            item.name?.toLowerCase().includes(courseSearch.toLowerCase())
+          )
+        : domainCourses,
+    [domainCourses, courseSearch]
+  );
   const { setSelectedCourse, setSelectedCourseBatch } = useSelectionsStore();
   const [selectedBatches, setSelectedBatches] = useState<Record<string, string>>({});
   const navigate = useNavigate();

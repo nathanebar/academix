@@ -4,7 +4,7 @@ import style from "./CourseDashboard.module.css";
 import CourseSetting from "../../../components/CourseSetting/CourseSetting";
 import CourseMission from "../../../components/CourseMission/TeamMission";
 import CourseBatchList from "../../../components/CourseBatchDiv/CourseBatchList";
-import { useFilteredDataStore } from "../../../store/filteredDataStore";
+import { useFilteredData } from "../../../hooks/useFilteredData";
 import {
   Button,
   ConfigProvider,
@@ -27,7 +27,7 @@ import TagCard from "./TagCard/TagCard";
 import { useAxisBatchArchiveData, useCourseBatchesData, useCoursesData, useDomainsData, useTeamMembersData, useTeamsData } from "../../../hooks/useHierarchyData";
 
 const CourseDashboard = () => {
-  const { filteredAxis, filteredCourseBatches } = useFilteredDataStore();
+  const { filteredAxis, filteredCourseBatches } = useFilteredData();
   const { selectedCourse } = useSelectionsStore();
 
   const [gradeStages, setGradeStages] = useState<any[]>([]);

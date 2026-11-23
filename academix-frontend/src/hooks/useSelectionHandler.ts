@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { useSelectionsStore } from "../store/selectionStore";
 import { queryClient } from "../api/queryClient";
 
+// #17: the filtered lists (courses / batches / teams of the selection) are no longer written
+// here: they are derived from the selection in Layout (useFilteredData). This hook only updates
+// the selection; it still uses the filters to pick the default course / batch / team.
 export const useSelectionHandler = (
   courses: any[],
   courseBatches: any[],
@@ -14,9 +17,6 @@ export const useSelectionHandler = (
   setSelectedCourseBatch: (item: any) => void,
   setSelectedTeam: (item: any) => void,
   setSelectedTeamMember: (items: any) => void,
-  setFilteredCourses: (items: any[]) => void,
-  setFilteredCourseBatches: (items: any[]) => void,
-  setFilteredTeams: (items: any[]) => void,
   setShowDropdown: (show: boolean) => void,
   filterCoursesBySelection: (courses: any[], domain: any) => any[],
   filterBatchesBySelection: (batches: any[], course: any) => any[],
@@ -35,7 +35,6 @@ export const useSelectionHandler = (
           domainItem || null
         );
 
-        setFilteredCourses(updatedCourses);
 
         if (updatedCourses && updatedCourses.length > 0) {
        
@@ -56,7 +55,6 @@ export const useSelectionHandler = (
           courseBatches,
           courseItem || null
         );
-        setFilteredCourseBatches(updatedCourseBatches);
         if (updatedCourseBatches && updatedCourseBatches.length > 0) {
           setSelectedCourseBatch(
             updatedCourseBatches[updatedCourseBatches.length - 1]
@@ -77,8 +75,6 @@ export const useSelectionHandler = (
           batchItem || null
         );
 
-        
-        setFilteredTeams(updatedFilteredTeams);
 
         if (
           updatedFilteredTeams &&
@@ -132,9 +128,6 @@ export const useSelectionHandler = (
               if (selectedBatchItem) {
                 updateTeams(selectedBatchItem);
               }
-            } else {
-              setFilteredCourseBatches([]);
-              setFilteredTeams([]);
             }
           // }
           break;
@@ -185,9 +178,6 @@ export const useSelectionHandler = (
       filterBatchesBySelection,
       filterTeamsByBatch,
       filterTeamMembers,
-      setFilteredCourses,
-      setFilteredCourseBatches,
-      setFilteredTeams,
     ]
   );
 

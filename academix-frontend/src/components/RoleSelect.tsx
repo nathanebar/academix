@@ -7,7 +7,7 @@ import { usePermissionStore } from "../store/permissionStore";
 import { useUserStore } from "../store/userStore";
 import { useRoleNavigation } from "../hooks/useRoleNavigation";
 import { useSelectionHandler } from "../hooks/useSelectionHandler";
-import { useFilteredDataStore } from "../store/filteredDataStore";
+import { useFilteredData } from "../hooks/useFilteredData";
 import { useSelectionsStore } from "../store/selectionStore";
 
 import {
@@ -26,16 +26,7 @@ export const RoleSelect = () => {
     usePermissionStore();
   const { user } = useUserStore();
 
-  const {
-    filteredDomains,
-    filteredCourses,
-    setFilteredCourses,
-    filteredCourseBatches,
-    setFilteredCourseBatches,
-    filteredTeams,
-    setFilteredTeams,
-    filteredTeamMembers,
-  } = useFilteredDataStore();
+  const { filteredDomains, filteredCourses, filteredCourseBatches, filteredTeams, filteredTeamMembers } = useFilteredData();
 
   const teams = useTeamsData();
   const courses = useCoursesData();
@@ -85,9 +76,6 @@ export const RoleSelect = () => {
     setSelectedCourseBatch,
     setSelectedTeam,
     setSelectedTeamMember,
-    setFilteredCourses,
-    setFilteredCourseBatches,
-    setFilteredTeams,
     () => {},
     filterCoursesBySelection,
     filterBatchesBySelection,

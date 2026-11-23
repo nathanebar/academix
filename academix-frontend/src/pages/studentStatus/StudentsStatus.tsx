@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { HeaderPermissionDisplay } from "../../components/HeaderPermissionDisplay";
 import style from "./studentsStatus.module.css";
-import { useFilteredDataStore } from "../../store/filteredDataStore";
+import { useFilteredData } from "../../hooks/useFilteredData";
 import StudentStatusCard from "./studentStatusCard/StudentStatusCard";
 import { Button, Tooltip } from "antd";
 import {
@@ -15,7 +15,7 @@ import StudentExpandedView from "../StudentExpandedView/StudentExpandedView";
 type Props = {};
 
 const StudentsStatus = (props: Props) => {
-  const { filteredTeamMembers } = useFilteredDataStore();
+  const { filteredTeamMembers } = useFilteredData();
   const { selectedTeam, selectedTeamMember } = useSelectionsStore();
   
   const [isExpandedAll, setIsExpandedAll] = useState<boolean>(false);

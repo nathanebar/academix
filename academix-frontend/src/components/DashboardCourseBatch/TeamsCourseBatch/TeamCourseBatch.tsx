@@ -10,7 +10,7 @@ import {
   deleteTeam,
   updateTeam,
 } from "../../../services/ApiServices";
-import { useFilteredDataStore } from "../../../store/filteredDataStore";
+import { useFilteredData } from "../../../hooks/useFilteredData";
 import { useSelectionsStore } from "../../../store/selectionStore";
 import style from "./TeamCourseBatch.module.css";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +24,7 @@ const TeamCourseBatch = () => {
   const [editValue, setEditValue] = useState<string>("");
   const [teamValue, setTeamValue] = useState<string>("");
   const [inputError, setInputError] = useState<boolean>(false);
-  const { filteredTeams } = useFilteredDataStore();
+  const { filteredTeams } = useFilteredData();
   const { selectedCourseBatch, setSelectedTeam, selectedCourse } =
     useSelectionsStore();
   const { selectedPermission, setSelectedPermission } = usePermissionStore();

@@ -9,7 +9,7 @@ import { useFetchFormsByCourseIdAndTeamId } from "../../../hooks/Forms/useFetchF
 import { useSelectionsStore } from "../../../store/selectionStore";
 import LineChartForms from "./LineChartForms";
 import { useNavigate } from "react-router-dom";
-import { useFilteredDataStore } from "../../../store/filteredDataStore";
+import { useFilteredData } from "../../../hooks/useFilteredData";
 import FormsChart from "./FormsChart/FormsChart";
 
 const TeamsFormsBody = () => {
@@ -39,7 +39,7 @@ const TeamsFormsBody = () => {
   );
 
 
-  const { filteredCourseBatches } = useFilteredDataStore();
+  const { filteredCourseBatches } = useFilteredData();
 
   useEffect(() => {
     if (teamId) {

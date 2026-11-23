@@ -58,7 +58,7 @@ import { Input } from "antd";
 import { UserTaskModal } from "../LazyTaskModals";
 import CheckListForOverlap from "./Inputs/CheckListForOverlap/CheckListForOverlap";
 import BlackButton from "../../UI/Button/BlackButton";
-import { useBlockColorStore } from "../../store/blockColorStore";
+import { useBlockColorEnabled } from "../../hooks/useTeamBlockColor";
 
 const cleanCheckListItems = (checklist: any[] | null | undefined) => {
   if (!Array.isArray(checklist)) return [];
@@ -148,7 +148,11 @@ const NewTaskModal = (props: NewMissionProps) => {
   const [lastAddedId, setLastAddedId] = useState<number | null>(null);
   const [mode, setMode] = useState<Mode>("soldier");
 
-  const { isBlockColorEnabled } = useBlockColorStore();
+  // #17: from the query (was a copy in blockColorStore); same key as Layout, no extra request
+  const { isBlockColorEnabled } = useBlockColorEnabled(
+    selectedTeam?.id,
+    selectedCourseBatch?.id
+  );
 
   const [openUserTaskModal, setOpenUserTaskModal] = useState(false);
   const [previewTask, setPreviewTask] = useState<any>(null);

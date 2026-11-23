@@ -16,7 +16,7 @@ import {
 import BlackButton from "../../UI/Button/BlackButton";
 import { useSelectionsStore } from "../../store/selectionStore";
 import { useSelectionHandler } from "../../hooks/useSelectionHandler";
-import { useFilteredDataStore } from "../../store/filteredDataStore";
+import { useFilteredData } from "../../hooks/useFilteredData";
 import {
   filterTeamsByBatch,
   filterCoursesBySelection,
@@ -33,6 +33,7 @@ import EditDomainModal from "../Modals/EditDomain/EditDomainModal";
 import { Domain } from "../../types/types";
 import { queryClient } from "../../api/queryClient";
 import { updateDomainsData, useCourseBatchesData, useCoursesData, useDomainsData, useTeamsData } from "../../hooks/useHierarchyData";
+import { useAdminCourseSearchStore } from "../../store/adminCourseSearchStore";
 
 const DashboardAdminHeader = () => {
   const [currentDomain, setCurrentDomain] = useState<string | number>();
@@ -52,10 +53,8 @@ const DashboardAdminHeader = () => {
     setSelectedTeamMember,
     selectedSystemId,
   } = useSelectionsStore();
-  const { setFilteredCourses, setFilteredCourseBatches, setFilteredTeams } =
-    useFilteredDataStore();
-  const { selectedPermission, setSelectedPermission } = usePermissionStore();
-  const { filteredDomains, setFilteredDomains } = useFilteredDataStore();
+    const { selectedPermission, setSelectedPermission } = usePermissionStore();
+  const { filteredDomains } = useFilteredData();
   const domains = useDomainsData();
   const teams = useTeamsData();
   const courses = useCoursesData();
@@ -70,9 +69,6 @@ const DashboardAdminHeader = () => {
     setSelectedCourseBatch,
     setSelectedTeam,
     setSelectedTeamMember,
-    setFilteredCourses,
-    setFilteredCourseBatches,
-    setFilteredTeams,
     () => {},
     filterCoursesBySelection,
     filterBatchesBySelection,
@@ -106,22 +102,11 @@ const DashboardAdminHeader = () => {
     }
   };
 
-  const handleFilterCourse = (value: string) => {
-    if (!value.trim()) {
-      const domainFilteredCourses = courses.filter(
-        (course) => course.domainId === selectedDomain?.id
-      );
-      setFilteredCourses(domainFilteredCourses);
-      return;
-    }
-    const domainFilteredCourses = courses.filter(
-      (course) => course.domainId === selectedDomain?.id
-    );
-    const filteredData = domainFilteredCourses?.filter((item) => {
-      return item.name?.toLowerCase().includes(value?.toLowerCase());
-    });
-    setFilteredCourses(filteredData);
-  };
+  // #17: the search text is UI state; DashboardAdminBody filters the domain's courses with it
+  // (this used to overwrite the shared filtered courses with the search result)
+  const courseSearch = useAdminCourseSearchStore((s) => s.courseSearch);
+  const setCourseSearch = useAdminCourseSearchStore((s) => s.setCourseSearch);
+  const handleFilterCourse = (value: string) => setCourseSearch(value);
 
   useEffect(() => {
     if (domains && domains.length > 0) {
@@ -345,6 +330,7 @@ const DashboardAdminHeader = () => {
             style={{ backgroundColor: "white" }}
             type="search"
             className={styles["search-input"]}
+            value={courseSearch}
             onChange={(e) => {
               handleFilterCourse(e.target.value);
             }}

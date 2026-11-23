@@ -5,7 +5,7 @@ import ScoreChartUserForms from "./ScoreChartUserForms/ScoreChartUserForms";
 import ScoreProgressUserForms from "./ScoreProgressUserForms/ScoreProgressUserForms";
 import FormFiltersAndList from "./FormFiltersAndList/FormFiltersAndList";
 import { useSelectionsStore } from "../../store/selectionStore";
-import { useFilteredDataStore } from "../../store/filteredDataStore";
+import { useFilteredData } from "../../hooks/useFilteredData";
 import { useEffect } from "react";
 import { usePermissionStore } from "../../store/permissionStore";
 import ScoreTrajectory from "./ScoreTrajectory/ScoreTrajectory";
@@ -42,7 +42,7 @@ const DashboardUserForms = (props: Props) => {
     }
   }, [selectedTeamMember?.id, refetch]);
 
-  const { filteredTeamMembers, filteredCourseBatches } = useFilteredDataStore();
+  const { filteredTeamMembers, filteredCourseBatches } = useFilteredData();
 
   if (isLoading) {
     return (

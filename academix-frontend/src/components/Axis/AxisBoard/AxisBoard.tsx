@@ -44,7 +44,6 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-import { useBlockColorStore } from "../../../store/blockColorStore";
 import { useBlockColorEnabled } from "../../../hooks/useTeamBlockColor";
 import ExpandableMenu from "../../ExpandableMenu/ExpandableMenu";
 
@@ -388,8 +387,7 @@ const AxisBoard = ({
     [saveOrderMutation, orderedAxes]
   );
 
-  const { isBlockColorEnabled, isLoading } = useBlockColorStore();
-  const { toggleBlockColor } = useBlockColorEnabled(
+  const { isBlockColorEnabled, isLoading, toggleBlockColor } = useBlockColorEnabled(
     selectedTeam?.id,
     selectedCourseBatch?.id
   );

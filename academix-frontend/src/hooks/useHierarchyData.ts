@@ -8,7 +8,8 @@
 import { queryClient } from "../api/queryClient";
 import { usePermissionStore } from "../store/permissionStore";
 import { useSelectionsStore } from "../store/selectionStore";
-import { useFilteredDataStore } from "../store/filteredDataStore";
+import { useMemo } from "react";
+import { filterTeamsByBatch } from "../utils/filterUtils";
 import { Course, CourseBatch, Domain, Team, TeamMembers } from "../types/types";
 import { useFetchDomains } from "./useFetchDomains";
 import { useFetchCourses } from "./useFetchCourses";
@@ -46,12 +47,18 @@ export const useTeamsData = (): Team[] => {
 };
 
 export const useTeamMembersData = (): TeamMembers[] => {
-  // members of the teams shown in the header (computed in Layout), for the selected batch
-  const filteredTeams = useFilteredDataStore((s) => s.filteredTeams);
-  const selectedCourseBatchId = useSelectionsStore((s) => s.selectedCourseBatch?.id);
+  // members of the teams of the selected batch (the filtered teams, computed here: Layout's
+  // filtered lists are derived from this hook's result)
+  const teams = useTeamsData();
+  const selectedCourseBatch = useSelectionsStore((s) => s.selectedCourseBatch);
+  const selectedCourseBatchId = selectedCourseBatch?.id;
+  const teamIds = useMemo(
+    () => filterTeamsByBatch(teams as any[], selectedCourseBatch).map((team) => team.id),
+    [teams, selectedCourseBatch]
+  );
   return (
     useFetchTeamMembers(
-      filteredTeams.map((team) => team.id),
+      teamIds,
       selectedCourseBatchId ? selectedCourseBatchId : (null as any)
     ).data ?? EMPTY
   );

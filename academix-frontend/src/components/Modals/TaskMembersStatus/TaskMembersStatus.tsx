@@ -31,7 +31,7 @@ import {
   TaskAssignmentsCompletedByCommander,
 } from "../../../services/ApiServices";
 import { queryClient } from "../../../api/queryClient";
-import { useFilteredDataStore } from "../../../store/filteredDataStore";
+import { useFilteredData } from "../../../hooks/useFilteredData";
 import { useLocation } from "react-router-dom";
 import { useSelectionsStore } from "../../../store/selectionStore";
 import dayjs, { Dayjs } from "dayjs";
@@ -124,7 +124,7 @@ const TaskMembersStatus: React.FC<TaskProps> = ({
   setOpenModal,
   setSelectedEvent,
 }) => {
-  const { filteredTeamMembers } = useFilteredDataStore();
+  const { filteredTeamMembers } = useFilteredData();
   const { selectedTeam, selectedDate } = useSelectionsStore();
   const { pathname } = useLocation();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]); 
