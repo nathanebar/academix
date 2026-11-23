@@ -41,7 +41,7 @@ exports.create = async (req, res) => {
         });
         res.status(200).json(newAxisTemplate);
     } catch (err) {
-        console.log(err);
+        logger.error("axisTemplate.create failed", { originalError: err.message, stack: err.stack });
 
         res.status(400).json({ error: "Failed to create AxisTemplate" });
     }
@@ -66,7 +66,7 @@ exports.update = async (req, res) => {
 
     res.status(200).json({ updatedCount });
   } catch (err) {
-    console.log(err);
+    logger.error("axisTemplate.update failed", { originalError: err.message, stack: err.stack });
     res.status(400).json({ error: "Failed to update AxisTemplate" });
   }
 };

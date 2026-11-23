@@ -66,7 +66,6 @@ exports.getHoefsByTaskAssignment = async (req, res) => {
       data: formattedHoefs,
     });
   } catch (error) {
-    console.error("Error fetching hoefs:", error);
     catchError(error, req, res, { function: "taskAssignmentHoef.getHoefsByTaskAssignment" });
   }
 };
@@ -150,7 +149,6 @@ exports.getHoefsByUser = async (req, res) => {
       data: formattedHoefs,
     });
   } catch (error) {
-    console.error("Error fetching user hoefs:", error);
     catchError(error, req, res, { function: "taskAssignmentHoef.getHoefsByUser" });
   }
 };
@@ -228,7 +226,6 @@ exports.getHoefTasksWithStatus = async (req, res) => {
       data: hoefsWithStatus,
     });
   } catch (error) {
-    console.error("Error fetching hoef tasks with status:", error);
     catchError(error, req, res, { function: "taskAssignmentHoef.getHoefTasksWithStatus" });
   }
 };
@@ -295,7 +292,6 @@ exports.saveHoefsForTask = async (req, res) => {
       data: savedHoefs,
     });
   } catch (error) {
-    console.error("Error saving hoefs:", error);
     catchError(error, req, res, { function: "taskAssignmentHoef.saveHoefsForTask" });
   }
 };
@@ -344,7 +340,6 @@ exports.addHoef = async (req, res) => {
       data: hoef,
     });
   } catch (error) {
-    console.error("Error adding hoef:", error);
     catchError(error, req, res, { function: "taskAssignmentHoef.addHoef" });
   }
 };
@@ -378,7 +373,6 @@ exports.updateHoefDeadline = async (req, res) => {
       data: hoef,
     });
   } catch (error) {
-    console.error("Error updating hoef deadline:", error);
     catchError(error, req, res, { function: "taskAssignmentHoef.updateHoefDeadline" });
   }
 };
@@ -408,7 +402,6 @@ exports.deleteHoef = async (req, res) => {
       message: "החופף נמחק בהצלחה",
     });
   } catch (error) {
-    console.error("Error deleting hoef:", error);
     catchError(error, req, res, { function: "taskAssignmentHoef.deleteHoef" });
   }
 };
@@ -472,7 +465,6 @@ exports.getAvailableHoefs = async (req, res) => {
       data: formattedHoefs,
     });
   } catch (error) {
-    console.error("Error fetching available hoefs:", error);
     catchError(error, req, res, { function: "taskAssignmentHoef.getAvailableHoefs" });
   }
 };
@@ -740,7 +732,6 @@ exports.getAllHoefsByTeam = async (req, res) => {
       data: memberSummaries,
     });
   } catch (error) {
-    console.error("Error fetching team members:", error);
     catchError(error, req, res, { function: "taskAssignmentHoef.getAllHoefsByTeam" });
   }
 };
@@ -974,15 +965,12 @@ exports.getAllTeamTasks = async (req, res) => {
         },
       };
     });
-
-    // console.log("formattedTasks",formattedTasks);
     
     res.status(200).json({
       success: true,
       data: formattedTasks,
     });
   } catch (error) {
-    console.error("Error fetching team tasks:", error);
     catchError(error, req, res, { function: "taskAssignmentHoef.getAllTeamTasks" });
   }
 };
@@ -1019,7 +1007,6 @@ exports.removeHoefFromTask = async (req, res) => {
       message: "החופף הוסר בהצלחה",
     });
   } catch (error) {
-    console.error("Error removing hoef:", error);
     catchError(error, req, res, { function: "taskAssignmentHoef.removeHoefFromTask" });
   }
 };

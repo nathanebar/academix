@@ -1,6 +1,7 @@
 // controllers/teamEventAssignment.controller.js
 const { TeamEventAssignment, TeamEvent } = require("../../models");
 const { Op } = require("sequelize");
+const logger = require("../utils/logger");
 exports.getAll = async (req, res) => {
   try {
     const { teamEventsIds } = req.params;
@@ -25,7 +26,7 @@ exports.getAll = async (req, res) => {
 
     res.json(assignments);
   } catch (err) {
-    console.error(err);
+    logger.error("teamEventAssignment.getAll failed", { originalError: err.message, stack: err.stack });
     res.status(500).json({ error: "Failed to fetch assignments" });
   }
 };
@@ -39,7 +40,7 @@ exports.getById = async (req, res) => {
       return res.status(404).json({ error: "TeamEventAssignment not found" });
     res.json(assignment);
   } catch (err) {
-    console.error(err);
+    logger.error("teamEventAssignment.getById failed", { originalError: err.message, stack: err.stack });
     res.status(500).json({ error: "Failed to fetch assignment" });
   }
 };
@@ -49,7 +50,7 @@ exports.create = async (req, res) => {
     const assignment = await TeamEventAssignment.create(req.body);
     res.status(201).json(assignment);
   } catch (err) {
-    console.error(err);
+    logger.error("teamEventAssignment.create failed", { originalError: err.message, stack: err.stack });
     res.status(400).json({ error: "Failed to create assignment" });
   }
 };
@@ -78,7 +79,7 @@ exports.update = async (req, res) => {
     await assignment.update(updateData);
     res.json(assignment);
   } catch (err) {
-    console.error(err);
+    logger.error("teamEventAssignment.update failed", { originalError: err.message, stack: err.stack });
     res.status(400).json({ error: "Failed to update assignment" });
   }
 };
@@ -93,7 +94,7 @@ exports.remove = async (req, res) => {
     await assignment.destroy({ force: true });
     res.status(200).send();
   } catch (err) {
-    console.error(err);
+    logger.error("teamEventAssignment.remove failed", { originalError: err.message, stack: err.stack });
     res.status(500).json({ error: "Failed to delete assignment" });
   }
 };

@@ -1,6 +1,7 @@
 "use strict";
 const { TeamAxisOrder, TeamCourseBatch, Axis } = require("../../models");
 const { Op } = require("sequelize");
+const logger = require("../utils/logger");
 
 // ============================================
 // 🔥 שליפת סדר צירים לפי courseBatchId + teamId
@@ -58,7 +59,7 @@ exports.getAxesOrdered = async (req, res) => {
       })),
     });
   } catch (error) {
-    console.error("Error fetching axes order:", error);
+    logger.error("teamAxisOrder.getAxesOrdered failed", { originalError: error.message, stack: error.stack });
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -114,7 +115,7 @@ exports.updateOrder = async (req, res) => {
       teamCourseBatchId: teamCourseBatch.id,
     });
   } catch (error) {
-    console.error("Error updating order:", error);
+    logger.error("teamAxisOrder.updateOrder failed", { originalError: error.message, stack: error.stack });
     res.status(500).json({ error: "Internal server error" });
   }
 };

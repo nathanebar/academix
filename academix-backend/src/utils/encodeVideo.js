@@ -1,4 +1,5 @@
 const ffmpeg = require("fluent-ffmpeg");
+const logger = require("./logger");
 // FFMPEG_PATH : binaire fourni manuellement (réseau fermé). Sinon @ffmpeg-installer.
 ffmpeg.setFfmpegPath(
   process.env.FFMPEG_PATH || require("@ffmpeg-installer/ffmpeg").path
@@ -25,18 +26,12 @@ function encodeBuffer(buffer) {
                   try {
                     await fs.unlink(inputFile.path);
                   } catch (unlinkErr) {
-                    console.log(
-                      "✗ Failed to delete input file:",
-                      unlinkErr.message
-                    );
+                    logger.warn("encodeVideo: failed to delete the input temp file", { originalError: unlinkErr.message });
                   }
                   try {
                     await fs.unlink(outputPath);
                   } catch (unlinkErr) {
-                    console.log(
-                      "✗ Failed to delete output file:",
-                      unlinkErr.message
-                    );
+                    logger.warn("encodeVideo: failed to delete the output temp file", { originalError: unlinkErr.message });
                   }
                   resolve(resultBuffer);
                 } catch (cleanupErr) {

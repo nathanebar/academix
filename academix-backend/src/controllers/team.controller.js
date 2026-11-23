@@ -118,7 +118,7 @@ exports.create = async (req, res) => {
 
   } catch (error) {
     await transaction.rollback();
-    console.log(error);
+    logger.error("team.create failed", { originalError: error.message, stack: error.stack });
     res.status(500).json({ msg: "שגיאת שרת" });
   }
 };

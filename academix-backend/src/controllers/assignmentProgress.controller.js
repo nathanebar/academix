@@ -107,7 +107,6 @@ exports.createAssignmentProgress = async (req, res) => {
     return res.status(201).json(results);
   } catch (error) {
     /*    console.log("errorrrr ------");
-    console.log("errorrrr ------",error);
     
     catchError(error, req, res, {
       taskId: task_id,

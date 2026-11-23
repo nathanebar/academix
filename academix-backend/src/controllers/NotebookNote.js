@@ -25,7 +25,6 @@ exports.updateNote = async (req, res) => {
 
     return res.json({ success: true, data: note });
   } catch (error) {
-    console.error(error);
     return catchError(error, req, res, { function: "NotebookNote.updateNote" });
   }
 };
@@ -33,8 +32,6 @@ exports.updateNote = async (req, res) => {
 exports.createNote = async (req, res) => {
   try {
     const { folder_id, title, content, parent_note_id ,created_by} = req.body;
-
-    console.log(req?.created_by);
     
     if (!folder_id) {
       return res.status(400).json({
@@ -64,7 +61,6 @@ exports.createNote = async (req, res) => {
       data: note,
     });
   } catch (error) {
-    console.error(error);
     return catchError(error, req, res, { function: "NotebookNote.createNote" });
   }
 };
@@ -89,7 +85,6 @@ exports.deleteNote = async (req, res) => {
       message: "הפתק נמחק",
     });
   } catch (error) {
-    console.error(error);
     return catchError(error, req, res, { function: "NotebookNote.deleteNote" });
   }
 };

@@ -1,6 +1,7 @@
 // controllers/teamEvent.controller.js
 const { Op } = require("sequelize");
 const { TeamEvent, TeamEventAssignment, TeamCourseBatch, TeamEventDay, Sequelize } = require("../../models");
+const logger = require("../utils/logger");
 
 exports.getAllByTeamId = async (req, res) => {
     try {
@@ -27,7 +28,7 @@ exports.getAllByTeamId = async (req, res) => {
 
         res.json(filterTeamEvents);
     } catch (err) {
-        console.error(err);
+        logger.error("teamEvent.getAllByTeamId failed", { originalError: err.message, stack: err.stack });
         res.status(500).json({ error: "Failed to fetch team events" });
     }
 };
@@ -44,7 +45,7 @@ exports.getById = async (req, res) => {
             return res.status(404).json({ error: "TeamEvent not found" });
         res.json(teamEvent);
     } catch (err) {
-        console.error(err);
+        logger.error("teamEvent.getById failed", { originalError: err.message, stack: err.stack });
         res.status(500).json({ error: "Failed to fetch team event" });
     }
 };
@@ -78,7 +79,7 @@ exports.create = async (req, res) => {
 
         res.status(201).json(teamEventWithDays);
     } catch (err) {
-        console.error(err);
+        logger.error("teamEvent.create failed", { originalError: err.message, stack: err.stack });
         res.status(400).json({ error: "Failed to create team event" });
     }
 };
@@ -129,7 +130,7 @@ exports.update = async (req, res) => {
 
         res.json(teamEventWithDays);
     } catch (err) {
-        console.error(err);
+        logger.error("teamEvent.update failed", { originalError: err.message, stack: err.stack });
         res.status(400).json({ error: "Failed to update team event" });
     }
 };
@@ -148,7 +149,7 @@ exports.remove = async (req, res) => {
         await teamEvent.destroy({ force: true });
         res.status(200).send();
     } catch (err) {
-        console.error(err);
+        logger.error("teamEvent.remove failed", { originalError: err.message, stack: err.stack });
         res.status(500).json({ error: "Failed to delete team event" });
     }
 };
@@ -181,7 +182,7 @@ exports.getByDay = async (req, res) => {
 
         res.json(todayEvents);
     } catch (err) {
-        console.error(err);
+        logger.error("teamEvent.getByDay failed", { originalError: err.message, stack: err.stack });
         res.status(500).json({ error: "Failed to fetch events by day" });
     }
 };

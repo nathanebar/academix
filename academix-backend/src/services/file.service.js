@@ -71,7 +71,6 @@ async function createFile(
 
     return fileRecord;
   } catch (error) {
-    console.log(error);
     // catchError(error);
     throw error;
   }
@@ -88,7 +87,7 @@ async function getFilesByTaskId(taskId) {
     return filesRecord;
   } catch (error) {
     // catchError(error);
-    console.log(error);
+    logger.error("file.service.getFilesByTaskId failed", { originalError: error.message, stack: error.stack });
   }
 }
 
@@ -104,7 +103,7 @@ async function getFilesBySolutionFileId(solution_file_id) {
     return TaskfilesSolutionFile;
   } catch (error) {
     // catchError(error);
-    console.log(error);
+    logger.error("file.service.getFilesBySolutionFileId failed", { originalError: error.message, stack: error.stack });
   }
 }
 
@@ -148,7 +147,7 @@ async function getFilesByKey(key) {
     return fileRecord;
   } catch (error) {
     // catchError(error);
-    console.log(error);
+    logger.error("file.service.getFilesByKey failed", { originalError: error.message, stack: error.stack });
   }
 }
 

@@ -1,4 +1,5 @@
 const { CheckLists } = require("../../models");
+const logger = require("../utils/logger");
 
 async function createCheckList(taskId, todo, done) {
   try {
@@ -8,7 +9,7 @@ async function createCheckList(taskId, todo, done) {
     });
     return checkLists;
   } catch (error) {
-    console.log(error);
+    logger.error("checkLists.service.createCheckList failed", { originalError: error.message, stack: error.stack });
     return;
   }
 }
@@ -22,7 +23,7 @@ async function getCheckListsByTaskId(taskId) {
     });
     return checkListsRecord;
   } catch (error) {
-    console.log(error);
+    logger.error("checkLists.service.getCheckListsByTaskId failed", { originalError: error.message, stack: error.stack });
   }
 }
 
@@ -35,7 +36,7 @@ async function updateCheckList(taskId) {
     });
     return checkListsRecord;
   } catch (error) {
-    console.log(error);
+    logger.error("checkLists.service.updateCheckList failed", { originalError: error.message, stack: error.stack });
   }
 }
 
@@ -52,7 +53,7 @@ async function deleteCheckList(id) {
 
     return deletedCheckList;
   } catch (error) {
-    console.log(error);
+    logger.error("checkLists.service.deleteCheckList failed", { originalError: error.message, stack: error.stack });
   }
 }
 

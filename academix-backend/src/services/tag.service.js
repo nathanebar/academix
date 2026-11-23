@@ -1,5 +1,6 @@
 const { Tags, TaskTags } = require("../../models");
 const Sequelize = require("sequelize");
+const logger = require("../utils/logger");
 const { Op, fn, col } = Sequelize;
 
 async function createTag(courseId, name) {
@@ -19,7 +20,7 @@ async function createTag(courseId, name) {
     });
     return tag;
   } catch (error) {
-    console.log(error);
+    logger.error("tag.service.createTag failed", { originalError: error.message, stack: error.stack });
     return;
   }
 }
@@ -33,7 +34,7 @@ async function getTagsByCourseId(courseId) {
     });
     return tags;
   } catch (error) {
-    console.log(error);
+    logger.error("tag.service.getTagsByCourseId failed", { originalError: error.message, stack: error.stack });
   }
 }
 
@@ -59,7 +60,7 @@ async function deleteTag(id) {
     }
     return { error: "error in delete tag!" };
   } catch (error) {
-    console.log(error);
+    logger.error("tag.service.deleteTag failed", { originalError: error.message, stack: error.stack });
     return { error: "An error occurred while deleting the tag" };
   }
 }
@@ -89,7 +90,7 @@ async function updateTag(id, newName) {
     }
     return { error: "error in update tag!" };
   } catch (error) {
-    console.log(error);
+    logger.error("tag.service.updateTag failed", { originalError: error.message, stack: error.stack });
     return;
   }
 }
@@ -103,7 +104,7 @@ async function getTagsByTaskId(taskId) {
 
     return filesRecord;
   } catch (error) {
-    console.log(error);
+    logger.error("tag.service.getTagsByTaskId failed", { originalError: error.message, stack: error.stack });
   }
 }
 module.exports = {
