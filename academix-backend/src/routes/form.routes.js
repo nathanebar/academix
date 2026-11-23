@@ -4,9 +4,6 @@ const formController = require('../controllers/form.controller');
 router.get('/', formController.getAll);
 router.get('/userId/:userId', formController.getFormsByUser);
 router.get('/formId/:formId', formController.getByFormId);
-// Old path, missing a "/" (it matches /formId123). Still used by the frontend: remove it once
-// the frontend calls /formId/:formId.
-router.get('/formId:formId', formController.getByFormId);
 router.get("/formByTaskAssignmentId", formController.getByTaskAssignmentId);
 router.get('/getAllByCourseIdAndTeamId/:courseId', formController.getAllByCourseIdAndTeamId);
 router.get("/getUsersInSameTeamAndTask", formController.getUsersInSameTeamAndTask);
