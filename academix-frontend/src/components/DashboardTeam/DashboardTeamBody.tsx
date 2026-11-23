@@ -34,6 +34,8 @@ import {
   getTeamCompletedTasks,
 } from "../../services/ApiServices";
 import { queryClient } from "../../api/queryClient";
+import { useQuery } from "@tanstack/react-query";
+import { taskKeys } from "../../api/queryKeys";
 import CompletedMissions from "../../Exception/completedMissions/CompletedMissions";
 import TeamMission from "../CourseMission/TeamMission";
 import SoldiersChartComponent from "./SoldiersChartComponent/SoldiersChartComponent";
@@ -104,7 +106,6 @@ const DashboardTeamBody = () => {
   const [tags, setTags] = useState<any[]>([]);
   const [tagsInput, setTagsInput] = useState<string>("");
   const fetchedTags = useFetchTagsByCourseId(Number(selectedCourse?.id));
-  const [assignmemtData, setAssignmemtData] = useState<any[]>([]);
 
   useEffect(() => {
     if (fetchedTags?.data) {
@@ -112,34 +113,24 @@ const DashboardTeamBody = () => {
     }
   }, [JSON.stringify(fetchedTags?.data), selectedCourse?.id]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (teamId) {
-          const response = await getTeamCompletedTasks(teamId, courseBatchId);
-
-          if (response?.success && response.data?.length > 0) {
-            const teamData = response.data;
-            const assignmentsCompletedWithColor = teamData.map(
-              (assignment: any, index: any) => ({
-                ...assignment,
-                color: COLORS[index % COLORS.length],
-                completedTasks:
-                  assignment.completedTasks === 0
-                    ? 0.1
-                    : assignment.completedTasks,
-              })
-            );
-
-            setAssignmemtData(assignmentsCompletedWithColor);
-          }
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-    fetchData();
-  }, [teamId]);
+  // React Query (#17): completed tasks per team member, with a chart color each.
+  // The key also holds the batch (the former useEffect only re-ran on a team change), and an
+  // empty answer now gives an empty chart instead of keeping the previous team's data.
+  const { data: assignmemtData = [] } = useQuery({
+    queryKey: taskKeys.completedByTeam(teamId, courseBatchId),
+    queryFn: async () => {
+      const response = await getTeamCompletedTasks(teamId!, courseBatchId!);
+      if (!response?.success || !(response.data?.length > 0)) return [];
+      return response.data.map((assignment: any, index: number) => ({
+        ...assignment,
+        color: COLORS[index % COLORS.length],
+        completedTasks:
+          assignment.completedTasks === 0 ? 0.1 : assignment.completedTasks,
+      }));
+    },
+    enabled: !!teamId && !!courseBatchId,
+    staleTime: 0, // refetch on every mount, like the former useEffect
+  });
 
   const handleTagBtnClick = () => setOpenTagModal(true);
   const handleCommandBtnClick = () => setOpenCommandModal(true);

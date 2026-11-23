@@ -27,7 +27,7 @@ import { queryClient } from "../../../api/queryClient";
 import { usePermissionStore } from "../../../store/permissionStore";
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
-import { useTaskTeamMemberRefreshStore } from "../../../store/taskTeamMemberRefreshStore";
+import { taskKeys } from "../../../api/queryKeys";
 import { useSelectionsStore } from "../../../store/selectionStore";
 
 interface TaskAssignment {
@@ -127,10 +127,6 @@ const TaskUserTag: React.FC<TaskProps> = ({
   const userName = selectedTeamMember?.name || task.name || userNameProp;
 
   const isStudent = selectedPermission?.role_code === "STUDENT";
-  const triggerRefresh = useTaskTeamMemberRefreshStore(
-    (state) => state.triggerRefresh
-  );
-
   const currentStatus = useMemo((): MemberStatus => {
     if (task.notRequiredToSubmit && task.assigned !== null) {
       return "NOTREQUIREDTOSUBMIT";
@@ -234,7 +230,8 @@ const TaskUserTag: React.FC<TaskProps> = ({
         queryKey: ["tasks-day"],
       });
 
-      triggerRefresh();
+      // the team member dashboard (was a Zustand "needsRefresh" flag, #17)
+      queryClient.invalidateQueries({ queryKey: taskKeys.memberDashboardAll() });
 
       // Rafraîchir les données
       refetchData();
