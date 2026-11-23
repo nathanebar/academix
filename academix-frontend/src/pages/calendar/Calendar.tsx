@@ -1,4 +1,5 @@
 import { teamEventKeys } from "../../api/queryKeys";
+import { assertOk } from "../../utils/httpStatus";
 import React, {
   useState,
   useEffect,
@@ -67,7 +68,6 @@ import {
   fetchTeamQueueTasks,
   saveHoefsForTask,
   updateOccurrence,
-  updateToTeam,
   updateToUser,
 } from "../../services/ApiServices";
 import { UserTaskModal } from "../../components/LazyTaskModals";
@@ -839,84 +839,92 @@ const MyCalendar: React.FC = () => {
     });
   };
 
+  // Calendar drag / resize of a task. FullCalendar moves the event on screen right away
+  // (optimistic); the callers pass `onError: () => info.revert()` so a failed save puts it back.
+  // Before (#17): the team branch used `items.map(async ...)` without awaiting it, so the mutation
+  // "succeeded" before the requests were done and their errors were lost, with one refetch per
+  // item; and updateToUser / updateOccurrence return error.response instead of throwing (assertOk).
+  // Also, it tested `activeHeaderType === "team"`, but the header type is often unset (team
+  // commander with a team picked in the header): the event was moved on screen and never saved.
+  // Same rule as the event query and the event building above: not "teamMember" = grouped team view.
   const handleUpdateEvent = useMutation({
     mutationFn: async (event: any) => {
-      if (activeHeaderType === "team") {
-        if (event.extendedProps.items?.[0].source === "assignment") {
-          event.extendedProps.items.map(async (it: any) => {
+      if (activeHeaderType !== "teamMember") {
+        const items: any[] = event.extendedProps.items ?? [];
+        if (items[0]?.source === "assignment") {
+          await Promise.all(
+            items.map(async (it: any) =>
+              assertOk(
+                await updateToUser(
+                  it.taskAssignmentId,
+                  event.start,
+                  event.allDay
+                    ? dayjs(event.start).add(21, "hour").toDate()
+                    : is21to20NextDay(event.id)
+                    ? dayjs(event.start).add(1, "hour").toDate()
+                    : event.end
+                )
+              )
+            )
+          );
+        } else {
+          await Promise.all(
+            items.map(async (it: any) =>
+              assertOk(
+                await updateOccurrence(
+                  it.occurrence_id,
+                  event.start,
+                  is21to20NextDay(event.id)
+                    ? dayjs(event.start).add(21, "hour").toDate()
+                    : event.allDay
+                    ? dayjs(event.start).add(1, "hour").toDate()
+                    : event.end
+                )
+              )
+            )
+          );
+        }
+      } else if (selectedTeamMember) {
+        if (event.extendedProps.source === "assignment") {
+          assertOk(
             await updateToUser(
-              it.taskAssignmentId,
+              event.extendedProps.taskassignmentid,
               event.start,
               event.allDay
                 ? dayjs(event.start).add(21, "hour").toDate()
                 : is21to20NextDay(event.id)
                 ? dayjs(event.start).add(1, "hour").toDate()
                 : event.end
-            );
-            await refetch();
-          });
-        } else {
-          event.extendedProps.items.map(async (it: any) => {
-            await updateOccurrence(
-              it.occurrence_id,
-              event.start,
-              is21to20NextDay(event.id)
-                ? dayjs(event.start).add(21, "hour").toDate()
-                : event.allDay
-                ? dayjs(event.start).add(1, "hour").toDate()
-                : event.end
-            );
-            await refetch();
-          });
-        }
-
-        <Popconfirm
-          title="האם אתה בטוח שברצונך למחוק את קורס?"
-          description="פעולה זו לא ניתנת לביטול"
-          onConfirm={async () =>
-            await updateToTeam(
-              event.id,
-              selectedTeam.id,
-              event.start,
-              event.end
             )
-          }
-          okText="כן, מחק"
-          cancelText="ביטול"
-          placement="bottom"
-        >
-          <div style={{ color: "red" }}>מחיקה</div>
-        </Popconfirm>;
-      } else if (activeHeaderType === "teamMember" && selectedTeamMember) {
-        if (event.extendedProps.source === "assignment") {
-          await updateToUser(
-            event.extendedProps.taskassignmentid,
-            event.start,
-            event.allDay
-              ? dayjs(event.start).add(21, "hour").toDate()
-              : is21to20NextDay(event.id)
-              ? dayjs(event.start).add(1, "hour").toDate()
-              : event.end
           );
         } else {
-          await updateOccurrence(
-            Number(event.extendedProps?.occurrence_id),
-            event.start,
-            event.allDay
-              ? dayjs(event.start).add(21, "hour").toDate()
-              : is21to20NextDay(event.id)
-              ? dayjs(event.start).add(1, "hour").toDate()
-              : event.end
+          assertOk(
+            await updateOccurrence(
+              Number(event.extendedProps?.occurrence_id),
+              event.start,
+              event.allDay
+                ? dayjs(event.start).add(21, "hour").toDate()
+                : is21to20NextDay(event.id)
+                ? dayjs(event.start).add(1, "hour").toDate()
+                : event.end
+            )
           );
         }
       }
-      await refetch();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["group-tasks"],
       });
     },
+    onError: () => {
+      notification.error({
+        message: "שינוי הזמן לא נשמר – המשימה הוחזרה למקומה",
+        placement: "topRight",
+      });
+    },
+    // one refetch after all the updates (success or failure), instead of one per item
+    onSettled: () => refetch(),
   });
 
   const handleDragStart = (info: any) => {
@@ -1649,7 +1657,7 @@ const MyCalendar: React.FC = () => {
                 return;
               }
               if (info.event.id.includes("T")) {
-                handleUpdateEvent.mutate(info.event);
+                handleUpdateEvent.mutate(info.event, { onError: () => info.revert() });
               } else {
                 if (info.event.extendedProps.constant) {
                   setSelectedUpdateEventModal({ info: info, type: "drag" });
@@ -1701,7 +1709,7 @@ const MyCalendar: React.FC = () => {
                   return;
                 }
 
-                handleUpdateEvent.mutate(info.event);
+                handleUpdateEvent.mutate(info.event, { onError: () => info.revert() });
               } else {
                 if (info.event.extendedProps.constant) {
                   setSelectedUpdateEventModal({ info: info, type: "move" });
@@ -1911,7 +1919,7 @@ const MyCalendar: React.FC = () => {
                     return;
                   }
 
-                  handleUpdateEvent.mutate(info.event);
+                  handleUpdateEvent.mutate(info.event, { onError: () => info.revert() });
                 }}
                 eventResize={(info) => {
                   if (
@@ -1950,7 +1958,7 @@ const MyCalendar: React.FC = () => {
                     return;
                   }
 
-                  handleUpdateEvent.mutate(info.event);
+                  handleUpdateEvent.mutate(info.event, { onError: () => info.revert() });
                 }}
                 eventDragStart={handleDragStart}
                 eventDragStop={(arg) => handleDragStop.mutate(arg)}
