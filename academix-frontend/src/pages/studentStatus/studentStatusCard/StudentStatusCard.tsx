@@ -244,7 +244,7 @@ const StudentStatusCard: React.FC<Props> = ({
       queryClient.setQueryData<Task[]>(tasksByUserKey, (old = []) =>
         typeof update === "function" ? update(old) : update
       ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // the key parts (spread), not the key array itself, which is a new array on every render
     [queryClient, ...tasksByUserKey]
   );
 
@@ -259,7 +259,7 @@ const StudentStatusCard: React.FC<Props> = ({
       queryClient.invalidateQueries({ queryKey: tasksByUserKey, exact: true }, { cancelRefetch: false });
     }
     lastDayTasksUpdate.current = dayTasksUpdatedAt;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // only dayTasksUpdatedAt: runs on a real update of the day's tasks (see above)
   }, [dayTasksUpdatedAt]);
 
 
