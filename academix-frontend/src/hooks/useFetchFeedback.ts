@@ -20,13 +20,6 @@ export const useFetchFeedback = (courseId:number,teamId:number) => {
                 throw error; // חשוב להחזיר את השגיאה
             }
         },
-        meta:{
-
-            onSuccess: (data: any) => {
-              
-            },
-            
-        },
        /*  onError: (error: any) => {
             console.log('Error occurred:', error);
         } */

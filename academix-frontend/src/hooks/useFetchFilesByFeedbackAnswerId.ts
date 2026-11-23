@@ -29,11 +29,5 @@ export const useFetchFilesByFeedbackAnswerId = (
     },
 
     enabled: task_assignment_id !== undefined && task_assignment_id !== null,
-    meta: {
-      onSuccess: (data) => {
-     
-        return data;
-      },
-    },
   });
 };

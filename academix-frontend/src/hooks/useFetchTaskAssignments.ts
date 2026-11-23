@@ -36,11 +36,6 @@ export const useFetchTaskAssignments = (
         return response.data.data; // הוסף .data כדי להגיע ל-Array הפנימי
       }
     },
-    meta: {
-      onSuccess: (data: any) => {
-        return data;
-      },
-    },
     enabled: userId !== undefined || taskGroupId !== undefined, // Always enabled but with conditional logic
   });
 };

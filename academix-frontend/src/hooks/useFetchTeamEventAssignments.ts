@@ -1,23 +1,24 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "../api/axios";
 import { TeamEvent, TeamEventAssignment } from "../types/types";
-import { useTeamEventAssignmentStore } from "../store/teamEventAssignment";
-import { useTeamEventStore } from "../store/teamEventStore";
+import { useTeamEvent } from "./useTeamEvent";
 // In useTeamEventAssignment.ts
 
 // In useTeamEventAssignment.ts
 
 export const useTeamEventAssignment = () => {
-  const { setTeamEventsAssignments } = useTeamEventAssignmentStore();
-  const { teamEvents } = useTeamEventStore();
-  const teamEventsIds = teamEvents.map((teamEvent) => teamEvent.id);
+  // #17: the team events come from their query (same key as useTeamEvent, no extra request),
+  // not from a Zustand copy that was only filled when another component mounted useTeamEvent.
+  const { data: teamEvents = [] } = useTeamEvent();
+  const teamEventsIds: number[] = (teamEvents as Partial<TeamEvent>[])
+    .map((teamEvent) => teamEvent.id)
+    .filter((id): id is number => id != null);
 
-  
   return useQuery({
-    queryKey: ["teamEventsAssignment", teamEvents],
+    // the ids only (the whole objects made a new key on any field change)
+    queryKey: ["teamEventsAssignment", teamEventsIds],
     queryFn: async () => {
       const { data } = await api.get(`/teamEventsAssignment/${teamEventsIds}`);
-      setTeamEventsAssignments(data); // Move store update here
       return data;
     },
   enabled: teamEventsIds.length > 0,

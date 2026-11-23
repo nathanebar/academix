@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../api/axios";
-import { useSelectionsStore } from "../store/selectionStore";
 
 export const useFetchCourseCommanders = (
   allowedCoursesIds: string | number
@@ -9,9 +8,10 @@ export const useFetchCourseCommanders = (
     ? allowedCoursesIds
     : [allowedCoursesIds];
 
-  const { setSelectedCourseCommanders } = useSelectionsStore();
-
-  return useQuery({
+  // #17: the components read the commanders from this query. They used to read a copy in the
+  // (persisted) selection store, filled only where this hook was mounted (CourseSetting).
+  // Key unchanged: useSelectionHandler / DashboardAdminBody / EditPermissionsModal refresh it.
+  return useQuery<any>({
     queryKey: ["roleAssignments", allowedCoursesIds],
     queryFn: async () => {
       if (!coursesIdsArray || coursesIdsArray.length === 0) return [];
@@ -21,12 +21,6 @@ export const useFetchCourseCommanders = (
       );
       return data;
       
-    },
-    meta:{
-
-      onSuccess: (data: any) => {
-        setSelectedCourseCommanders(data);
-      },
     },
     enabled: !!allowedCoursesIds,
     // staleTime: Infinity,

@@ -10,7 +10,6 @@ import {
   Select,
 } from "antd";
 import he_IL from "antd/locale/he_IL";
-import { useRoleStore } from "../../../store/roleStore";
 import { PermissionsTable } from "../../PermissionsTable/PermissionsTable";
 import { OnSearch } from "../../../utils/OnSearch";
 import UserPermissionsDiv from "../../../utils/UserPermissionsDiv";

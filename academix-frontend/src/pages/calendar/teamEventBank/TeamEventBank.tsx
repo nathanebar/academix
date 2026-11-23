@@ -276,7 +276,7 @@ const TeamEventBank = (props: Props) => {
           onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: teamEventKeys.all });
             queryClient.invalidateQueries({
-              queryKey: ["teamEventAssignment"],
+              queryKey: ["teamEventsAssignment"],
             });
             if (isConstant) {
               props.generateConstantTeamEvent(

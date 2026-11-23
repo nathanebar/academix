@@ -28,11 +28,6 @@ export const useFetchGradeStagesByCourseId = (
         return { error: "needed courseId in order to fetch" };
       }
     },
-    meta: {
-      onSuccess: (data: any) => {
-        return data;
-      },
-    },
     enabled: userId !== undefined || courseId !== undefined,
     // reference data: refetched only when invalidated after a change
     staleTime: Infinity,

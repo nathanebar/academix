@@ -19,11 +19,6 @@ export const useFetchFilesByTaskId = (taskId: number | undefined, task_assigneme
         return { error: "needed taskId in order to fetch" };
       }
     },
-    meta: {
-      onSuccess: (data: any) => {
-        return data;
-      },
-    },
     enabled: taskId !== undefined,
   });
 };

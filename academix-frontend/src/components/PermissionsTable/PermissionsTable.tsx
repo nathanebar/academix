@@ -6,6 +6,7 @@ import { useCourseStore } from "../../store/courseStore";
 import { useFilteredDataStore } from "../../store/filteredDataStore";
 import { useLocation } from "react-router-dom";
 import { useSelectionsStore } from "../../store/selectionStore";
+import { useFetchCourseCommanders } from "../../hooks/useFetchCourseCommanders";
 
 type User = {
   id?: string | number;
@@ -24,7 +25,8 @@ interface props {
 export const PermissionsTable: React.FC<props> = ({ userID }) => {
   const { teamMembers } = useTeamMembersStore();
   const { filteredTeams } = useFilteredDataStore();
-  const { selectedTeam, selectedCourseCommanders } = useSelectionsStore();
+  const { selectedTeam, selectedCourse } = useSelectionsStore();
+  const { data: selectedCourseCommanders } = useFetchCourseCommanders(selectedCourse?.id);
   const location = useLocation();
 
   const currentUrl = location.pathname;

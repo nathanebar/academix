@@ -2,13 +2,11 @@ import { teamEventKeys } from "../api/queryKeys";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "../api/axios";
 
-import { useTeamEventStore } from "../store/teamEventStore";
 import { TeamEvent } from "../types/types";
 import { useSelectionsStore } from "../store/selectionStore";
 
 export const useTeamEvent = () => {
   const { selectedTeam, selectedCourseBatch } = useSelectionsStore();
-  const { setTeamEvents } = useTeamEventStore();
   return useQuery({
     // ids only: the whole store objects made a new cache entry on any unrelated field change
     queryKey: teamEventKeys.byTeamAndBatch(selectedTeam?.id, selectedCourseBatch?.id),
@@ -21,11 +19,6 @@ export const useTeamEvent = () => {
     },
     // previously the queryFn threw on `selectedTeam.id` when nothing was selected
     enabled: !!selectedTeam?.id && !!selectedCourseBatch?.id,
-    meta: {
-      onSuccess: (data: any) => {
-        setTeamEvents(data);
-      },
-    },
   });
 };
 export const useRemoveTeamEvent = () => {
