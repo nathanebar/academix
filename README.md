@@ -15,6 +15,7 @@ Academix is a course and training management platform (similar to Moodle) with a
 | `docker-compose.yml` | Local infrastructure for development: PostgreSQL 16 + MinIO |
 | `CLAUDE.md` | Collaboration rules (ownership zones, git workflow, closed-network constraints) |
 | `RAPPORT.he.md` | Full project review and performance roadmap (Hebrew) |
+| `DEPLOY.he.md` | Step-by-step deployment on the closed network: export, merge into the internal GitLab, backups, rehearsal, rollback (Hebrew) |
 
 ## Running locally (outside the closed network)
 
@@ -89,7 +90,7 @@ Two developers work in parallel, each with their own Claude Code session. The ru
 
 ## Redeploying on the closed network
 
-The target has **no internet access**: everything it needs must be brought in.
+The target has **no internet access**: everything it needs must be brought in. The full step-by-step procedure (export, merge into the internal GitLab without overwriting the real media, backups, rehearsal on a copy, checks, rollback) is in [`DEPLOY.he.md`](DEPLOY.he.md) (Hebrew); the list below is the summary.
 
 1. **Offline dependencies**: transfer `node_modules` (same OS and same Node version as the target), or an npm cache / internal registry (Verdaccio). For the frontend, transferring only the `build/` folder is also enough. Docker is used for local development only; the target does not need it.
 2. **ffmpeg**: `@ffmpeg-installer` contains a binary for one OS. If the platform differs, provide the binary and set `FFMPEG_PATH`.
