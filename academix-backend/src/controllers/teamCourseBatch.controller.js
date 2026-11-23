@@ -1,5 +1,6 @@
 const { TeamCourseBatch } = require("../../models");
 const { catchError } = require("../utils/errorHandler");
+const logger = require("../utils/logger");
 
 exports.getAll = async (req, res) => {
   const teamCourseBatch = await TeamCourseBatch.findAll();
@@ -26,7 +27,6 @@ exports.getByTeamAndCourseBatchIds = async (req, res) => {
       data: records,
     });
   } catch (err) {
-    console.error("🔴 getByTeamAndCourseBatchIds error:", err);
     return catchError(err, req, res, { function: "teamCourseBatch.getByTeamAndCourseBatchIds" });
   }
 };
@@ -61,7 +61,6 @@ exports.resetDates = async (req, res) => {
       data: { teamId, courseBatchId },
     });
   } catch (err) {
-    console.error("🔴 resetDates error:", err);
     return catchError(err, req, res, { function: "teamCourseBatch.resetDates" });
   }
 };
@@ -106,7 +105,6 @@ exports.updateDates = async (req, res) => {
       },
     });
   } catch (err) {
-    console.error("🔴 updateDates error:", err);
     return catchError(err, req, res, { function: "teamCourseBatch.updateDates" });
   }
 };
@@ -120,7 +118,6 @@ exports.getByTeamAndBatch = async (req, res) => {
     if (!record) return res.status(404).json({ error: "Not found" });
     return res.status(200).json(record);
   } catch (error) {
-    console.error("🔴 update BlockColor By Team error:", error);
     return catchError(error, req, res, { function: "teamCourseBatch.getByTeamAndBatch" });
   }
 };
@@ -159,7 +156,6 @@ exports.updateBlockColorByTeam = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("🔴 update BlockColor By Team error:", error);
     return catchError(error, req, res, { function: "teamCourseBatch.updateBlockColorByTeam" });
   }
 };

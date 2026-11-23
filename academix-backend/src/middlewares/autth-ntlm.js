@@ -1,4 +1,5 @@
 const ntlm = require("express-ntlm");
+const logger = require("../utils/logger");
 
 // Middleware créé une seule fois (la négociation NTLM se fait en plusieurs requêtes).
 const domainControllers = (process.env.NTLM_DOMAIN_CONTROLLER || "")
@@ -13,7 +14,7 @@ const ntlmMiddleware = ntlm({
   internalservererror: (req, res) => res.status(500).json({ error: "NTLM server error" }),
   forbidden: (req, res) => res.status(403).json({ error: "NTLM forbidden" }),
   prefix: "ntlm-auth",
-  debug: process.env.NTLM_DEBUG === "true" ? (...args) => console.debug(...args) : () => {},
+  debug: process.env.NTLM_DEBUG === "true" ? (...args) => logger.info("ntlm", { details: args.join(" ") }) : () => {},
 });
 
 exports.ntlmAuth = (req, res, next) => {

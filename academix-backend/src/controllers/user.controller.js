@@ -277,7 +277,7 @@ exports.createUser = async (req, res) => {
     }
 
     if (militaryid && !/^\d{7}$/.test(militaryid)) {
-      console.log("Invalid militaryid format:", militaryid);
+      logger.warn("createUser: militaryid is not 7 digits", { username });
     }
 
     const user = await User.findOne({

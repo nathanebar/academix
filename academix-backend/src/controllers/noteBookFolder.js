@@ -71,7 +71,6 @@ exports.getFolders = async (req, res) => {
 
     return res.json({ success: true, data: folders });
   } catch (error) {
-    console.error(error);
     return catchError(error, req, res, { function: "noteBookFolder.getFolders" });
   }
 };
@@ -97,8 +96,6 @@ exports.getNotesByFolder = async (req, res) => {
       include: [{ model: User, as: "creator" }],
       order: [["created_at", "ASC"]],
     });
-
-    // console.log("notes",notes);
     
     // בונים עץ תגובות מה-parent_note_id
     const noteMap = {};
@@ -121,7 +118,6 @@ exports.getNotesByFolder = async (req, res) => {
 
     return res.json({ success: true, data: treeNotes });
   } catch (error) {
-    console.error(error);
     return catchError(error, req, res, { function: "noteBookFolder.getNotesByFolder" });
   }
 };
@@ -145,7 +141,6 @@ exports.deleteFolder = async (req, res) => {
       message: "התיקייה נמחקה",
     });
   } catch (error) {
-    console.error(error);
     return catchError(error, req, res, { function: "noteBookFolder.deleteFolder" });
   }
 };
@@ -196,7 +191,6 @@ exports.createFolder = async (req, res) => {
       data: folder,
     });
   } catch (error) {
-    console.error(error);
     return catchError(error, req, res, { function: "noteBookFolder.createFolder" });
   }
 };

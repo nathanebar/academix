@@ -61,7 +61,6 @@ module.exports = {
 
       res.status(201).json(newTaskGroup);
     } catch (err) {
-      console.log(err);
       catchError(err, req, res, { function: "taskGroup.create", status: 400 });
     }
   },
@@ -107,7 +106,6 @@ module.exports = {
 
       res.json(taskGroup);
     } catch (err) {
-      console.log(err);
       catchError(err, req, res, { function: "taskGroup.update", status: 400 });
     }
   },

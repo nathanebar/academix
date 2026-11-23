@@ -1,6 +1,7 @@
 // const {User} = require('../../models');
 const { Axis, Team, Course, User } = require('../../models');
 const { createJWT } = require('./jwt');
+const logger = require("./logger");
 
 exports.identifyUsername = async (userName) => {
   try {
@@ -20,6 +21,6 @@ exports.identifyUsername = async (userName) => {
       return { user: null, token: null };
     }
   } catch (error) {
-    console.error('User Not Found Must be regular token', error);
+    logger.error("identifyUserName.identifyUsername failed", { originalError: error.message, stack: error.stack });
   }
 };

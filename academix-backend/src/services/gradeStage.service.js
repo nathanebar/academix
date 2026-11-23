@@ -10,6 +10,7 @@ const {
   TeamMember
 } = require("../../models");
 const Sequelize = require("sequelize");
+const logger = require("../utils/logger");
 const { Op, fn, col } = Sequelize;
 
 async function createGradeStage(courseId, name) {
@@ -29,7 +30,7 @@ async function createGradeStage(courseId, name) {
     });
     return gradeStage;
   } catch (error) {
-    console.log(error);
+    logger.error("gradeStage.service.createGradeStage failed", { originalError: error.message, stack: error.stack });
     return;
   }
 }
@@ -43,7 +44,7 @@ async function getGradeStageByCourseId(courseId) {
     });
     return gradeStageRecord;
   } catch (error) {
-    console.log(error);
+    logger.error("gradeStage.service.getGradeStageByCourseId failed", { originalError: error.message, stack: error.stack });
   }
 }
 
@@ -89,7 +90,7 @@ async function deleteGradeStage(id) {
     }
     return { error: "error in delete grade stage!" };
   } catch (error) {
-    console.log(error);
+    logger.error("gradeStage.service.deleteGradeStage failed", { originalError: error.message, stack: error.stack });
     return { error: "An error occurred while deleting the grade stage" };
   }
 }
@@ -119,7 +120,7 @@ async function updateGradeStage(id, newName) {
     }
     return { error: "error in update grade stage!" };
   } catch (error) {
-    console.log(error);
+    logger.error("gradeStage.service.updateGradeStage failed", { originalError: error.message, stack: error.stack });
     return;
   }
 }
@@ -155,7 +156,7 @@ async function getTeamsByCourseId(courseId) {
     return teams;
     
   } catch (error) {
-    console.log(error);
+    logger.error("gradeStage.service.getTeamsByCourseId failed", { originalError: error.message, stack: error.stack });
     return [];
   }
 }
@@ -191,7 +192,7 @@ async function getTaskAssignmentsByTeamIds(teamIds, userIdCondition, selectedCou
     });
     return TaskAssignments;
   } catch (error) {
-    console.log(error);
+    logger.error("gradeStage.service.getTaskAssignmentsByTeamIds failed", { originalError: error.message, stack: error.stack });
   }
 }
 
@@ -263,7 +264,7 @@ async function getTasksByTeamIds(teamIds, selectedCourseBatch) {
     return Tasks;
 
   } catch (error) {
-    console.log(error);
+    logger.error("gradeStage.service.getTasksByTeamIds failed", { originalError: error.message, stack: error.stack });
     return [];
   }
 }

@@ -464,7 +464,6 @@ exports.downloadFile = async (req, res) => {
       headers: downloadHeaders(originalFileName),
     });
   } catch (error) {
-    console.error("Download file error:", error);
     catchError(error, req, res, {
       function: "downloadFile",
       key: req.query.key,

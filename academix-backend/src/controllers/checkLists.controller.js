@@ -19,8 +19,7 @@ module.exports = {
       const checkLists = await getCheckListsByTaskId(taskid);
       res.status(200).json(checkLists);
     } catch (error) {
-      console.log(error);
-      res.status(500).json(`An Error Occured ${error}`);
+      catchError(error, req, res, { function: "checkLists.getByTaskId" });
     }
   },
 
@@ -83,7 +82,6 @@ module.exports = {
       });
       return res.status(200).json({ updated: true });
     } catch (err) {
-      console.log(err);
 
       catchError(err, req, res, { function: "checkLists.update", status: 400 });
     }

@@ -20,8 +20,7 @@ module.exports = {
       const tags = await getTagsByCourseId(courseid);
       res.status(200).json(tags);
     } catch (error) {
-      console.log(error);
-      res.status(500).json(`An Error Occured ${error}`);
+      catchError(error, req, res, { function: "tag.getByCourseId" });
     }
   },
 
@@ -85,8 +84,7 @@ module.exports = {
         res.status(200).json(deletedTag);
       }
     } catch (error) {
-      console.log(error);
-      res.status(500).json(`An Error Occured ${error}`);
+      catchError(error, req, res, { function: "tag.delete" });
     }
   },
   async getTagsByTaskId(req, res) {
@@ -98,8 +96,7 @@ module.exports = {
       const tags = await getTagsByTaskId(taskid);
       res.status(200).json(tags);
     } catch (error) {
-      console.log(error);
-      res.status(500).json(`An Error Occured ${error}`);
+      catchError(error, req, res, { function: "tag.getTagsByTaskId" });
     }
   },
 };

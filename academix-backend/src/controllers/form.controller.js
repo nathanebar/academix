@@ -1658,7 +1658,6 @@ exports.duplicateForm = async (req, res) => {
     });
   } catch (error) {
     await transaction.rollback();
-    console.error("Error duplicating form:", error);
     return catchError(error, req, res, { function: "form.duplicateForm" });
   }
 };

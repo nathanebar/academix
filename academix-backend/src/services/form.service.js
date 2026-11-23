@@ -367,7 +367,7 @@ async function getFormByTaskAssignmentId(
     }
     return result;
   } catch (error) {
-    console.error("Error in getFormByTaskAssignmentId:", error);
+    logger.error("form.service.getFormByTaskAssignmentId failed", { originalError: error.message, stack: error.stack });
     throw error;
   }
 }

@@ -665,17 +665,12 @@ exports.getMissedFeedbacks = async (req, res) => {
         feedbackName: ta.Task?.Feedback?.name,
       }));
 
-    console.log(
-      "result", result
-    );
-
     return res.status(200).json({
       success: true,
       count: result.length,
       data: result,
     });
   } catch (err) {
-    console.error("❌ getMissedFeedbacks error:", err);
     return catchError(err, req, res, { function: "feedback.getMissedFeedbacks" });
   }
 };

@@ -51,7 +51,7 @@ exports.getAllowedUsersInTeam = async (req, res) => {
 
     res.json(teamMembers);
   } catch (error) {
-    console.log(error);
+    logger.error("teamMember.getAllowedUsersInTeam failed", { originalError: error.message, stack: error.stack });
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -139,8 +139,8 @@ exports.create = async (req, res) => {
 
     res.status(201).json(data);
   } catch (error) {
-    console.log(error);
-    res.json(500).json({ msg: "Internal Server Error" });
+    logger.error("teamMember.create failed", { originalError: error.message, stack: error.stack });
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
 
@@ -234,7 +234,6 @@ exports.update = async (req, res) => {
           },
         },
       });
-      if (deleteAssignments) console.log(deleteAssignments);
 
       res
         .status(201)
@@ -311,7 +310,7 @@ exports.getByTeamId = async (req, res) => {
     });
     res.json(teamMembers);
   } catch (error) {
-    console.log(error);
+    logger.error("teamMember.getByTeamId failed", { originalError: error.message, stack: error.stack });
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -341,7 +340,7 @@ exports.getTeamMemberByUserIdAndTeamId = async (req, res) => {
     }
     res.json(teamMember);
   } catch (error) {
-    console.log(error);
+    logger.error("teamMember.getTeamMemberByUserIdAndTeamId failed", { originalError: error.message, stack: error.stack });
     res.status(500).json({ error: "Internal server error" });
   }
 };
