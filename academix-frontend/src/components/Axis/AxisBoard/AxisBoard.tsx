@@ -351,7 +351,7 @@ const AxisBoard = ({
     },
     onError: () => {
       notification.error({
-        message: "שגיאה בשמירת הסדר",
+        message: "שגיאה בשמירת הסדר – הסדר הקודם הוחזר",
         duration: 3,
         placement: "topRight",
       });
@@ -363,27 +363,29 @@ const AxisBoard = ({
       const { active, over } = event;
 
       if (over && active.id !== over.id) {
-        setOrderedAxes((prevItems) => {
-          const oldIndex = prevItems.findIndex((item) => item.id === active.id);
-          const newIndex = prevItems.findIndex((item) => item.id === over.id);
+        const previousItems = orderedAxes;
+        const oldIndex = previousItems.findIndex((item) => item.id === active.id);
+        const newIndex = previousItems.findIndex((item) => item.id === over.id);
+        if (oldIndex === -1 || newIndex === -1) return;
 
-          if (oldIndex === -1 || newIndex === -1) return prevItems;
+        const newItems = [...previousItems];
+        const [removed] = newItems.splice(oldIndex, 1);
+        newItems.splice(newIndex, 0, removed);
 
-          const newItems = [...prevItems];
-          const [removed] = newItems.splice(oldIndex, 1);
-          newItems.splice(newIndex, 0, removed);
+        // Optimistic (#17): show the new order now, put the previous one back if the save fails.
+        // (The save used to be called inside the setState updater, which React may run twice.)
+        setOrderedAxes(newItems);
 
-          // שמירה בשרת
-          const axisIds = newItems
-            .map((item) => item.id)
-            .filter((id): id is number => id != null);
-          saveOrderMutation.mutate(axisIds);
-
-          return newItems;
+        // שמירה בשרת
+        const axisIds = newItems
+          .map((item) => item.id)
+          .filter((id): id is number => id != null);
+        saveOrderMutation.mutate(axisIds, {
+          onError: () => setOrderedAxes(previousItems),
         });
       }
     },
-    [saveOrderMutation]
+    [saveOrderMutation, orderedAxes]
   );
 
   const { isBlockColorEnabled, isLoading } = useBlockColorStore();

@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState, useMemo } from "react";
 import style from "./CheckList.module.css";
 import editIcon from "../../../../media/svg/Edit Icon.svg";
 import threeIcon from "../../../../media/svg/material-symbols-lightlist-rounded.svg";
-import { Button, Input, Tooltip } from "antd";
+import { Button, Input, Tooltip, notification } from "antd";
+import { assertOk } from "../../../../utils/httpStatus";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { useTaskStore } from "../../../../store/taskStore";
 import {
@@ -16,6 +17,7 @@ interface ChecklistItems {
   checked: boolean;
   isEditing: boolean;
   progress_id?: number;
+  completed_at?: Date | string | null;
 }
 
 type CheckListProps = {
@@ -67,18 +69,18 @@ const CheckList = (props: CheckListProps) => {
 
     const missionId = itemWithProgress.progress_id || itemWithProgress.id;
 
-    await updateMissionCompleted(missionId);
+    // Optimistic (#17): marked right away, rolled back if the server refuses. Before, the item was
+    // marked done even when the request failed (updateMissionCompleted returns error.response).
+    const previousCompletedAt = itemWithProgress.completed_at ?? null;
+    setItemCompletedAt(itemWithProgress.id, new Date());
+    props.setIsCompleted?.(itemWithProgress.id); // מעביר id לקומפוננטה האב
 
-    props.setCheckLists((prev: any) =>
-      prev.map((checkItem: any) =>
-        checkItem.id === itemWithProgress.id
-          ? { ...checkItem, completed_at: new Date() }
-          : checkItem
-      )
-    );
-
-    if (props.setIsCompleted) {
-      props.setIsCompleted(itemWithProgress.id); // מעביר id לקומפוננטה האב
+    try {
+      assertOk(await updateMissionCompleted(missionId));
+    } catch {
+      setItemCompletedAt(itemWithProgress.id, previousCompletedAt);
+      props.setIsNotCompleted?.(itemWithProgress.id);
+      notification.error({ message: "סימון הביצוע לא נשמר", placement: "top" });
     }
   };
   const removeMission = async (item: ChecklistItems) => {
@@ -87,20 +89,28 @@ const CheckList = (props: CheckListProps) => {
     // ════════════════════════════════════════════
     const missionId = item.progress_id || item.id;
 
-    await removeMissionCompleted(missionId);
+    // Optimistic (#17): unmarked right away, rolled back if the server refuses.
+    const previousCompletedAt = item.completed_at ?? null;
+    setItemCompletedAt(item.id, null);
+    props.setIsNotCompleted?.(item.id); // מעביר id לקומפוננטה האב
 
-    props.setCheckLists((prev: any) =>
-      prev.map((checkItem: any) =>
-        checkItem.id === item.id
-          ? { ...checkItem, completed_at: null }
-          : checkItem
-      )
-    );
-
-    if (props.setIsNotCompleted) {
-      props.setIsNotCompleted(item.id); // מעביר id לקומפוננטה האב
+    try {
+      assertOk(await removeMissionCompleted(missionId));
+    } catch {
+      setItemCompletedAt(item.id, previousCompletedAt);
+      props.setIsCompleted?.(item.id);
+      notification.error({ message: "ביטול הסימון לא נשמר", placement: "top" });
     }
   };
+
+  // completed_at of one checklist item, in the parent's list
+  function setItemCompletedAt(itemId: number, completedAt: Date | string | null) {
+    props.setCheckLists((prev: any) =>
+      prev.map((checkItem: any) =>
+        checkItem.id === itemId ? { ...checkItem, completed_at: completedAt } : checkItem
+      )
+    );
+  }
   useEffect(() => {
     // Only sync to store if items have changed
     if (items.length >= 0) {
