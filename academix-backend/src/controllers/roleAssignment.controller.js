@@ -69,7 +69,7 @@ module.exports = {
       },
     });
     if (!user) {
-      return res.status(401).json({
+      return res.status(409).json({
         error: "User doesnt exist!",
       });
     }

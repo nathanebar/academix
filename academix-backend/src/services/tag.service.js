@@ -11,7 +11,7 @@ async function createTag(courseId, name) {
       },
     });
     if (existTag) {
-      return { error: "there is already this grade stage in this course!" };
+      return { error: "there is already this tag in this course!" };
     }
     const tag = await Tags.create({
       course_id: courseId,

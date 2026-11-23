@@ -172,7 +172,7 @@ module.exports = {
     try {
       const gradeStage = await createGradeStage(courseid, name);
       if (gradeStage?.error) {
-        res.status(401).json(gradeStage);
+        res.status(409).json(gradeStage);
       } else {
         logger.info('GradeStage created', {
           gradeStageId: gradeStage?.id,
@@ -193,7 +193,7 @@ module.exports = {
     try {
       const updatedGradeStage = await updateGradeStage(id, name);
       if (updatedGradeStage?.error) {
-        res.status(401).json(updatedGradeStage);
+        res.status(409).json(updatedGradeStage);
       } else {
         logger.info('GradeStage updated', {
           gradeStageId: id,
@@ -216,7 +216,7 @@ module.exports = {
     try {
       const deletedGradeStage = await deleteGradeStage(id);
       if (deletedGradeStage?.error) {
-        res.status(401).json(deletedGradeStage);
+        res.status(409).json(deletedGradeStage);
       } else {
         logger.info('GradeStage deleted', {
           gradeStageId: id,

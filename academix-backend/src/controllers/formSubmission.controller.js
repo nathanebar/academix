@@ -70,7 +70,7 @@ exports.create = async (req, res) => {
     });
 
     if (existingSubmission) {
-      return res.status(401).json({
+      return res.status(409).json({
         success: false,
         message:
           "submission to this task assignment already exist!",
@@ -108,7 +108,7 @@ exports.create = async (req, res) => {
         message: "Form submission created successfully",
       });
     }
-    return res.status(401).json({
+    return res.status(409).json({
       success: false,
       message: "Form submission or Form submission Answers not found",
       error: submissionAnswers?.error,

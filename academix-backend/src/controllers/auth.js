@@ -98,27 +98,3 @@ exports.handleMe = async (req, res) => {
 exports.handleLogout = (req, res) => {
   res.clearCookie("token").clearCookie("userInfo").json({ ok: true });
 };
-
-exports.validateJWT = async (req, res, next) => {
-  const token = req.cookies?.token;
-
-  if (!token) {
-    res.status(401).json({ error: "No token provided" });
-    return;
-  }
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findOne({ where: { username: decoded.username } });
-
-    if (!user) {
-      res.status(401).json({ error: "User not found" });
-      return;
-    }
-
-    req.user = user;
-    next();
-  } catch (err) {
-    res.status(401).json({ error: "Invalid token" });
-  }
-};

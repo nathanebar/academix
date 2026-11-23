@@ -1,22 +1,26 @@
-// Server-side identity and permission (#13, step 1 of the contract).
+// Server-side identity and permission (#13). Since step 3 the client is never trusted for
+// who the user is or which role is active.
 //
-// - authenticate: the user comes from the `token` cookie (JWT), never from the client.
-//   With a valid token, the X-User-Id / X-User-Name headers are OVERWRITTEN with the token's
-//   user, so every existing `req.headers['x-user-id']` read (creator_id, assigned_by...)
-//   now gets the real user without changing the controllers.
-//   Without a valid token: 401 { error: "unauthenticated" } when REQUIRE_AUTH=true,
-//   otherwise the old header-based behavior still works (until step 3).
+// - authenticate: the user comes from the `token` cookie (JWT) only. The X-User-Id /
+//   X-User-Name headers sent by the client are always discarded, then set from the token, so
+//   every `req.headers['x-user-id']` read (creator_id, assigned_by...) gets the real user.
+//   Without a valid token: 401 { error: "unauthenticated" }. REQUIRE_AUTH=false is only an
+//   escape hatch for local development: requests then run as anonymous (no user id at all),
+//   never as the user named by a header.
 // - resolvePermission: `X-Role-Assignment-Id` (the active role chosen in the UI) is checked
 //   against the user, and its allowed ids are computed server-side (req.permission). The
-//   `selectedpermission` header read by the controllers is overwritten with its role code.
+//   role headers read by the controllers (`selectedpermission`, `notstudentrole`) are always
+//   discarded and set from that role assignment.
 // - restrictAllowedIds: the allowed*Ids query params of the getAllowed* endpoints are
-//   intersected with req.permission, so a client can narrow a list but not widen it.
+//   intersected with req.permission (a client can narrow a list but not widen it), and
+//   default to everything the active role allows when they are omitted.
 const jwt = require("jsonwebtoken");
 const { RoleAssignment, User } = require("../../models");
 const { withScopes } = require("../services/permissions.service");
 const logger = require("../utils/logger");
 
-const REQUIRE_AUTH = process.env.REQUIRE_AUTH === "true";
+// Required unless explicitly disabled (REQUIRE_AUTH=false, local development only).
+const REQUIRE_AUTH = process.env.REQUIRE_AUTH !== "false";
 const SUPERVISOR_ROLES = ["TEAM_COMMANDER", "OVERLAP"];
 
 const unauthenticated = (res) => res.status(401).json({ error: "unauthenticated" });
@@ -24,6 +28,10 @@ const forbidden = (res) => res.status(403).json({ error: "forbidden" });
 const toId = (value) => (/^\d+$/.test(String(value ?? "").trim()) ? Number(value) : null);
 
 const authenticate = async (req, res, next) => {
+  const claimed = req.headers["x-user-id"];
+  delete req.headers["x-user-id"];
+  delete req.headers["x-user-name"];
+
   let payload = null;
   if (req.cookies?.token) {
     try {
@@ -42,7 +50,6 @@ const authenticate = async (req, res, next) => {
     }
     if (id) {
       req.user = { id, username: payload.username, name: payload.name };
-      const claimed = req.headers["x-user-id"];
       if (claimed && String(claimed) !== String(id)) {
         logger.warn("X-User-Id header ignored (differs from the authenticated user)", {
           claimed,
@@ -80,10 +87,13 @@ const canUseRoleAssignment = async (user, assignment) => {
 };
 
 const resolvePermission = async (req, res, next) => {
+  // Role headers are never taken from the client: set below from the checked role assignment.
+  delete req.headers.selectedpermission;
+  delete req.headers.notstudentrole;
+
   const header = req.headers["x-role-assignment-id"];
   if (header === undefined || header === "") return next();
-  // Without an authenticated user the header cannot be checked: ignored (old behavior),
-  // unless REQUIRE_AUTH (then authenticate already answered 401).
+  // Without an authenticated user (only possible with REQUIRE_AUTH=false) there is no role.
   if (!req.user) return next();
 
   const id = toId(header);
@@ -106,8 +116,10 @@ const resolvePermission = async (req, res, next) => {
     allowedTeamIds: scoped.allowedTeamIds || [],
     allowedAxisIds: scoped.allowedAxisIds || [],
   };
-  // The controllers read the active role from this header: it now comes from the server.
+  // The controllers read the active role from these headers: they come from the server.
+  // (notstudentrole: same rule as the frontend used, role_code != "STUDENT".)
   req.headers.selectedpermission = assignment.role_code;
+  if (assignment.role_code !== "STUDENT") req.headers.notstudentrole = "true";
   next();
 };
 
@@ -116,7 +128,8 @@ const safe = (middleware) => (req, res, next) =>
   Promise.resolve(middleware(req, res, next)).catch(next);
 
 /**
- * Intersects the comma-separated query param `param` with req.permission[field].
+ * Intersects the comma-separated query param `param` with req.permission[field]; when the
+ * param is omitted, it defaults to the whole list the active role allows.
  * Express 5's req.query is a getter that re-parses the URL on each access, so the filtered
  * object is installed as an own property of the request.
  */
@@ -124,15 +137,18 @@ const restrictAllowedIds = (param, field) => (req, res, next) => {
   if (!req.permission) return next();
   const query = { ...req.query };
   const raw = Array.isArray(query[param]) ? query[param].join(",") : query[param];
+  const allowedIds = req.permission[field].map(String);
   if (typeof raw === "string") {
-    const allowed = new Set(req.permission[field].map(String));
+    const allowed = new Set(allowedIds);
     query[param] = raw
       .split(",")
       .map((value) => value.trim())
       .filter((value) => allowed.has(value))
       .join(",");
-    Object.defineProperty(req, "query", { value: query, writable: true, configurable: true });
+  } else {
+    query[param] = allowedIds.join(",");
   }
+  Object.defineProperty(req, "query", { value: query, writable: true, configurable: true });
   next();
 };
 
