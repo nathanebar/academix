@@ -14,21 +14,17 @@ import sevenIcon from "../../../media/svg/material-symbols-lightfeedback-outline
 import eightIcon from "../../../media/svg/healthiconsi-exam-qualification-outline.svg";
 import nineIcon from "../../../media/svg/lets-iconsquestion-light.svg";
 
-import {
-  getTemplateByAxisId,
-  createTemplateAxis,
-  updateTemplateAxis,
-} from "../../../services/ApiServices";
+import { createTemplateAxis, updateTemplateAxis } from "../../../services/ApiServices";
 import { AxisTemplate } from "../../../types/types";
-import { useAxisTemplate } from "../../../store/AxisTemplateStore";
+import { useQueryClient } from "@tanstack/react-query";
+import { axisTemplateKeys } from "../../../api/queryKeys";
+import { emptyAxisTemplate, useAxisTemplateQuery } from "../../../hooks/useAxisTemplateQuery";
 
 type Props = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   courseName?: string;
   axisId?: number;
-  /** רענון של כל הטמפלייטים אחרי שינוי (ב‑store) */
-  fetchAxisTemplates: () => void;
 };
 
 const EditTemplateAxisModal: React.FC<Props> = ({
@@ -36,9 +32,11 @@ const EditTemplateAxisModal: React.FC<Props> = ({
   setOpen,
   courseName,
   axisId,
-  fetchAxisTemplates,
 }) => {
-  const { axisTemplates, setAxisTemplates } = useAxisTemplate();
+  const queryClient = useQueryClient();
+  // The axis template from the server (null = the axis has no template yet). It decides
+  // update vs create; this used to come from a separate store, filled by another request.
+  const { refetch: refetchTemplate, data: serverTemplate } = useAxisTemplateQuery(axisId);
 
   /* ---------- STATE ----------
      items – הטמפלייט שהמשתמש עורך (null עד לטעינה) */
@@ -46,34 +44,20 @@ const EditTemplateAxisModal: React.FC<Props> = ({
   const [items, setItems] = useState<AxisTemplate | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Each time the modal opens: load the current template into the edited form
   useEffect(() => {
     if (!axisId) return;
-
-    const load = async () => {
-      setLoading(true);
-      const data = await getTemplateByAxisId(axisId);
-      const tmpl = data && data.length > 0 ? data[0] : null;
-
-      setItems(
-        tmpl ?? {
-          axisId,
-          files: false,
-          checklist: false,
-          link: false,
-          gradeStage: false,
-          duration: false,
-          feedBack: false,
-          Form: false,
-          FileResponse: false,
-          SolutionFile: false,
-          exposureEnabled: false,
-          color: false,
-          tags: false,
-        }
-      );
+    let cancelled = false;
+    setLoading(true);
+    refetchTemplate().then(({ data }) => {
+      if (cancelled) return;
+      setItems(data ?? emptyAxisTemplate(axisId));
       setLoading(false);
+    });
+    return () => {
+      cancelled = true;
     };
-    load();
+    // refetchTemplate is stable; reload on open, as before
   }, [axisId, open]);
 
   /* ---------- רשימת השדות שאנחנו מציגים ----------
@@ -108,21 +92,15 @@ const EditTemplateAxisModal: React.FC<Props> = ({
     { title: "תיוגים", logo: nineIcon }, // tags
   ];
 
-  useEffect(() => {
-    fetchAxisTemplates();
-  }, []);
-
   /* ---------- שמירה ----------
-     עדכון ב‑store וב‑API */
+     עדכון ב‑API, ואז רענון של הטמפלייט (גם ב‑NewTaskModal) */
   const handleSave = async () => {
     if (!items) return;
 
     try {
-      const exists = axisTemplates.some((t) => t?.axisId === axisId);
+      // the template loaded when the modal opened: it exists on the server or not
+      const exists = !!serverTemplate;
       if (exists) {
-        setAxisTemplates(
-          axisTemplates.map((t) => (t?.axisId === axisId ? items : t))
-        );
         const res = await updateTemplateAxis(items);
         if (res.status === 200) {
           notification.success({ message: "הטמפלייט עודכן בהצלחה" });
@@ -133,12 +111,11 @@ const EditTemplateAxisModal: React.FC<Props> = ({
         const res = await createTemplateAxis(items);
         if (res.status === 200) {
           notification.success({ message: "הטמפלייט נוצר בהצלחה" });
-          setAxisTemplates([...axisTemplates, items]); // מוסיף למצב המקומי
-          fetchAxisTemplates(); // רפרש מה‑backend
         } else {
           throw new Error("create‑failed");
         }
       }
+      queryClient.invalidateQueries({ queryKey: axisTemplateKeys.byAxis(axisId) });
     } catch (e) {
       console.error(e);
       notification.error({ message: "שגיאה בתהליך השמירה" });

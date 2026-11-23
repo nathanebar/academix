@@ -1350,18 +1350,6 @@ export async function createTemplateAxis(template: AxisTemplate) {
     return error.response;
   }
 }
-export async function getTemplateAxisByAxisId(axisId: number) {
-  try {
-    const req = await api.get(
-      `/axisTemplate/get-by-axisId`,
-      { params: { axisId } }
-    );
-    return req;
-  } catch (error: any) {
-    console.log(error);
-    return error.response;
-  }
-}
 export async function getMemberByBatchId(courseBatchId: number) {
   try {
     const req = await api.get(

@@ -8,6 +8,8 @@ import { updateTeamMember } from "../../../services/ApiServices";
 import Notification from "../../../UI/Notification/Notification";
 import { Button, ConfigProvider } from "antd";
 import { queryClient } from "../../../api/queryClient";
+import { useQuery } from "@tanstack/react-query";
+import { userKeys } from "../../../api/queryKeys";
 
 type DeleteStudentModalProps = {
   isOpen: boolean;
@@ -20,7 +22,21 @@ const DeleteStudentModal: React.FC<DeleteStudentModalProps> = ({
   setIsOpen,
   user,
 }) => {
-  const [userRank, setUserRank] = useState<any>("");
+  // The student's rank from the people directory (React Query, #17). The former effect ran only
+  // on mount ([]), so it kept the first student's rank if `user` changed.
+  const { data: userRank = "" } = useQuery({
+    queryKey: userKeys.rank(user?.username),
+    queryFn: async () => {
+      try {
+        return (await getRank(user.username)) ?? "";
+      } catch (error) {
+        console.log("Error getting rank:", error);
+        return "";
+      }
+    },
+    enabled: !!user?.username?.trim(),
+    staleTime: 0, // refetch on every mount, like the former useEffect
+  });
   const [deleteReason, setDeleteReason] = useState<string>("");
   const [height, setHeight] = useState("");
   const [activeButton, setActiveButton] = useState<string>("");
@@ -33,19 +49,6 @@ const DeleteStudentModal: React.FC<DeleteStudentModalProps> = ({
     { id: "button3", label: "אילוצים אישיים" },
     { id: "button4", label: "טעות שיבוץ" },
   ];
-
-  useEffect(() => {
-    const fetchRank = async () => {
-      try {
-        const rank = await getRank(user.username);
-        setUserRank(rank);
-      } catch (error) {
-        console.log("Error getting rank:", error);
-      }
-    };
-
-    fetchRank();
-  }, []);
 
   useEffect(() => {
     const handleResize = () => {

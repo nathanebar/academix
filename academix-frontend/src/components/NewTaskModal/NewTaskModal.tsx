@@ -1,5 +1,5 @@
 import api from "../../api/axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import style from "./NewTaskModal.module.css";
 
 import { Button, Modal, notification, Spin, Tooltip } from "antd";
@@ -36,8 +36,8 @@ import UploadFiles from "./Inputs/UploadFiles/UploadFiles";
 import ResponseFile from "./Inputs/ResponseFile/ResponseFile";
 import { useUserStore } from "../../store/userStore";
 import { useSelectionsStore } from "../../store/selectionStore";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { axisTemplateKeys } from "../../api/queryKeys";
+import { useQueryClient } from "@tanstack/react-query";
+import { emptyAxisTemplate, useAxisTemplateQuery } from "../../hooks/useAxisTemplateQuery";
 import { useFetchCheckListsByTaskId } from "../../hooks/useFetchCheckListsByTaskId";
 import { useFetchFilesByTaskId } from "../../hooks/useFetchFilesByTaskId";
 import { isEqual } from "es-toolkit/compat";
@@ -45,7 +45,6 @@ import CastingAssignments from "./CastingAssignments/CastingAssignments";
 import ColorPicker from "./Inputs/ColorPicker/ColorPicker";
 import { useFetchTagsByTaskId } from "../../hooks/useFetchTagsByTaskId";
 import EditableTagGroup from "./Inputs/Tags/Tags";
-import { getTemplateByAxisId } from "../../services/ApiServices";
 import { AxisTemplate, rules } from "../../types/types";
 import Scheduling from "./Inputs/Scheduling/Scheduling";
 import { usePermissionStore } from "../../store/permissionStore";
@@ -197,34 +196,16 @@ const NewTaskModal = (props: NewMissionProps) => {
       survey: surveyId ? { id: surveyId, title: "סקר" } : null,
     });
   }, [formId, surveyId]);
-  // The axis template (which task fields are required): read-only server data.
-  const { data: items = null } = useQuery({
-    queryKey: axisTemplateKeys.byAxis(props.axisId),
-    queryFn: async (): Promise<AxisTemplate> => {
-      const axisId = props.axisId!;
-      const data = await getTemplateByAxisId(axisId);
-      const tmpl = data && data.length > 0 ? data[0] : null;
-      return (
-        tmpl ?? {
-          axisId,
-          files: false,
-          checklist: false,
-          link: false,
-          gradeStage: false,
-          duration: false,
-          feedBack: false,
-          Form: false,
-          FileResponse: false,
-          SolutionFile: false,
-          exposureEnabled: false,
-          color: false,
-          tags: false,
-        }
-      );
-    },
-    enabled: !!props.axisId,
-    staleTime: 0, // refetch on every mount, like the former useEffect
-  });
+  // The axis template (which task fields are required): read-only here; edited in
+  // EditTemplateAxisModal. null until loaded; no template = nothing required.
+  const { data: axisTemplate } = useAxisTemplateQuery(props.axisId);
+  const items: AxisTemplate | null = useMemo(
+    () =>
+      axisTemplate === undefined || !props.axisId
+        ? null
+        : axisTemplate ?? emptyAxisTemplate(props.axisId),
+    [axisTemplate, props.axisId]
+  );
 
   useEffect(() => {
     if (!props.editingTask) {
