@@ -14,7 +14,6 @@ interface SelectionsState {
   selectedCourseBatch: any | null;
   selectedDomain: any | null;
   selectedCourse: any | null;
-  selectedCourseCommanders: any;
   selectedTeam: any | null;
   selectedAxis: any | null;
   selectedTeamMember: TeamMembers | null | any;
@@ -35,7 +34,6 @@ interface SelectionsState {
   setSelectedCourseBatch: (courseBatch: any | null) => void;
   setSelectedDomain: (domain: any | null) => void;
   setSelectedCourse: (course: any | null) => void;
-  setSelectedCourseCommanders: (courseCommanders: any) => void;
   setSelectedTeam: (team: any | null) => void;
   setSelectedAxis: (axis: any | null) => void;
   setSelectedTeamMember: (teamMember: TeamMembers | null) => void;
@@ -72,7 +70,6 @@ export const useSelectionsStore = create<SelectionsState>()(
       selectedCourseBatch: null,
       selectedDomain: null,
       selectedCourse: null,
-      selectedCourseCommanders: null,
       selectedTeam: null,
       selectedAxis: null,
       selectedTeamMember: null,
@@ -92,8 +89,6 @@ export const useSelectionsStore = create<SelectionsState>()(
         set({ selectedCourseBatch: courseBatch }),
       setSelectedDomain: (domain) => set({ selectedDomain: domain }),
       setSelectedCourse: (course) => set({ selectedCourse: course }),
-      setSelectedCourseCommanders: (courseCommanders) =>
-        set({ selectedCourseCommanders: courseCommanders }),
       setSelectedTeam: (team) => set({ selectedTeam: team }),
       setSelectedAxis: (axis) => set({ selectedAxis: axis }),
       setSelectedTeamMember: (teamMember) =>

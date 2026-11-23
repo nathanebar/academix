@@ -7,6 +7,7 @@ import Photo from "../../../UI/Photo/Photo";
 import { useLocation } from "react-router-dom";
 import { useSelectionsStore } from "../../../store/selectionStore";
 import { usePermissionStore } from "../../../store/permissionStore";
+import { useFetchCourseCommanders } from "../../../hooks/useFetchCourseCommanders";
 type PermmisionsCourseBatchProps = {
   height?: string;
 };
@@ -23,8 +24,8 @@ const PermmisionsCourseBatch: React.FC<PermmisionsCourseBatchProps> = (
     selectedTeam,
     selectedCourse,
     selectedCourseBatch,
-    selectedCourseCommanders,
   } = useSelectionsStore();
+  const { data: selectedCourseCommanders } = useFetchCourseCommanders(selectedCourse?.id);
   const location = useLocation();
   const currentUrl = location.pathname;
 

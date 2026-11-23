@@ -14,8 +14,7 @@ import { useEffect } from "react";
 import { useCourseStore } from "../../store/courseStore";
 
 const CourseSetting = () => {
-  const { selectedCourse, setSelectedCourse, selectedCourseCommanders } =
-    useSelectionsStore();
+  const { selectedCourse, setSelectedCourse } = useSelectionsStore();
   const { selectedPermission } = usePermissionStore();
 
   const course = selectedCourse;
@@ -44,7 +43,7 @@ const CourseSetting = () => {
 
   const durationOptions = Array.from({ length: 24 }, (_, i) => i + 1);
 
-  useFetchCourseCommanders(selectedCourse?.id);
+  const { data: selectedCourseCommanders } = useFetchCourseCommanders(selectedCourse?.id);
 
   const handleEditClick = (e: React.MouseEvent) => {
     e.stopPropagation();

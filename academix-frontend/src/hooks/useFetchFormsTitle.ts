@@ -17,11 +17,6 @@ export const useFetchFormsTitle = (courseId: number, teamId: number,selectedCour
         throw error; // חשוב להחזיר את השגיאה
       }
     },
-    meta: {
-      onSuccess: (data: any) => {
-        return data;
-      },
-    },
     enabled: !!courseId,
     /*  onError: (error: any) => {
             console.log('Error occurred:', error);

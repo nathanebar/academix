@@ -24,11 +24,6 @@ export const useFetchCheckListsByTaskId = (taskId: number | undefined, userId?: 
         return { error: "needed taskId in order to fetch" };
       }
     },
-    meta:{
-      onSuccess: (data: any) => {
-        return data;
-      },
-    },
     enabled: userId !== undefined || taskId !== undefined,
   });
 };

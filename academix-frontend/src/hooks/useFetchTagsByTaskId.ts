@@ -19,11 +19,6 @@ export const useFetchTagsByTaskId = (taskId: number | undefined) => {
         return { error: "needed taskId in order to fetch" };
       }
     },
-    meta: {
-      onSuccess: (data: any) => {
-        return data;
-      },
-    },
     enabled: taskId !== undefined,
   });
 };

@@ -2193,7 +2193,7 @@ const MyCalendar: React.FC = () => {
               onSuccess: (data) => {
                 queryClient.invalidateQueries({ queryKey: teamEventKeys.all });
                 queryClient.invalidateQueries({
-                  queryKey: ["teamEventAssignment"],
+                  queryKey: ["teamEventsAssignment"],
                 });
                 generateConstantTeamEvent(
                   dayjs(
