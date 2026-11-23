@@ -28,11 +28,19 @@ export const feedbackKeys = {
   byAssignmentAll: () => [...feedbackKeys.all, "assignment"] as const,
   byAssignment: (taskAssignmentId: number | undefined, roleCode: string | undefined) =>
     [...feedbackKeys.byAssignmentAll(), taskAssignmentId, roleCode] as const,
+  // under byAssignmentAll(): FeedbackForm already invalidates that prefix after a submission
+  statusByAssignment: (taskAssignmentId: number | string | undefined) =>
+    [...feedbackKeys.byAssignmentAll(), "status", taskAssignmentId] as const,
 
   openByTeam: (teamId: number | undefined, courseBatchId: number | undefined) =>
     [...feedbackKeys.all, "open", "team", teamId, courseBatchId] as const,
   openByTeams: (teamIds: number[] | undefined, courseBatchId: number | undefined) =>
     [...feedbackKeys.all, "open", "teams", teamIds, courseBatchId] as const,
+};
+
+export const axisTemplateKeys = {
+  all: ["axisTemplate"] as const,
+  byAxis: (axisId: number | undefined) => [...axisTemplateKeys.all, axisId] as const,
 };
 
 export const systemKeys = {
