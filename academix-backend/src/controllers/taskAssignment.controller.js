@@ -1668,7 +1668,6 @@ exports.deleteTaskAssignmentByUserId = async (req, res) => {
     });
     res.json({ message: "TaskAssignment deleted" });
   } catch (error) {
-    console.log(error.message);
     catchError(error, req, res, { function: "taskAssignment.deleteTaskAssignmentByUserId" });
   }
 };
@@ -3004,7 +3003,6 @@ exports.getTaskAssignmentsByTeam = async (req, res) => {
       data: formatted,
     });
   } catch (error) {
-    console.error("Error getting task assignments by team:", error);
     catchError(error, req, res, { function: "taskAssignment.getTaskAssignmentsByTeam" });
   }
 };
@@ -3108,7 +3106,7 @@ exports.getTeamCompletedTasks = async (req, res) => {
       data: formattedData,
     });
   } catch (error) {
-    console.error("Error:", error);
+    logger.error("taskAssignment.getTeamCompletedTasks failed", { originalError: error.message, stack: error.stack });
     return res.status(500).json({
       success: false,
       error: "Failed to fetch team tasks",
@@ -3223,7 +3221,6 @@ exports.getDuplicatedTasks = async (req, res) => {
       data: finalResult,
     });
   } catch (error) {
-    console.error("Error:", error);
     catchError(error, req, res, { function: "taskAssignment.getDuplicatedTasks" });
   }
 };
