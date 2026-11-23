@@ -60,9 +60,11 @@ export const usePermissionStore = create<PermissionState>()(
     }),
     {
       name: "permission-storage",
+      // Persist only the selected role (#17): the permissions themselves always come from
+      // GET /permissions/my (the server is the source of truth since #13), and
+      // useFetchPermissions restores the selection from selectedPermissionId alone.
       partialize: (state) => {
         return {
-          permissions: state.permissions,
           selectedPermissionId:
             state.selectedPermission?.id ?? state.selectedPermissionId ?? null,
           isInitialized: state.isInitialized,
@@ -70,10 +72,6 @@ export const usePermissionStore = create<PermissionState>()(
       },
       onRehydrateStorage: () => (state) => {
         state?.setIsInitialized(true);
-
-        if (state?.permissions?.length) {
-          queryClient.setQueryData(["permissions"], state.permissions);
-        }
       },
     }
   )

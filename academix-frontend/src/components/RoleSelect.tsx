@@ -18,7 +18,8 @@ import {
   filterCoursesBySelection,
   filterBatchesBySelection,
 } from "../utils/filterUtils";
-import { getTeamMemberByUserIdAndTeamId } from "../services/ApiServices";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { studentTeamMemberQuery } from "../hooks/useStudentTeamMember";
 
 import Photo from "../UI/Photo/Photo";
 
@@ -58,17 +59,20 @@ export const RoleSelect = () => {
   } = useSelectionsStore();
 
 
+  // STUDENT role: its team member becomes the selected one (React Query, #17)
+  const queryClient = useQueryClient();
+  const isStudentRole =
+    selectedPermission?.role_code === "STUDENT" &&
+    !!selectedPermission?.user_id &&
+    !!selectedPermission?.scope_id;
+  const { data: studentTeamMember } = useQuery({
+    ...studentTeamMemberQuery(selectedPermission?.user_id, selectedPermission?.scope_id),
+    enabled: isStudentRole,
+  });
   useEffect(() => {
-  
-    if (selectedPermission?.role_code === "STUDENT") {
-      getTeamMemberByUserIdAndTeamId(
-        selectedPermission?.user_id,
-        selectedPermission.scope_id
-      )
-        .then((res) => setSelectedTeamMember(res.data))
-        .catch(console.error);
-    }
-  }, [selectedPermission?.id]); 
+    if (isStudentRole && studentTeamMember) setSelectedTeamMember(studentTeamMember);
+    // also on a role change when the team member is already cached (same data reference)
+  }, [studentTeamMember, selectedPermission?.id]);
 
   useRoleNavigation();
   const navigate = useNavigate();
@@ -164,10 +168,12 @@ export const RoleSelect = () => {
         if (role.user_id && role.scope_id) {
           
           
-          getTeamMemberByUserIdAndTeamId(/* user.id */role.user_id, role.scope_id)
-            .then((res: any) => {
-              if (res?.data) {
-                setSelectedTeamMember(res.data);
+          // same query as above: shares the request with the role-change fetch
+          queryClient
+            .fetchQuery(studentTeamMemberQuery(role.user_id, role.scope_id))
+            .then((teamMember: any) => {
+              if (teamMember) {
+                setSelectedTeamMember(teamMember);
                 setSelectedTeam(targetTeam);
                 navigate("/calendar");
               }
