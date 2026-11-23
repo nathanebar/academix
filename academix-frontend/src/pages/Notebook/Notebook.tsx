@@ -123,8 +123,7 @@ const [folderScope, setFolderScope] = useState<"personal" | "team">("personal");
   const foldersError: string | null = foldersQuery.isError
     ? (foldersQuery.error as any)?.message || "שגיאה בשליפת תיקיות"
     : foldersQuery.data && !foldersQuery.data.ok
-    ? // (pre-existing: activeHeaderType is "teamMember", so this is always the first message)
-      activeHeaderType !== "teammember"
+    ? activeHeaderType !== "teamMember"
       ? "יש לבחור חבר צוות"
       : "לא נמצאו תיקיות לחייל זה"
     : null;
