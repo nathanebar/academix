@@ -22,7 +22,7 @@ const {
 } = require("../../models");
 const { Op, where } = require("sequelize");
 const { sequelize } = require("../../models/index");
-const fileController = require("../controllers/file.controller");
+const { deleteFileRecords, deleteUnreferencedObjects } = require("../services/fileCleanup.service");
 const logger = require("../utils/logger");
 const { catchError } = require("../utils/errorHandler");
 
@@ -638,69 +638,6 @@ exports.create = async (req, res) => {
     catchError(err, req, res);
   }
 };
-// ============================================
-// פונקציה לשכפול משימה עם כל הטבלאות הקשורות
-// ============================================
-const replicateTaskWithRelations = async (prevTaskId, newTask, transaction) => {
-  const replicatedIds = {
-    checkLists: [],
-    files: [],
-    taskTags: [],
-  };
-
-  // 1. שכפול CheckLists
-  const checkLists = await CheckLists.findAll({
-    where: { task_id: prevTaskId },
-    transaction,
-  });
-
-  for (const item of checkLists) {
-    const newItem = await CheckLists.create(
-      { task_id: newTask.id, todo: item.todo },
-      { transaction }
-    );
-    replicatedIds.checkLists.push(newItem.id);
-  }
-
-  // 2. שכפול Files (עם task_id)
-  const files = await File.findAll({
-    where: { task_id: prevTaskId },
-    transaction,
-  });
-
-  for (const file of files) {
-    const newFile = await File.create(
-      {
-        task_id: newTask.id,
-        s3BucketName: file.s3BucketName,
-        name: file.name,
-        size: file.size,
-        length: file.length,
-        type: file.type,
-        s3Key: file.s3Key,
-        isPatbass: file.isPatbass,
-      },
-      { transaction }
-    );
-    replicatedIds.files.push(newFile.id);
-  }
-
-  // 3.5. שכפול CheckLists
-  const TaskTagsList = await TaskTags.findAll({
-    where: { task_id: prevTaskId },
-    transaction,
-  });
-
-  for (const item of TaskTagsList) {
-    const newItem = await TaskTags.create(
-      { task_id: newTask.id, tag_id: item.tag_id },
-      { transaction }
-    );
-    replicatedIds.taskTags.push(newItem.id);
-  }
-
-  return replicatedIds;
-};
 exports.update = async (req, res) => {
   const batchId = req.body.batchId || req.body.courseBatchId;
   const t = await sequelize.transaction();
@@ -810,21 +747,10 @@ exports.remove = async (req, res) => {
   const t = await sequelize.transaction();  // ← כאן נוצר המשתנה t!
 
   try {
-    const reletedFiles = await File.findAll({
-      where: { task_id: taskId },
-      transaction: t,
-    });
-
-    if (reletedFiles && reletedFiles?.length > 0) {
-      for (const f of reletedFiles) {
-        await fileController.deleteFile(f?.id);
-      }
-      logger.info("Task files deleted", {
-        taskId,
-        filesCount: reletedFiles.length,
-        userId: req.headers["x-user-id"],
-      });
-    }
+    // The Files rows go in the same transaction; their S3 objects are deleted after the commit
+    // (in batches, and only if no other row still uses the key). It was one deleteFile() per
+    // file: 4 queries + 1 S3 call each, outside the transaction and before the commit.
+    const s3Objects = await deleteFileRecords({ task_id: taskId }, t);
 
     // soft delete לכל ההקצאות של המשימה
     await TaskAssignment.destroy({
@@ -869,8 +795,12 @@ exports.remove = async (req, res) => {
 
     await t.commit();
 
+    const s3Result = await deleteUnreferencedObjects(s3Objects);
+
     logger.info("Task deleted", {
       taskId,
+      filesCount: s3Objects.length,
+      s3: s3Result,
       userId: req.headers["x-user-id"],
     });
 
@@ -994,80 +924,97 @@ exports.getTasksWithFeedbackByTeamId = async (req, res) => {
 
     const tasksWithAnswers = Array.from(taskMap.values());
 
-    for (const taskData of tasksWithAnswers) {
-      if (taskData.feedback && taskData.feedback.id) {
-        const assignmentIds = taskData.assignments.map(a => a.id);
+    // Two queries for all the tasks together (it was two per task): the answer counts and the
+    // category selections of every assignment, then split per task in memory. An assignment
+    // belongs to one task only, and is matched with that task's feedback id, as before.
+    const withFeedback = tasksWithAnswers.filter((td) => td.feedback && td.feedback.id && td.assignments.length > 0);
+    const allAssignmentIds = withFeedback.flatMap((td) => td.assignments.map((a) => a.id));
+    const allFeedbackIds = [...new Set(withFeedback.map((td) => td.feedback.id))];
+    const pairKey = (assignmentId, feedbackId) => `${assignmentId}:${feedbackId}`;
 
-        if (assignmentIds.length > 0) {
-          // ספירת תשובות קיימות
-          const countQuery = `
-            SELECT COUNT(*) as count
-            FROM "FeedbackAnswers" fa
-            WHERE fa."task_assignment_id" IN (:assignmentIds)
-              AND fa."feedback_id" = :feedbackId
-          `;
-
-          const countResult = await sequelize.query(countQuery, {
-            replacements: {
-              assignmentIds,
-              feedbackId: taskData.feedback.id,
-            },
+    const answerCounts = new Map(); // "assignmentId:feedbackId" -> count
+    const selectionsByTask = new Map(withFeedback.map((td) => [td, []])); // rows kept in the DB order
+    if (allAssignmentIds.length > 0) {
+      const [countRows, allSelections] = await Promise.all([
+        sequelize.query(
+          `SELECT fa."task_assignment_id" AS "assignmentId", fa."feedback_id" AS "feedbackId", COUNT(*) AS count
+           FROM "FeedbackAnswers" fa
+           WHERE fa."task_assignment_id" IN (:assignmentIds)
+             AND fa."feedback_id" IN (:feedbackIds)
+           GROUP BY fa."task_assignment_id", fa."feedback_id"`,
+          {
+            replacements: { assignmentIds: allAssignmentIds, feedbackIds: allFeedbackIds },
             type: sequelize.QueryTypes.SELECT,
-          });
-
-          taskData.countOfAnswers = countResult[0].count || 0;
-
-          // שליפת כל הקטגוריות שנבחרו במשובים של אותה משימה
-          const categorySelections = await FeedbackCategorySelection.findAll({
-            where: {
-              task_assignment_id: { [Op.in]: assignmentIds },
-              feedback_id: taskData.feedback.id,
-              selection_type: {
-                [Op.in]: ["improvement", "preservation"],
-              },
+          }
+        ),
+        FeedbackCategorySelection.findAll({
+          where: {
+            task_assignment_id: { [Op.in]: allAssignmentIds },
+            feedback_id: { [Op.in]: allFeedbackIds },
+            selection_type: {
+              [Op.in]: ["improvement", "preservation"],
             },
-            include: [
-              {
-                model: FeedbackCategory,
-                as: "category",
-                attributes: ["id", "category"],
-                required: true,
-              },
-            ],
-            raw: true, // כדי לקבל אובייקטים פשוטים
+          },
+          include: [
+            {
+              model: FeedbackCategory,
+              as: "category",
+              attributes: ["id", "category"],
+              required: true,
+            },
+          ],
+          raw: true, // כדי לקבל אובייקטים פשוטים
+        }),
+      ]);
+      countRows.forEach((r) => answerCounts.set(pairKey(r.assignmentId, r.feedbackId), Number(r.count)));
+      const taskByPair = new Map();
+      withFeedback.forEach((td) => td.assignments.forEach((a) => taskByPair.set(pairKey(a.id, td.feedback.id), td)));
+      allSelections.forEach((s) => {
+        const td = taskByPair.get(pairKey(s.task_assignment_id, s.feedback_id));
+        if (td) selectionsByTask.get(td).push(s);
+      });
+    }
+
+    for (const taskData of withFeedback) {
+      const feedbackId = taskData.feedback.id;
+      const keys = taskData.assignments.map((a) => pairKey(a.id, feedbackId));
+
+      // ספירת תשובות קיימות. COUNT(*) comes back from PostgreSQL as a string ("3"): kept as a
+      // string so the response is unchanged.
+      taskData.countOfAnswers = String(keys.reduce((sum, k) => sum + (answerCounts.get(k) || 0), 0));
+
+      // הקטגוריות שנבחרו במשובים של אותה משימה
+      const categorySelections = selectionsByTask.get(taskData);
+
+      // איסוף כל הקטגוריות למפה לפי categoryId
+      const categoriesMap = new Map();
+
+      categorySelections.forEach((selection) => {
+        const type = selection.selection_type; // "improvement" או "preservation"
+        const categoryId = selection["category.id"];
+        const categoryName = selection["category.category"];
+
+        if (!categoriesMap.has(categoryId)) {
+          categoriesMap.set(categoryId, {
+            categoryId: categoryId,
+            categoryName: categoryName,
+            counts: {
+              improvement: 0,
+              preservation: 0,
+            },
           });
-
-          // איסוף כל הקטגוריות למפה לפי categoryId
-          const categoriesMap = new Map();
-
-          categorySelections.forEach((selection) => {
-            const type = selection.selection_type; // "improvement" או "preservation"
-            const categoryId = selection["category.id"];
-            const categoryName = selection["category.category"];
-
-            if (!categoriesMap.has(categoryId)) {
-              categoriesMap.set(categoryId, {
-                categoryId: categoryId,
-                categoryName: categoryName,
-                counts: {
-                  improvement: 0,
-                  preservation: 0,
-                },
-              });
-            }
-
-            const categoryData = categoriesMap.get(categoryId);
-            if (type === "improvement") {
-              categoryData.counts.improvement += 1;
-            } else if (type === "preservation") {
-              categoryData.counts.preservation += 1;
-            }
-          });
-
-          // הכנסת הקטגוריות לפידבק של המשימה
-          taskData.feedback.categories = Array.from(categoriesMap.values());
         }
-      }
+
+        const categoryData = categoriesMap.get(categoryId);
+        if (type === "improvement") {
+          categoryData.counts.improvement += 1;
+        } else if (type === "preservation") {
+          categoryData.counts.preservation += 1;
+        }
+      });
+
+      // הכנסת הקטגוריות לפידבק של המשימה
+      taskData.feedback.categories = Array.from(categoriesMap.values());
     }
 
     res.json(tasksWithAnswers);
