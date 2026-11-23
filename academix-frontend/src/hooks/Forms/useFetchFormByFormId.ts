@@ -8,7 +8,7 @@ export const useFetchFormsByFormId = (formId?: number) => {
   return useQuery({
     queryKey: ["formByFormId", formId],
     queryFn: async () => {
-      const { data } = await api.get(`/forms/formId${formId}`);
+      const { data } = await api.get(`/forms/formId/${formId}`);
       return data;
     },
     meta: {
