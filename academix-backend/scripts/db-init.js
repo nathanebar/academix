@@ -1,7 +1,11 @@
 // Crée le schéma à partir des models (les migrations historiques sont incohérentes).
-// Usage : npm run db:init           -> crée les tables manquantes
-//         npm run db:init -- --alter -> ajuste les tables existantes aux models
-//         npm run db:init -- --force -> SUPPRIME et recrée toutes les tables
+// Usage: npm run db:init                -> creates the missing tables
+//        npm run db:init -- --alter     -> also adds missing columns, indexes and enum values to existing tables.
+//                                          Never drops or changes an existing column: safe on the production database.
+//        npm run db:init -- --alter-full -> Sequelize's full alter: also CHANGES existing columns to match the models
+//                                          and DROPS columns that are not in a model (their data is lost).
+//                                          Local development only, never on a shared or production database.
+//        npm run db:init -- --force     -> DROPS and recreates every table
 require("dotenv").config({ quiet: true });
 const db = require("../models");
 const triggers = require("../migrations/20251009102719-create-role-assignment-triggers");
@@ -32,7 +36,9 @@ async function removeDuplicateUniqueConstraints(sequelize) {
 
 (async () => {
   const force = process.argv.includes("--force");
-  const alter = process.argv.includes("--alter");
+  // { drop: false } makes Sequelize skip its whole "existing columns" pass (removeColumn and changeColumn):
+  // only missing columns, indexes and enum values are added.
+  const alter = process.argv.includes("--alter-full") ? true : process.argv.includes("--alter") ? { drop: false } : false;
   try {
     await db.sequelize.authenticate();
     console.log(`Connected to ${db.sequelize.config.database}@${db.sequelize.config.host}`);

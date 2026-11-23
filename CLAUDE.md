@@ -71,7 +71,8 @@ Never ship a backend change that breaks the current frontend, or the reverse.
 
 - The schema is created from the models with `npm run db:init` (`sequelize.sync()`); the historical migrations are inconsistent (see `README.md`).
 - Model / schema changes belong to the backend zone only.
-- After pulling model changes: `cd academix-backend && npm run db:init -- --alter`. **Never** run `--force` on a shared or production database.
+- After pulling model changes: `cd academix-backend && npm run db:init -- --alter`. It only adds missing columns, indexes and enum values; it never drops or changes an existing column.
+- `--alter-full` (Sequelize's full alter: changes existing columns and **drops columns that are not in a model**) and `--force` are for a local database only. **Never** run them on a shared or production database. A change to an existing column (type, nullability, rename) therefore needs an explicit, idempotent script for production (see #20).
 
 ## 7. Parallel work with Claude Code
 
