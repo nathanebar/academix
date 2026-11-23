@@ -801,7 +801,6 @@ exports.update = async (req, res) => {
     });
 
     await t.rollback();
-    console.log(err);
     catchError(err, req, res, { function: "task.update", status: 400 });
   }
 };
@@ -3187,7 +3186,6 @@ exports.advancedSearch = async (req, res) => {
 
     return res.json({ success: true, data: grouped });
   } catch (error) {
-    console.error("Advanced search error:", error);
     return catchError(error, req, res, { function: "task.advancedSearch" });
   }
 };
