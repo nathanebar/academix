@@ -31,6 +31,7 @@ const {
 const logger = require("../utils/logger");
 const { catchError } = require("../utils/errorHandler");
 const { assignToTeam } = require("./taskAssignment.controller");
+const { deleteFileRecords, deleteUnreferencedObjects } = require("../services/fileCleanup.service");
 
 config({ quiet: true });
 
@@ -636,213 +637,147 @@ exports.getAllForms = async (req, res) => {
   }
 };
 
+// ---------- questions of a form: built in memory, then inserted with one bulkCreate per table ----------
+// createForm and updateForm used to insert every question, option and file one by one inside the
+// transaction (a 30-question form = 100+ INSERTs). The rows and their order are the same as before.
+
+// One option row (option_text NOT NULL: empty text is stored as "").
+const optionRow = (
+  questionId,
+  text,
+  { side = "none", orderIndex, paireKey = null, isCorrect = null, points = null } = {}
+) => ({
+  question_id: questionId,
+  option_text: (text ?? "").trim(),
+  side,
+  orderIndex,
+  paireKey,
+  is_correct: isCorrect,
+  points,
+});
+
+// The option rows of one question, in the order they used to be created.
+const buildOptionRows = (question, questionId) => {
+  const rows = [];
+  const add = (text, opts) => rows.push(optionRow(questionId, text, opts));
+  switch (question.type) {
+    case "american":
+    case "ordering_line":
+      (question.options || []).forEach((o, i) => add(o, { orderIndex: i }));
+      break;
+    case "scale":
+      add(question.min?.title, { orderIndex: question.min?.value ?? 0 });
+      add(question.max?.title, { orderIndex: question.max?.value ?? 20 });
+      break;
+    case "multipleQuestion":
+      // sous-questions → side="right", pool partagé → side="left"
+      (question.matches || []).forEach((m, i) => add(m?.value1, { side: "right", orderIndex: i }));
+      (question.options || []).forEach((o, j) => add(o, { side: "left", orderIndex: j }));
+      break;
+    case "matching_pairs":
+      // paires mot ↔ pair, groupées par paireKey
+      (question.matches || []).forEach((m, i) => {
+        const pairKey = `pair_${i}`;
+        add(m?.value1, { side: "right", orderIndex: i, paireKey: pairKey });
+        add(m?.value2, { side: "left", orderIndex: i, paireKey: pairKey });
+      });
+      break;
+    case "fill_in_bank":
+      // banque de mots proposés → side="none"
+      (question.matches || []).forEach((m, i) => add(m?.value1, { orderIndex: i }));
+      break;
+    case "true_false":
+      add("", { isCorrect: question.booleanValue ?? null });
+      break;
+    // text, fill_in_open, description : rien à stocker en options
+    default:
+      break;
+  }
+  return rows;
+};
+
+// The File rows of a file_upload question. New files (base64) are uploaded to S3 first: one
+// upload per file is unavoidable. An upload error now fails the whole request (the caller rolls
+// back); it used to answer 500 from inside the loop and then answer again (ERR_HTTP_HEADERS_SENT).
+const buildQuestionFileRows = async (question, questionId) => {
+  if (question.type !== "file_upload" || !(question.uploadedFiles?.length > 0)) return [];
+  const rows = [];
+  for (const fileData of question.uploadedFiles) {
+    const bucket = fileData.bucket || "academix";
+    let s3Key;
+    if (fileData.base64 || fileData.buffer) {
+      s3Key = `upload_${Date.now()}_${fileData.name}`;
+      await s3Client.send(
+        new UploadObject({
+          Bucket: bucket,
+          Key: s3Key,
+          Body: Buffer.from(fileData.base64, "base64"),
+          ContentType: fileData.type,
+        })
+      );
+    } else if (fileData.key) {
+      s3Key = fileData.key;
+    } else {
+      continue;
+    }
+    rows.push({
+      form_question_id: questionId,
+      task_id: null,
+      s3BucketName: bucket,
+      s3Key,
+      name: fileData.name,
+      size: fileData.size,
+      type: fileData.type,
+      isPatbass: false,
+      isFileResponse: false,
+    });
+  }
+  return rows;
+};
+
+// Inserts the questions of a form with their options and files: 3 INSERTs whatever the size.
+const persistQuestions = async (formId, questions, transaction) => {
+  if (!questions?.length) return;
+  // returning: true gives the ids in the same order as the input rows (PostgreSQL RETURNING)
+  const created = await FormQuestion.bulkCreate(
+    questions.map((question, qi) => ({
+      form_id: formId,
+      question_text: question.text,
+      question_type: question.type,
+      is_required: question.required,
+      points: question.points,
+      orderIndex: qi, // ✅ IMPORTANT : l'ordre du tableau front
+    })),
+    { transaction, returning: true }
+  );
+  const optionRows = questions.flatMap((question, qi) => buildOptionRows(question, created[qi].id));
+  const fileRows = [];
+  for (let qi = 0; qi < questions.length; qi++) {
+    fileRows.push(...(await buildQuestionFileRows(questions[qi], created[qi].id)));
+  }
+  if (optionRows.length) await FormOption.bulkCreate(optionRows, { transaction });
+  if (fileRows.length) await File.bulkCreate(fileRows, { transaction });
+};
+
 exports.createForm = async (req, res) => {
   const transaction = await sequelize.transaction();
   const data = req.body;
 
-  // ---------- helper : crée une option en ignorant les vides (option_text NOT NULL) ----------
-  const createOption = async (
-    questionId,
-    text,
-    {
-      side = "none",
-      orderIndex,
-      paireKey = null,
-      isCorrect = null,
-      points = null,
-    } = {}
-  ) => {
-    const clean = (text ?? "").trim();
-    // if (!clean) return null; // évite le notNull Violation
-    return FormOption.create(
-      {
-        question_id: questionId,
-        option_text: clean,
-        side,
-        orderIndex,
-        paireKey,
-        is_correct: isCorrect,
-        points,
-      },
-      { transaction }
-    );
-  };
-
-  // ---------- helper : persist toutes les options d'une question ----------
-  const persistQuestion = async (question, newQuestionId) => {
-    switch (question.type) {
-      case "american":
-      case "ordering_line": {
-        for (let i = 0; i < (question.options || []).length; i++) {
-          await createOption(newQuestionId, question.options[i], {
-            orderIndex: i,
-          });
-        }
-        break;
-      }
-
-      case "scale": {
-        await createOption(newQuestionId, question.min?.title, {
-          orderIndex: question.min?.value ?? 0,
-        });
-        await createOption(newQuestionId, question.max?.title, {
-          orderIndex: question.max?.value ?? 20,
-        });
-        break;
-      }
-
-      case "multipleQuestion": {
-        // sous-questions → side="right"
-        for (let i = 0; i < (question.matches || []).length; i++) {
-          await createOption(newQuestionId, question.matches[i]?.value1, {
-            side: "right",
-            orderIndex: i,
-          });
-        }
-        // pool partagé → side="left"
-        for (let j = 0; j < (question.options || []).length; j++) {
-          await createOption(newQuestionId, question.options[j], {
-            side: "left",
-            orderIndex: j,
-          });
-        }
-        break;
-      }
-
-      case "matching_pairs": {
-        // paires mot ↔ pair, groupées par paireKey
-        for (let i = 0; i < (question.matches || []).length; i++) {
-          const pairKey = `pair_${i}`;
-          await createOption(newQuestionId, question.matches[i]?.value1, {
-            side: "right",
-            orderIndex: i,
-            paireKey: pairKey,
-          });
-          await createOption(newQuestionId, question.matches[i]?.value2, {
-            side: "left",
-            orderIndex: i,
-            paireKey: pairKey,
-          });
-        }
-        break;
-      }
-
-      case "fill_in_bank": {
-        // banque de mots proposés → side="none"
-        for (let i = 0; i < (question.matches || []).length; i++) {
-          await createOption(newQuestionId, question.matches[i]?.value1, {
-            orderIndex: i,
-          });
-        }
-        break;
-      }
-
-      case "true_false": {
-        await createOption(newQuestionId, "", {
-          isCorrect: question.booleanValue ?? null,
-        });
-        break;
-      }
-
-      // text, fill_in_open, description : rien à stocker en options
-      default:
-        break;
-    }
-  };
-
   try {
     const newForm = await Form.create(data.form, { transaction });
+    await persistQuestions(newForm.id, data.questions, transaction);
+    await transaction.commit();
 
-    try {
-      for (let qi = 0; qi < data.questions.length; qi++) {
-        const question = data.questions[qi];
-
-        const newQuestion = await FormQuestion.create(
-          {
-            form_id: newForm.id,
-            question_text: question.text,
-            question_type: question.type,
-            is_required: question.required,
-            points: question.points,
-            orderIndex: qi, // ✅ IMPORTANT : l'ordre du tableau front
-          },
-          { transaction }
-        );
-
-        await persistQuestion(question, newQuestion.id);
-
-        // ---------- fichiers (file_upload) ----------
-        if (
-          question.type === "file_upload" &&
-          question.uploadedFiles?.length > 0
-        ) {
-          for (const fileData of question.uploadedFiles) {
-            try {
-              if (fileData.base64 || fileData.buffer) {
-                const s3Key = `upload_${Date.now()}_${fileData.name}`;
-                await s3Client.send(
-                  new UploadObject({
-                    Bucket: fileData.bucket || "academix",
-                    Key: s3Key,
-                    Body: Buffer.from(fileData.base64, "base64"),
-                    ContentType: fileData.type,
-                  })
-                );
-                await File.create(
-                  {
-                    form_question_id: newQuestion.id,
-                    task_id: null,
-                    s3BucketName: fileData.bucket || "academix",
-                    s3Key,
-                    name: fileData.name,
-                    size: fileData.size,
-                    type: fileData.type,
-                    isPatbass: false,
-                    isFileResponse: false,
-                  },
-                  { transaction }
-                );
-              } else if (fileData.key) {
-                await File.create(
-                  {
-                    form_question_id: newQuestion.id,
-                    task_id: null,
-                    s3BucketName: fileData.bucket || "academix",
-                    s3Key: fileData.key,
-                    name: fileData.name,
-                    size: fileData.size,
-                    type: fileData.type,
-                    isPatbass: false,
-                    isFileResponse: false,
-                  },
-                  { transaction }
-                );
-              }
-            } catch (error) {
-              catchError(error, req, res, {
-                function: "createForm - file upload",
-                questionId: newQuestion.id,
-              });
-            }
-          }
-        }
-      }
-
-      await transaction.commit();
-      logger.info("Form created", {
-        formId: newForm.id,
-        title: data.form.title,
-        courseId: data.form.courseId,
-        userId: req.headers["x-user-id"],
-      });
-      return res.status(200).json(newForm);
-    } catch (error) {
-      await transaction.rollback();
-      return catchError(error, req, res, { function: "form.createForm" });
-    }
+    logger.info("Form created", {
+      formId: newForm.id,
+      title: data.form.title,
+      courseId: data.form.courseId,
+      userId: req.headers["x-user-id"],
+    });
+    return res.status(200).json(newForm);
   } catch (error) {
     await transaction.rollback();
-    catchError(error, req, res, { function: "createForm" });
+    return catchError(error, req, res, { function: "form.createForm" });
   }
 };
 
@@ -850,97 +785,6 @@ exports.updateForm = async (req, res) => {
   const transaction = await sequelize.transaction();
   const { formId } = req.params;
   const data = req.body;
-
-  const createOption = async (
-    questionId,
-    text,
-    {
-      side = "none",
-      orderIndex,
-      paireKey = null,
-      isCorrect = null,
-      points = null,
-    } = {}
-  ) => {
-    const clean = (text ?? "").trim();
-    // if (!clean) return null;
-    return FormOption.create(
-      {
-        question_id: questionId,
-        option_text: clean,
-        side,
-        orderIndex,
-        paireKey,
-        is_correct: isCorrect,
-        points,
-      },
-      { transaction }
-    );
-  };
-
-  const persistQuestion = async (question, newQuestionId) => {
-    switch (question.type) {
-      case "american":
-      case "ordering_line":
-        for (let i = 0; i < (question.options || []).length; i++) {
-          await createOption(newQuestionId, question.options[i], {
-            orderIndex: i,
-          });
-        }
-        break;
-      case "scale":
-        await createOption(newQuestionId, question.min?.title, {
-          orderIndex: question.min?.value ?? 0,
-        });
-        await createOption(newQuestionId, question.max?.title, {
-          orderIndex: question.max?.value ?? 20,
-        });
-        break;
-      case "multipleQuestion":
-        for (let i = 0; i < (question.matches || []).length; i++) {
-          await createOption(newQuestionId, question.matches[i]?.value1, {
-            side: "right",
-            orderIndex: i,
-          });
-        }
-        for (let j = 0; j < (question.options || []).length; j++) {
-          await createOption(newQuestionId, question.options[j], {
-            side: "left",
-            orderIndex: j,
-          });
-        }
-        break;
-      case "matching_pairs":
-        for (let i = 0; i < (question.matches || []).length; i++) {
-          const pairKey = `pair_${i}`;
-          await createOption(newQuestionId, question.matches[i]?.value1, {
-            side: "right",
-            orderIndex: i,
-            paireKey: pairKey,
-          });
-          await createOption(newQuestionId, question.matches[i]?.value2, {
-            side: "left",
-            orderIndex: i,
-            paireKey: pairKey,
-          });
-        }
-        break;
-      case "fill_in_bank":
-        for (let i = 0; i < (question.matches || []).length; i++) {
-          await createOption(newQuestionId, question.matches[i]?.value1, {
-            orderIndex: i,
-          });
-        }
-        break;
-      case "true_false":
-        await createOption(newQuestionId, "", {
-          isCorrect: question.booleanValue ?? null,
-        });
-        break;
-      default:
-        break;
-    }
-  };
 
   try {
     const form = await Form.findByPk(formId, { transaction });
@@ -966,87 +810,26 @@ exports.updateForm = async (req, res) => {
     // ---------- questions : suppression des anciennes + recréation ----------
     const existingQuestions = await FormQuestion.findAll({
       where: { form_id: formId },
+      attributes: ["id"],
       transaction,
     });
-    for (const q of existingQuestions) {
-      await FormOption.destroy({ where: { question_id: q.id }, transaction });
+    let s3Objects = [];
+    if (existingQuestions.length) {
+      const oldIds = existingQuestions.map((q) => q.id);
+      // one DELETE for the options of all the old questions (it was one per question)
+      await FormOption.destroy({ where: { question_id: oldIds }, transaction });
+      // The Files rows of the old questions: the questions could not be deleted while they were
+      // there (foreign key), so editing a form with a file_upload question always failed (500).
+      // The frontend re-attaches the files it keeps by their key; the objects of the removed ones
+      // are deleted from S3 after the commit (keys used again are kept).
+      s3Objects = await deleteFileRecords({ form_question_id: oldIds }, transaction);
     }
     await FormQuestion.destroy({ where: { form_id: formId }, transaction });
 
-    for (let qi = 0; qi < data.questions.length; qi++) {
-      const question = data.questions[qi];
-      const newQuestion = await FormQuestion.create(
-        {
-          form_id: formId,
-          question_text: question.text,
-          question_type: question.type,
-          is_required: question.required,
-          points: question.points,
-          orderIndex: qi, 
-        },
-        { transaction }
-      );
-
-      await persistQuestion(question, newQuestion.id);
-
-      // ---------- fichiers (re-téléversement / réattache) ----------
-      if (
-        question.type === "file_upload" &&
-        question.uploadedFiles?.length > 0
-      ) {
-        for (const fileData of question.uploadedFiles) {
-          try {
-            if (fileData.base64 || fileData.buffer) {
-              const s3Key = `upload_${Date.now()}_${fileData.name}`;
-              await s3Client.send(
-                new UploadObject({
-                  Bucket: fileData.bucket || "academix",
-                  Key: s3Key,
-                  Body: Buffer.from(fileData.base64, "base64"),
-                  ContentType: fileData.type,
-                })
-              );
-              await File.create(
-                {
-                  form_question_id: newQuestion.id,
-                  task_id: null,
-                  s3BucketName: fileData.bucket || "academix",
-                  s3Key,
-                  name: fileData.name,
-                  size: fileData.size,
-                  type: fileData.type,
-                  isPatbass: false,
-                  isFileResponse: false,
-                },
-                { transaction }
-              );
-            } else if (fileData.key) {
-              await File.create(
-                {
-                  form_question_id: newQuestion.id,
-                  task_id: null,
-                  s3BucketName: fileData.bucket || "academix",
-                  s3Key: fileData.key,
-                  name: fileData.name,
-                  size: fileData.size,
-                  type: fileData.type,
-                  isPatbass: false,
-                  isFileResponse: false,
-                },
-                { transaction }
-              );
-            }
-          } catch (error) {
-            catchError(error, req, res, {
-              function: "updateForm - file upload",
-              questionId: newQuestion.id,
-            });
-          }
-        }
-      }
-    }
+    await persistQuestions(formId, data.questions, transaction);
 
     await transaction.commit();
+    await deleteUnreferencedObjects(s3Objects);
     return res.status(200).json(form);
   } catch (error) {
     await transaction.rollback();
@@ -1577,54 +1360,50 @@ exports.duplicateForm = async (req, res) => {
       { transaction }
     );
 
-    // 3. Copier toutes les questions
-    for (const question of originalForm.FormQuestions || []) {
-      const newQuestion = await FormQuestion.create(
-        {
+    // 3. Copier toutes les questions, puis 4. leurs options et 5. leurs fichiers: one bulkCreate
+    // per table (it was one INSERT per question, option and file).
+    // Also copies the question orderIndex and the option paireKey / points, which the copy used
+    // to drop (the questions of the copy lost their order, and matching_pairs lost their pairs).
+    const questions = originalForm.FormQuestions || [];
+    if (questions.length > 0) {
+      const newQuestions = await FormQuestion.bulkCreate(
+        questions.map((question) => ({
           form_id: newForm.id,
           question_text: question.question_text,
           question_type: question.question_type,
           is_required: question.is_required,
           points: question.points,
-        },
-        { transaction }
+          orderIndex: question.orderIndex,
+        })),
+        { transaction, returning: true }
       );
 
-      // 4. Copier les options de la question
-      if (question.FormOptions && question.FormOptions.length > 0) {
-        for (const option of question.FormOptions) {
-          await FormOption.create(
-            {
-              question_id: newQuestion.id,
-              option_text: option.option_text,
-              side: option.side,
-              orderIndex: option.orderIndex,
-              is_correct: option.is_correct,
-            },
-            { transaction }
-          );
-        }
-      }
-
-      // 5. Copier les fichiers de la question
-      if (question.files && question.files.length > 0) {
-        for (const file of question.files) {
-          await File.create(
-            {
-              form_question_id: newQuestion.id,
-              task_id: file.task_id,
-              s3BucketName: file.s3BucketName,
-              s3Key: file.s3Key,
-              name: file.name,
-              size: file.size,
-              type: file.type,
-              isPatbass: file.isPatbass,
-              isFileResponse: file.isFileResponse,
-            },
-            { transaction }
-          );
-        }
-      }
+      const optionRows = questions.flatMap((question, qi) =>
+        (question.FormOptions || []).map((option) => ({
+          question_id: newQuestions[qi].id,
+          option_text: option.option_text,
+          side: option.side,
+          orderIndex: option.orderIndex,
+          paireKey: option.paireKey,
+          is_correct: option.is_correct,
+          points: option.points,
+        }))
+      );
+      const fileRows = questions.flatMap((question, qi) =>
+        (question.files || []).map((file) => ({
+          form_question_id: newQuestions[qi].id,
+          task_id: file.task_id,
+          s3BucketName: file.s3BucketName,
+          s3Key: file.s3Key,
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          isPatbass: file.isPatbass,
+          isFileResponse: file.isFileResponse,
+        }))
+      );
+      if (optionRows.length) await FormOption.bulkCreate(optionRows, { transaction });
+      if (fileRows.length) await File.bulkCreate(fileRows, { transaction });
     }
 
     await transaction.commit();
