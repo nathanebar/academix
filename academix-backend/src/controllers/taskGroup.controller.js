@@ -10,7 +10,7 @@ module.exports = {
       const taskGroups = await TaskGroup.findAll();
       res.json(taskGroups);
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      catchError(err, req, res, { function: "taskGroup.getAll" });
     }
   },
 
@@ -21,7 +21,7 @@ module.exports = {
         return res.status(404).json({ error: "TaskGroup not found" });
       res.json(taskGroup);
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      catchError(err, req, res, { function: "taskGroup.getById" });
     }
   },
 
@@ -62,7 +62,7 @@ module.exports = {
       res.status(201).json(newTaskGroup);
     } catch (err) {
       console.log(err);
-      res.status(400).json({ error: err.message });
+      catchError(err, req, res, { function: "taskGroup.create", status: 400 });
     }
   },
 
@@ -108,7 +108,7 @@ module.exports = {
       res.json(taskGroup);
     } catch (err) {
       console.log(err);
-      res.status(400).json({ error: err.message });
+      catchError(err, req, res, { function: "taskGroup.update", status: 400 });
     }
   },
 
@@ -145,7 +145,7 @@ module.exports = {
 
       res.json({ message: "TaskGroup deleted" });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      catchError(err, req, res, { function: "taskGroup.remove" });
     }
   },
 

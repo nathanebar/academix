@@ -8,6 +8,7 @@ const {
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 const logger = require("../utils/logger");
+const { catchError } = require("../utils/errorHandler");
 
 module.exports = {
   async getByCourseId(req, res) {
@@ -42,7 +43,7 @@ module.exports = {
         res.status(200).json(tag);
       }
     } catch (err) {
-      res.status(400).json({ error: "error: " + err.message });
+      catchError(err, req, res, { function: "tag.create", status: 400 });
     }
   },
 
@@ -62,7 +63,7 @@ module.exports = {
         res.status(200).json(updatedTag);
       }
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      catchError(err, req, res, { function: "tag.update", status: 400 });
     }
   },
 

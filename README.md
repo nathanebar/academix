@@ -113,7 +113,6 @@ The target has **no internet access**: everything it needs must be brought in.
 
 Tracked in the work plan ([#23](https://github.com/nathanebar/academix/issues/23)):
 
-- About 30 handlers still build their 5xx responses with `error.message` themselves ([#53](https://github.com/nathanebar/academix/issues/53)); `catchError` and the global error handler already hide it in production.
 - Production logs written **before** the new logger (`academix-backend/logs/errors.log`, `info.log`, `debug.log`, ignored by git) contain IPs, usernames and request bodies: purge them before sharing anything. The current logger no longer writes request bodies.
 
-Fixed since the review: client-trusted identity and permissions ([#13](https://github.com/nathanebar/academix/issues/13)), SQL injection ([#8](https://github.com/nathanebar/academix/issues/8)), security headers, login rate limit, internal error messages and the unverified directory TLS ([#15](https://github.com/nathanebar/academix/issues/15)).
+Fixed since the review: client-trusted identity and permissions ([#13](https://github.com/nathanebar/academix/issues/13)), SQL injection ([#8](https://github.com/nathanebar/academix/issues/8)), security headers, login rate limit, internal error messages and the unverified directory TLS ([#15](https://github.com/nathanebar/academix/issues/15), [#53](https://github.com/nathanebar/academix/issues/53)).

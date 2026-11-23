@@ -16,6 +16,6 @@ exports.create = async (req, res) => {
         const newItem = await Role.create(req.body);
         res.status(201).json(newItem);
       } catch (err) {
-        res.status(400).json({ error: err.message });
+        catchError(err, req, res, { function: "role.create", status: 400 });
       }
     };

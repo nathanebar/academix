@@ -1,6 +1,7 @@
 
 const { AxisTemplate } = require("../../models");
 const logger = require("../utils/logger");
+const { catchError } = require("../utils/errorHandler");
 
 exports.getByAxisId = async (req, res) => {
     try {
@@ -12,7 +13,7 @@ exports.getByAxisId = async (req, res) => {
         res.json(AxisTemplateById);
 
     } catch (err) {
-        res.status(500).json({ error: err });
+        catchError(err, req, res, { function: "axisTemplate.getByAxisId" });
     }
 };
 

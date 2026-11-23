@@ -618,6 +618,6 @@ exports.getQueueTasksByMemberFlat = async (req, res) => {
 
   } catch (err) {
     console.error("Error in getQueueTasksByMemberFlat:", err);
-    res.status(500).json({ success: false, error: err.message });
+    catchError(err, req, res, { function: "queue.getQueueTasksByMemberFlat" });
   }
 };

@@ -5,6 +5,7 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 const multer = require("multer");
+const { catchError } = require("../utils/errorHandler");
 
 const intEnv = (name, fallback) => {
   const value = Number.parseInt(process.env[name], 10);
@@ -59,7 +60,10 @@ const singleFile = (field) => (req, res, next) => {
       if (error.code === "BLOCKED_FILE_TYPE") {
         return res.status(415).json({ error: error.message });
       }
-      return res.status(400).json({ error: error.message });
+      // Multer's own errors (unexpected field, too many files...) are safe to show. Anything else
+      // (disk / temp folder errors, malformed body) may contain server paths: hidden in production.
+      if (error instanceof multer.MulterError) return res.status(400).json({ error: error.message });
+      return catchError(error, req, res, { function: "upload.singleFile", status: 400 });
     }
     if (req.file) res.on("close", () => removeTempFile(req.file));
     next();

@@ -6,6 +6,7 @@ const {
 } = require("../services/checkLists.service");
 const { CheckLists } = require("../../models");
 const logger = require("../utils/logger");
+const { catchError } = require("../utils/errorHandler");
 
 
 module.exports = {
@@ -35,7 +36,7 @@ module.exports = {
       });
       res.status(200).json(savedCheckList);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      catchError(err, req, res, { function: "checkLists.create", status: 400 });
     }
   },
 
@@ -53,24 +54,26 @@ module.exports = {
               userId: req.headers['x-user-id']
             });
           } catch (error) {
-            console.log(error);
-            res.status(400).json({ error });
+            // Was res.status(400).json({ error }) inside the loop: the raw error object went to the
+            // client and the loop kept going, so a second response was sent (ERR_HTTP_HEADERS_SENT).
+            throw error;
           }
         }
       }
       if (checkList && checkList?.length > 0) {
         for (const cl of checkList) {
           try {
-            await createCheckList(Number(taskId), cl?.toDo);
+            const newCheckList = await createCheckList(Number(taskId), cl?.toDo);
             logger.info('CheckList created (as part of update)', {
-              checkListId: newCheckList.id,
+              checkListId: newCheckList?.id,
               taskId: Number(taskId),
               todo: cl?.toDo,
               userId: req.headers['x-user-id']
             });
           } catch (error) {
-            console.log(error);
-            res.status(400).json({ error });
+            // Was res.status(400).json({ error }) inside the loop: the raw error object went to the
+            // client and the loop kept going, so a second response was sent (ERR_HTTP_HEADERS_SENT).
+            throw error;
           }
         }
       }
@@ -82,7 +85,7 @@ module.exports = {
     } catch (err) {
       console.log(err);
 
-      res.status(400).json({ error: err.message });
+      catchError(err, req, res, { function: "checkLists.update", status: 400 });
     }
   },
 
@@ -90,7 +93,7 @@ module.exports = {
     try {
       res.status(200).json({ message: "Course deleted" });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      catchError(err, req, res, { function: "checkLists.delete" });
     }
   },
 };

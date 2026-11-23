@@ -9,6 +9,7 @@ const {
 const { Op } = require("sequelize");
 const { sequelize } = require("../../models/index");
 const logger = require("../utils/logger");
+const { catchError } = require("../utils/errorHandler");
 // ==========================================
 // 📋 קבלת כל החופפים למשימה ספציפית
 // ==========================================
@@ -66,11 +67,7 @@ exports.getHoefsByTaskAssignment = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching hoefs:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
+    catchError(error, req, res, { function: "taskAssignmentHoef.getHoefsByTaskAssignment" });
   }
 };
 // ==========================================
@@ -154,11 +151,7 @@ exports.getHoefsByUser = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching user hoefs:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
+    catchError(error, req, res, { function: "taskAssignmentHoef.getHoefsByUser" });
   }
 };
 // ==========================================
@@ -236,11 +229,7 @@ exports.getHoefTasksWithStatus = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching hoef tasks with status:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
+    catchError(error, req, res, { function: "taskAssignmentHoef.getHoefTasksWithStatus" });
   }
 };
 // ==========================================
@@ -307,11 +296,7 @@ exports.saveHoefsForTask = async (req, res) => {
     });
   } catch (error) {
     console.error("Error saving hoefs:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
+    catchError(error, req, res, { function: "taskAssignmentHoef.saveHoefsForTask" });
   }
 };
 // ==========================================
@@ -360,11 +345,7 @@ exports.addHoef = async (req, res) => {
     });
   } catch (error) {
     console.error("Error adding hoef:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
+    catchError(error, req, res, { function: "taskAssignmentHoef.addHoef" });
   }
 };
 // ==========================================
@@ -398,11 +379,7 @@ exports.updateHoefDeadline = async (req, res) => {
     });
   } catch (error) {
     console.error("Error updating hoef deadline:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
+    catchError(error, req, res, { function: "taskAssignmentHoef.updateHoefDeadline" });
   }
 };
 // ==========================================
@@ -432,11 +409,7 @@ exports.deleteHoef = async (req, res) => {
     });
   } catch (error) {
     console.error("Error deleting hoef:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
+    catchError(error, req, res, { function: "taskAssignmentHoef.deleteHoef" });
   }
 };
 // ==========================================
@@ -500,11 +473,7 @@ exports.getAvailableHoefs = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching available hoefs:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
+    catchError(error, req, res, { function: "taskAssignmentHoef.getAvailableHoefs" });
   }
 };
 
@@ -772,11 +741,7 @@ exports.getAllHoefsByTeam = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching team members:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
+    catchError(error, req, res, { function: "taskAssignmentHoef.getAllHoefsByTeam" });
   }
 };
 exports.getAllTeamTasks = async (req, res) => {
@@ -1018,11 +983,7 @@ exports.getAllTeamTasks = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching team tasks:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
+    catchError(error, req, res, { function: "taskAssignmentHoef.getAllTeamTasks" });
   }
 };
 exports.removeHoefFromTask = async (req, res) => {
@@ -1059,10 +1020,6 @@ exports.removeHoefFromTask = async (req, res) => {
     });
   } catch (error) {
     console.error("Error removing hoef:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
+    catchError(error, req, res, { function: "taskAssignmentHoef.removeHoefFromTask" });
   }
 };

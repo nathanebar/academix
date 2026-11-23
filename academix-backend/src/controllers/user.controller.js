@@ -124,10 +124,11 @@ exports.getUserPhoto = (req, res) => {
           username,
           userId: req.headers['x-user-id']
         }); */
-      return res.status(500).json({
-        error: "Failed to retrieve user full name",
-        details: searchResult.error.message,
+      logger.warn("Directory search request failed", {
+        username,
+        originalError: searchResult.error.message || searchResult.error.code,
       });
+      return res.status(500).json({ error: "Failed to retrieve user full name" });
     }
 
     if (searchResult.response.statusCode !== 200 && searchResult.response.statusCode !== 201) {
@@ -192,10 +193,12 @@ exports.getUserPhoto = (req, res) => {
          photoId,
          userId: req.headers['x-user-id']
        }); */
-      return res.status(500).json({
-        error: "Failed to retrieve user Photo",
-        details: photoResult.error.message,
+      logger.warn("Directory photo request failed", {
+        username,
+        photoId,
+        originalError: photoResult.error.message || photoResult.error.code,
       });
+      return res.status(500).json({ error: "Failed to retrieve user Photo" });
     }
 
     if (photoResult.response.statusCode !== 200) {
@@ -251,7 +254,7 @@ exports.getAllUsers = async (req, res) => {
     const users = await User.findAll();
     res.json(users);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    catchError(err, req, res, { function: "user.getAllUsers" });
   }
 };
 
@@ -261,7 +264,7 @@ exports.getUserById = async (req, res) => {
     if (!user) return res.status(404).json({ error: "User not found" });
     res.json(user);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    catchError(err, req, res, { function: "user.getUserById" });
   }
 };
 
@@ -305,7 +308,7 @@ exports.createUser = async (req, res) => {
 
     res.status(201).json({ msg: "User created successfully!", newUser });
   } catch (error) {
-    res.status(400).json({ error: "Failed to create user", details: error.message });
+    catchError(error, req, res, { function: "user.createUser", status: 400 });
   }
 };
 
@@ -327,9 +330,7 @@ exports.updateUser = async (req, res) => {
 
     res.json(user);
   } catch (err) {
-    res
-      .status(500)
-      .json({ error: "Failed to update user", details: err.message });
+    catchError(err, req, res, { function: "user.updateUser" });
   }
 };
 
@@ -348,9 +349,7 @@ exports.deleteUser = async (req, res) => {
     await user.destroy();
     res.json({ message: "User deleted successfully" });
   } catch (err) {
-    res
-      .status(500)
-      .json({ error: "Failed to delete user", details: err.message });
+    catchError(err, req, res, { function: "user.deleteUser" });
   }
 };
 
