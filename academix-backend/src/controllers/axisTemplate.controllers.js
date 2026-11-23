@@ -19,9 +19,10 @@ exports.getByAxisId = async (req, res) => {
 
 exports.getById = async (req, res) => {
     try {
-        const AxisTemplate = await AxisTemplate.findByPk(req.params.id);
-        if (!AxisTemplate) return res.status(404).json({ error: "AxisTemplate not found" });
-        res.json(AxisTemplate);
+        // The local const used to be named AxisTemplate too: it shadowed the model, so this always threw.
+        const axisTemplate = await AxisTemplate.findByPk(req.params.id);
+        if (!axisTemplate) return res.status(404).json({ error: "AxisTemplate not found" });
+        res.json(axisTemplate);
     } catch (err) {
         res.status(500).json({ error: "Failed to fetch AxisTemplate" });
     }
