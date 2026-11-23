@@ -17,7 +17,8 @@ export  const useGetGradeStageProgress =  (teamIds: Number[]) => {
 
       return data;
     },
-    enabled: !!teamIds,
+    // axios sends no teamIds[] param for an empty array, and the backend answers 400 "Missing teamIds"
+    enabled: !!teamIds?.length,
     // staleTime: 5 * 60 * 1000,
   });
 };

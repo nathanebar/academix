@@ -17,7 +17,8 @@ export const useTasksByTeamIds = (teamIds: Number[],courseBatchId:number) => {
 
       return data;
     },
-    enabled: !!teamIds,
+    // axios sends no teamIds[] param for an empty array (backend: 400 "Missing teamIds"); also wait for the batch
+    enabled: !!teamIds?.length && !!courseBatchId,
     // staleTime: 5 * 60 * 1000,
   });
 };
