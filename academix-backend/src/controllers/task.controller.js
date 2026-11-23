@@ -31,7 +31,7 @@ exports.getAll = async (req, res) => {
     const tasks = await Task.findAll();
     res.json(tasks);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    catchError(err, req, res, { function: "task.getAll" });
   }
 };
 
@@ -79,7 +79,7 @@ exports.getById = async (req, res) => {
       assignerName,
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    catchError(err, req, res, { function: "task.getById" });
   }
 };
 
@@ -802,7 +802,7 @@ exports.update = async (req, res) => {
 
     await t.rollback();
     console.log(err);
-    res.status(400).json({ error: err.message });
+    catchError(err, req, res, { function: "task.update", status: 400 });
   }
 };
 
@@ -883,7 +883,7 @@ exports.remove = async (req, res) => {
       error: err.message,
       userId: req.headers["x-user-id"],
     });
-    res.status(500).json({ error: err.message });
+    catchError(err, req, res, { function: "task.remove" });
   }
 };
 
@@ -1509,7 +1509,7 @@ exports.getTasksByUser = async (req, res) => {
     
     res.json(filteredResults);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    catchError(error, req, res, { function: "task.getTasksByUser" });
   }
 };
 exports.getTasksBySemester = async (req, res) => {
@@ -1654,7 +1654,7 @@ exports.getTasksByTeam = async (req, res) => {
     const finalResult = Object.values(result);
     res.json(finalResult);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    catchError(error, req, res, { function: "task.getTasksByTeam" });
   }
 };
 
@@ -3188,7 +3188,7 @@ exports.advancedSearch = async (req, res) => {
     return res.json({ success: true, data: grouped });
   } catch (error) {
     console.error("Advanced search error:", error);
-    return res.status(500).json({ success: false, error: error.message });
+    return catchError(error, req, res, { function: "task.advancedSearch" });
   }
 };
 

@@ -838,11 +838,7 @@ exports.createForm = async (req, res) => {
       return res.status(200).json(newForm);
     } catch (error) {
       await transaction.rollback();
-      return res.status(500).json({
-        success: false,
-        message: "Internal server error",
-        error: error.message,
-      });
+      return catchError(error, req, res, { function: "form.createForm" });
     }
   } catch (error) {
     await transaction.rollback();
@@ -1663,11 +1659,7 @@ exports.duplicateForm = async (req, res) => {
   } catch (error) {
     await transaction.rollback();
     console.error("Error duplicating form:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
+    return catchError(error, req, res, { function: "form.duplicateForm" });
   }
 };
 

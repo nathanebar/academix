@@ -676,11 +676,7 @@ exports.getMissedFeedbacks = async (req, res) => {
     });
   } catch (err) {
     console.error("❌ getMissedFeedbacks error:", err);
-    return res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: err.message,
-    });
+    return catchError(err, req, res, { function: "feedback.getMissedFeedbacks" });
   }
 };
 exports.getFeedbacksByUserId = async (req, res) => {

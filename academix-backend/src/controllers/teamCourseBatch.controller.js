@@ -27,9 +27,7 @@ exports.getByTeamAndCourseBatchIds = async (req, res) => {
     });
   } catch (err) {
     console.error("🔴 getByTeamAndCourseBatchIds error:", err);
-    return res
-      .status(500)
-      .json({ error: "Internal server error", details: err.message });
+    return catchError(err, req, res, { function: "teamCourseBatch.getByTeamAndCourseBatchIds" });
   }
 };
 exports.resetDates = async (req, res) => {
@@ -63,11 +61,8 @@ exports.resetDates = async (req, res) => {
       data: { teamId, courseBatchId },
     });
   } catch (err) {
-    catchError(err, req, res, { function: "resetDates" });
     console.error("🔴 resetDates error:", err);
-    return res
-      .status(500)
-      .json({ error: "Internal server error", details: err.message });
+    return catchError(err, req, res, { function: "teamCourseBatch.resetDates" });
   }
 };
 exports.updateDates = async (req, res) => {
@@ -111,11 +106,8 @@ exports.updateDates = async (req, res) => {
       },
     });
   } catch (err) {
-    catchError(err, req, res, { function: "updateDates" });
     console.error("🔴 updateDates error:", err);
-    return res
-      .status(500)
-      .json({ error: "Internal server error", details: err.message });
+    return catchError(err, req, res, { function: "teamCourseBatch.updateDates" });
   }
 };
 exports.getByTeamAndBatch = async (req, res) => {
@@ -129,9 +121,7 @@ exports.getByTeamAndBatch = async (req, res) => {
     return res.status(200).json(record);
   } catch (error) {
     console.error("🔴 update BlockColor By Team error:", error);
-    return res
-      .status(500)
-      .json({ error: "Internal server error", details: error.message });
+    return catchError(error, req, res, { function: "teamCourseBatch.getByTeamAndBatch" });
   }
 };
 exports.updateBlockColorByTeam = async (req, res) => {
@@ -169,10 +159,7 @@ exports.updateBlockColorByTeam = async (req, res) => {
       },
     });
   } catch (error) {
-    catchError(err, req, res, { function: "updateBlockColorByTeam" });
-    console.error("🔴 update BlockColor By Team error:", err);
-    return res
-      .status(500)
-      .json({ error: "Internal server error", details: err.message });
+    console.error("🔴 update BlockColor By Team error:", error);
+    return catchError(error, req, res, { function: "teamCourseBatch.updateBlockColorByTeam" });
   }
 };

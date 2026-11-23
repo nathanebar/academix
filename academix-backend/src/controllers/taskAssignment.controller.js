@@ -28,7 +28,7 @@ exports.getAllTaskAssignments = async (req, res) => {
     const assignments = await TaskAssignment.findAll();
     res.json(assignments);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    catchError(error, req, res, { function: "taskAssignment.getAllTaskAssignments" });
   }
 };
 
@@ -39,7 +39,7 @@ exports.getTaskAssignmentById = async (req, res) => {
       return res.status(404).json({ error: "TaskAssignment not found" });
     res.json(assignment);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    catchError(error, req, res, { function: "taskAssignment.getTaskAssignmentById" });
   }
 };
 
@@ -55,7 +55,7 @@ exports.createTaskAssignment = async (req, res) => {
     });
     res.status(201).json(assignment);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    catchError(error, req, res, { function: "taskAssignment.createTaskAssignment", status: 400 });
   }
 };
 
@@ -546,7 +546,7 @@ exports.updateTaskAssignmentTeam = async (req, res) => {
     const updatedAssignment = await TaskAssignment.findByPk(req.params.id);
     res.json(updatedAssignment);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    catchError(error, req, res, { function: "taskAssignment.updateTaskAssignmentTeam", status: 400 });
   }
 };
 
@@ -565,7 +565,7 @@ exports.updateTaskAssignmentUser = async (req, res) => {
     const updatedAssignment = await TaskAssignment.findByPk(req.params.id);
     res.json(updatedAssignment);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    catchError(error, req, res, { function: "taskAssignment.updateTaskAssignmentUser", status: 400 });
   }
 };
 
@@ -1597,7 +1597,7 @@ exports.deleteTaskAssignmentTeam = async (req, res) => {
     });
 
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    catchError(error, req, res, { function: "taskAssignment.deleteTaskAssignmentTeam" });
   }
 };
 exports.deleteTaskAssignmentOccurrenceTeam = async (req, res) => {
@@ -1669,7 +1669,7 @@ exports.deleteTaskAssignmentByUserId = async (req, res) => {
     res.json({ message: "TaskAssignment deleted" });
   } catch (error) {
     console.log(error.message);
-    res.status(500).json({ error: error.message });
+    catchError(error, req, res, { function: "taskAssignment.deleteTaskAssignmentByUserId" });
   }
 };
 
@@ -1687,7 +1687,7 @@ exports.deleteTaskAssignment = async (req, res) => {
     });
     res.json({ message: "TaskAssignment deleted" });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    catchError(error, req, res, { function: "taskAssignment.deleteTaskAssignment" });
   }
 };
 
@@ -1851,7 +1851,7 @@ exports.getPersonalTasks = async (req, res) => {
       order: [["createdAt", "ASC"]],
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    catchError(error, req, res, { function: "taskAssignment.getPersonalTasks" });
   }
 };
 
@@ -3005,11 +3005,7 @@ exports.getTaskAssignmentsByTeam = async (req, res) => {
     });
   } catch (error) {
     console.error("Error getting task assignments by team:", error);
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-      error: error.message,
-    });
+    catchError(error, req, res, { function: "taskAssignment.getTaskAssignmentsByTeam" });
   }
 };
 
@@ -3228,10 +3224,7 @@ exports.getDuplicatedTasks = async (req, res) => {
     });
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
+    catchError(error, req, res, { function: "taskAssignment.getDuplicatedTasks" });
   }
 };
 

@@ -1,9 +1,13 @@
 const jwt = require('jsonwebtoken');
 const logger = require('./logger');
 
+// extra.status: HTTP status to answer (default 500), for handlers whose catch-all answered 4xx.
+// Every other key of extra is only logged.
 const catchError = (error, req, res, extra = {}) => {
-  let functionName = 'לא ידוע';
-  if (error.stack) {
+  const { status = 500, ...context } = extra;
+  // The caller's name when given: guessing it from the stack often gives "async" or a Sequelize frame.
+  let functionName = context.function || 'לא ידוע';
+  if (!context.function && error.stack) {
     const match = error.stack.match(/at\s+(?:exports\.)?(\w+)\s+/);
     if (match && match[1]) functionName = match[1];
   }
@@ -44,14 +48,15 @@ const catchError = (error, req, res, extra = {}) => {
     params: req.params,
     query: req.query,
     originalError: error.message,
-    ...extra
+    status,
+    ...context
   });
 
   // In production the client never sees the internal error message (SQL, file paths, stack
   // details): `error` stays a string the frontend can display, with a reference to find the
   // full error in the logs. Development keeps the real message.
   const isProduction = process.env.NODE_ENV === 'production';
-  res.status(500).json({
+  res.status(status).json({
     success: false,
     message: 'שגיאה בשרת',
     error: isProduction ? `שגיאה בשרת (אסמכתא: ${errorId})` : error.message,

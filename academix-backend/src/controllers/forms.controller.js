@@ -1,11 +1,12 @@
 
 const { Form } = require("../../models");
+const { catchError } = require("../utils/errorHandler");
 
 exports.getAll = async (req, res) => {
   try {
      const forms = await Form.findAll({});  
     res.status(200).json(forms);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    catchError(err, req, res, { function: "forms.getAll" });
   }
 };

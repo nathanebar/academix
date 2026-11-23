@@ -7,6 +7,7 @@ const {
 } = require("../../models");
 
 const { Op } = require("sequelize"); // אם עוד לא מיובא
+const { catchError } = require("../utils/errorHandler");
 
 exports.getFolders = async (req, res) => {
   try {
@@ -71,11 +72,7 @@ exports.getFolders = async (req, res) => {
     return res.json({ success: true, data: folders });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      success: false,
-      message: "שגיאת שרת",
-      error: error.message,
-    });
+    return catchError(error, req, res, { function: "noteBookFolder.getFolders" });
   }
 };
 
@@ -125,11 +122,7 @@ exports.getNotesByFolder = async (req, res) => {
     return res.json({ success: true, data: treeNotes });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      success: false,
-      message: "שגיאת שרת",
-      error: error.message,
-    });
+    return catchError(error, req, res, { function: "noteBookFolder.getNotesByFolder" });
   }
 };
 exports.deleteFolder = async (req, res) => {
@@ -153,10 +146,7 @@ exports.deleteFolder = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    return catchError(error, req, res, { function: "noteBookFolder.deleteFolder" });
   }
 };
 exports.createFolder = async (req, res) => {
@@ -207,9 +197,6 @@ exports.createFolder = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    return catchError(error, req, res, { function: "noteBookFolder.createFolder" });
   }
 };
