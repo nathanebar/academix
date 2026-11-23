@@ -182,22 +182,21 @@ exports.assignToTeam = async (req, res) => {
       : [];
 
     // ✅ עדכון משימות מתור (הוצאה מהתור + שים תאריכים)
+    // Every queued assignment gets the same values: one UPDATE ... WHERE id IN (...) instead of one per member.
     if (assignmentsToUpdateFromQueue.length) {
-      for (const updateData of assignmentsToUpdateFromQueue) {
-        await TaskAssignment.update(
-          {
-            start: updateData.start,
-            end: updateData.end,
-            isQueueTask: updateData.isQueueTask,
-            assigned_by_user_id: updateData.assigned_by_user_id,
-            updatedAt: new Date(),
-          },
-          {
-            where: { id: updateData.id },
-            transaction: t,
-          }
-        );
-      }
+      await TaskAssignment.update(
+        {
+          start: start || null,
+          end: end || null,
+          isQueueTask: false,
+          assigned_by_user_id: assignedByUserId,
+          updatedAt: new Date(),
+        },
+        {
+          where: { id: assignmentsToUpdateFromQueue.map((u) => u.id) },
+          transaction: t,
+        }
+      );
     }
 
     // ✅ יצירת Occurrences למשימות רגילות קיימות
