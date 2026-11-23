@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { taskKeys } from "../../../api/queryKeys";
 import style from "./FormBody.module.css";
 import {
   useLocation,
@@ -66,10 +68,8 @@ const FormBody = (props: FormBodyProps) => {
   const { selectedPermission } = usePermissionStore();
   const [form, setForm] = useState<any>();
   const [formData, setFormData] = useState<any>([]);
-  const [missionData, setMissionData] = useState<any>();
   const [openUserModal, setOpenUserModal] = useState<boolean>(false);
   const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
-  const [refreshCount, setRefreshCount] = useState(0);
 
   /* ---------- brouillon réponse ---------- */
   const restorePromptShown = useRef<boolean>(false);
@@ -192,44 +192,49 @@ const FormBody = (props: FormBodyProps) => {
     saveAnswerDraft(Number(taskAssignmentId), { formData });
   }, [props.renderFor, taskAssignmentId, formData, restoreDone]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (selectedTeamMember?.id) {
-        const skipVisibility = selectedPermission?.role_code !== "STUDENT";
-        const data = await getTasksByUser(
-          selectedTeamMember?.user_id
-            ? Number(selectedTeamMember?.user_id)
-            : Number(selectedTeamMember?.id),
-          selectedTeam?.id ? Number(selectedTeam?.id) : null,
-          selectedPermission?.role_code,
-          selectedCourseBatch?.id,
-          skipVisibility
-        );
-        setMissionData(data);
+  // The selected team member's tasks (React Query, #17). The former effect depended on
+  // `selectedEvent` and set a new `selectedEvent` object after each fetch, so while a task was
+  // selected it re-ran forever (fetch → setSelectedEvent → fetch...).
+  const missionUserId = selectedTeamMember?.id
+    ? selectedTeamMember?.user_id
+      ? Number(selectedTeamMember?.user_id)
+      : Number(selectedTeamMember?.id)
+    : undefined;
+  const missionTeamId = selectedTeam?.id ? Number(selectedTeam?.id) : null;
+  const skipVisibility = selectedPermission?.role_code !== "STUDENT";
+  const { data: missionData, refetch: refetchMissions } = useQuery({
+    queryKey: taskKeys.byUser(
+      missionUserId,
+      missionTeamId,
+      selectedPermission?.role_code,
+      selectedCourseBatch?.id,
+      skipVisibility
+    ),
+    queryFn: () =>
+      getTasksByUser(
+        missionUserId!,
+        missionTeamId,
+        selectedPermission?.role_code,
+        selectedCourseBatch?.id,
+        skipVisibility
+      ),
+    enabled: !!selectedTeamMember?.id,
+    staleTime: 0, // refetch on every mount, like the former useEffect
+  });
 
-        if (selectedEvent?.id) {
-          const updatedTask = data.find((t: any) => t.id === selectedEvent.id);
-          if (updatedTask) {
-            setSelectedEvent((prev: any) => ({
-              ...prev,
-              extendedProps: {
-                ...prev.extendedProps,
-                completed_at: updatedTask.completed_at,
-              },
-            }));
-          }
-        }
-      }
-    };
-    fetchData();
-  }, [
-    selectedTeamMember,
-    selectedPermission?.role_code,
-    refreshCount,
-    selectedEvent,
-    selectedTeam,
-    selectedCourseBatch,
-  ]);
+  // Keep the open task's completed_at in sync with fresh data (the former effect did it after
+  // each fetch).
+  useEffect(() => {
+    if (!missionData || !selectedEvent?.id) return;
+    const updatedTask = missionData.find((t: any) => t.id === selectedEvent.id);
+    if (updatedTask && updatedTask.completed_at !== selectedEvent.extendedProps?.completed_at) {
+      setSelectedEvent((prev: any) => ({
+        ...prev,
+        extendedProps: { ...prev.extendedProps, completed_at: updatedTask.completed_at },
+      }));
+    }
+    // only missionData: runs when new data arrives
+  }, [missionData]);
 
   interface FlatTask {
     id: number;
@@ -702,7 +707,7 @@ const FormBody = (props: FormBodyProps) => {
           task={missionData?.find((t: any) => t.id === selectedEvent.id)}
           openModal={openUserModal}
           setOpenModal={setOpenUserModal}
-          onRefresh={() => setRefreshCount((c) => c + 1)}
+          onRefresh={() => refetchMissions()}
         />
       )}
     </>

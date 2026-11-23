@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import style from "./FeedbackForm.module.css";
 import { useFeedbackForm } from "../../../../hooks/useGetFeedbackFormForAssignment";
 import { Button, message } from "antd";
@@ -17,7 +17,7 @@ import {
 } from "../../../../store/taskStore";
 import { useFetchFilesByFeedbackAnswerId } from "../../../../hooks/useFetchFilesByFeedbackAnswerId";
 import Notification from "../../../../UI/Notification/Notification";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import BlackButton from "../../../../UI/Button/BlackButton";
 import { usePermissionStore } from "../../../../store/permissionStore";
@@ -25,7 +25,7 @@ import { UserTaskModal } from "../../../../components/LazyTaskModals";
 import dayjs from "dayjs";
 import { useSelectionsStore } from "../../../../store/selectionStore";
 import { useUserStore } from "../../../../store/userStore";
-import { feedbackKeys } from "../../../../api/queryKeys";
+import { feedbackKeys, taskKeys } from "../../../../api/queryKeys";
 
 interface Category {
   id: number;
@@ -88,10 +88,8 @@ const FeedbackForm: React.FC<Props> = (props) => {
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const { selectedPermission } = usePermissionStore();
   const { user } = useUserStore();
-  const [missionData, setMissionData] = useState<any>();
   const [openUserModal, setOpenUserModal] = useState<boolean>(false);
   const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
-  const [refreshCount, setRefreshCount] = useState(0);
 
   const { selectedCourseBatch, selectedTeam } = useSelectionsStore();
   const teamId = selectedTeam?.id;
@@ -109,6 +107,7 @@ const FeedbackForm: React.FC<Props> = (props) => {
     isError,
     error,
     refetch,
+    dataUpdatedAt: formDataUpdatedAt,
   } = useFeedbackForm(taskIdStr, teamIdStr, props.dates, props.assignmentIds);
 
   useEffect(() => {
@@ -155,39 +154,57 @@ const FeedbackForm: React.FC<Props> = (props) => {
     };
   }
 
+  const queryClient = useQueryClient();
+
+  // The selected student's tasks (React Query, #17)
+  const missionUserId = userTaskAssignments ? Number(userTaskAssignments[0]?.userId) : undefined;
+  const missionTeamId = selectedTeam?.id ? Number(selectedTeam?.id) : null;
+  const skipVisibility = selectedPermission?.role_code !== "STUDENT";
+  const missionKey = taskKeys.byUser(
+    missionUserId,
+    missionTeamId,
+    selectedPermission?.role_code,
+    selectedCourseBatch?.id,
+    skipVisibility
+  );
+  const { data: missionData, refetch: refetchMissions } = useQuery({
+    queryKey: missionKey,
+    queryFn: () =>
+      getTasksByUser(
+        missionUserId!,
+        missionTeamId,
+        selectedPermission?.role_code,
+        selectedCourseBatch?.id,
+        skipVisibility
+      ),
+    enabled: !!userTaskAssignments,
+    staleTime: 0, // refetch on every mount, like the former useEffect
+  });
+
+  // The former effect also refetched when the feedback form data was refreshed: keep it, but only
+  // on a real update (not its first load, and without cancelling a request in flight).
+  const lastFormDataUpdate = useRef(formDataUpdatedAt);
   useEffect(() => {
-    const fetchData = async () => {
-      if (userTaskAssignments) {
-        const skipVisibility = selectedPermission?.role_code !== "STUDENT";
+    if (lastFormDataUpdate.current && formDataUpdatedAt !== lastFormDataUpdate.current) {
+      queryClient.invalidateQueries({ queryKey: missionKey, exact: true }, { cancelRefetch: false });
+    }
+    lastFormDataUpdate.current = formDataUpdatedAt;
+    // only formDataUpdatedAt: runs on a real update of the form data
+  }, [formDataUpdatedAt]);
 
-        const data = await getTasksByUser(
-          Number(userTaskAssignments[0]?.userId),
-          selectedTeam?.id ? Number(selectedTeam?.id) : null,
-          selectedPermission?.role_code,
-          selectedCourseBatch.id,
-          skipVisibility
-        );
-
-        setMissionData(data);
-
-        if (selectedEvent?.id) {
-          const taskAssignmentId = selectedEvent?.id;
-          const updatedTask = data.find((t: any) => t.id === taskAssignmentId);
-
-          if (updatedTask) {
-            setSelectedEvent((prev: any) => ({
-              ...prev,
-              extendedProps: {
-                ...prev.extendedProps,
-                completed_at: updatedTask.completed_at,
-              },
-            }));
-          }
-        }
-      }
-    };
-    fetchData();
-  }, [userTaskAssignments, selectedPermission?.role_code, refreshCount]);
+  // Keep the open task's completed_at in sync with fresh data (the former effect did it after
+  // each fetch).
+  useEffect(() => {
+    if (!missionData || !selectedEvent?.id) return;
+    const updatedTask = missionData.find((t: any) => t.id === selectedEvent.id);
+    if (updatedTask && updatedTask.completed_at !== selectedEvent.extendedProps?.completed_at) {
+      setSelectedEvent((prev: any) => ({
+        ...prev,
+        extendedProps: { ...prev.extendedProps, completed_at: updatedTask.completed_at },
+      }));
+    }
+    // only missionData: runs when new data arrives
+  }, [missionData]);
 
   useEffect(() => {
     if (selectedUserId !== null) {
@@ -226,7 +243,6 @@ const FeedbackForm: React.FC<Props> = (props) => {
   const [selectedOptionLabel, setSelectedOptionLabel] = useState<string | null>(
     ""
   );
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const selectedTask = useMemo(() => {
@@ -678,7 +694,7 @@ const FeedbackForm: React.FC<Props> = (props) => {
           task={selectedEvent}
           openModal={openUserModal}
           setOpenModal={setOpenUserModal}
-          onRefresh={() => setRefreshCount((c) => c + 1)}
+          onRefresh={() => refetchMissions()}
           showFeedbackButton={false}
         />
       )}

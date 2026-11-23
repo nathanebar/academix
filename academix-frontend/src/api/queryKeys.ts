@@ -54,12 +54,14 @@ export const courseBatchKeys = {
 
 export const taskKeys = {
   all: ["tasks"] as const,
+  // getTasksByUser: skipVisibility changes the response (default false, as in ApiServices)
   byUser: (
     userId: number | undefined,
-    teamId: number | undefined,
+    teamId: number | undefined | null,
     roleCode: string | undefined,
-    courseBatchId: number | undefined
-  ) => [...taskKeys.all, "byUser", userId, teamId, roleCode, courseBatchId] as const,
+    courseBatchId: number | undefined,
+    skipVisibility: boolean = false
+  ) => [...taskKeys.all, "byUser", userId, teamId, roleCode, courseBatchId, skipVisibility] as const,
 };
 
 export const gradeStageKeys = {
