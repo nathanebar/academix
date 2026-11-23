@@ -82,6 +82,11 @@ export const courseBatchKeys = {
 
 export const taskKeys = {
   all: ["tasks"] as const,
+  // tasks of a batch's teams / of one team (exceptions widget)
+  bySemester: (teamIds: number[] | undefined, courseBatchId: number | undefined) =>
+    [...taskKeys.all, "bySemester", teamIds, courseBatchId] as const,
+  byTeam: (teamId: number | undefined, courseBatchId: number | undefined) =>
+    [...taskKeys.all, "byTeam", teamId, courseBatchId] as const,
   // getTasksByUser: skipVisibility changes the response (default false, as in ApiServices)
   byUser: (
     userId: number | undefined,

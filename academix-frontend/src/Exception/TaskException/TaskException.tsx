@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { feedbackKeys, gradeStageKeys, taskKeys } from "../../api/queryKeys";
 import style from "./TaskException.module.css";
 import TeamDelyas from "../TeamDelyas/TeamDelyas";
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer } from "recharts";
@@ -23,6 +25,9 @@ type Props = {
   teamId?: Number;
 };
 
+// stable empty value (a new [] on every render would re-run memos and effects)
+const NO_DATA: any[] = [];
+
 const TaskException = (props: Props) => {
   const [mode, setMode] = useState<Mode>("tasks");
   const [chooseGradeStage, setChooseGradeStage] = useState<Number>();
@@ -34,13 +39,120 @@ const TaskException = (props: Props) => {
   );
    const { selectedCourseBatch } = useSelectionsStore();
 
+  // ---------- server data (React Query, #17) ----------
+  // The former effect depended on [props]: a new object on every render of the parent (which
+  // also builds a new teamIds array each time), so it refetched feedbacks + tasks on every render.
+  // The keys hold the ids as numbers: same teams = same key = no new request.
+  const batchId = selectedCourseBatch?.id;
+  const teamIds =
+    props.teamIds && props.teamIds.length > 0 ? props.teamIds.map(Number) : undefined;
+  const teamId = props.teamId ? Number(props.teamId) : undefined;
+  // batch view (teamIds) takes precedence over the team view (teamId), as before
+  const scopeTeamId = teamIds ? undefined : teamId;
+  const hasScope = !!teamIds || !!scopeTeamId;
 
-  const [missionData, setMissionData] = useState<any[]>([]);
-  const [teamData, setTeamData] = useState<any[]>([]);
-  const [certificationSoldiersData, setCertificationSoldiersData] = useState<
-    any[]
-  >([]);
-  const [feedbackData, setFeedbackData] = useState<any[]>([]);
+  // Grade-stage progress of the team's soldiers (team view only)
+  const { data: certificationSoldiersData = NO_DATA } = useQuery({
+    queryKey: gradeStageKeys.progressByTeam(teamId, batchId),
+    queryFn: async (): Promise<any[]> => {
+      const data = await getGradeStageProgressByTeam(teamId!, batchId!);
+      return Array.isArray(data) && data.length > 0 ? data : [];
+    },
+    enabled: !!teamId,
+    staleTime: 0, // refetch on every mount, like the former effect
+  });
+
+  // Open feedbacks of the teams, each with a chart color
+  const { data: openFeedbacks } = useQuery({
+    queryKey: teamIds
+      ? feedbackKeys.openByTeams(teamIds, batchId)
+      : feedbackKeys.openByTeam(scopeTeamId, batchId),
+    queryFn: () =>
+      teamIds
+        ? getOpenFeedbackBySemester(teamIds, batchId!)
+        : getOpenFeedbackByTeam(scopeTeamId!, batchId!),
+    enabled: hasScope,
+    staleTime: 0,
+  });
+  const feedbackData = useMemo(
+    () =>
+      (Array.isArray(openFeedbacks) ? openFeedbacks : []).map(
+        (feedback: any, index: any) => ({
+          ...feedback,
+          color: COLORS[index % COLORS.length],
+        })
+      ),
+    [openFeedbacks]
+  );
+
+  // Tasks of the teams (batch view) or of the team (team view)
+  const { data: tasksResponse } = useQuery({
+    queryKey: teamIds
+      ? taskKeys.bySemester(teamIds, batchId)
+      : taskKeys.byTeam(scopeTeamId, batchId),
+    queryFn: () =>
+      teamIds
+        ? getTasksBySemester(teamIds, batchId!)
+        : getTasksByTeam(scopeTeamId!, batchId!),
+    enabled: hasScope,
+    staleTime: 0,
+  });
+
+  // Batch view: per team, the tasks that are not completed and past their end date
+  const missionData: any[] = useMemo(() => {
+    if (!teamIds || !Array.isArray(tasksResponse)) return NO_DATA;
+
+    ///////////////////////שינוי מIF למעלה תלוי COMPLETED_AT לא למחוק!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // if (props.teamIds && props.teamIds.length > 0) {
+    //   console.log(response);
+    //   const grouped = response.reduce((acc: any[], task: any) => {
+    //     const teamName = task.Team?.name || `משימה ${task.task_id}`;
+    //     const existing = acc.find((item: any) => item.name === teamName);
+    //     const isValid =
+    //       task.timeSinceEnd &&
+    //       (task.timeSinceEnd.days !== null ||
+    //         task.timeSinceEnd.hours !== null);
+    //     if (existing) {
+    //       if (isValid) {
+    //         existing.value++;
+    //       }
+    //     }
+    //     else {
+    //       acc.push({ name: teamName, value: isValid ? 1 : 0 });
+    //     }
+    //     return acc;
+    //   }, []);
+    //   console.log(grouped);
+
+    //   setMissionData(grouped);
+    // }
+
+    ///////////////////////שינוי מIF למעלה תלוי COMPLETED_AT לא למחוק!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    return tasksResponse.reduce((acc: any[], task: any) => {
+      const teamName = task.Team?.name || `משימה ${task.task_id}`;
+      const existing = acc.find((item: any) => item.name === teamName);
+
+      // const isValid = task.completed_at === null;
+      // בדיקה: לא הושלם + התאריך עבר
+      const deadlinePassed = task.end && new Date(task.end) < new Date();
+
+      const isValid = task.completed_at === null && deadlinePassed;
+      if (existing) {
+        if (isValid) {
+          existing.value++;
+        }
+      } else {
+        acc.push({ name: teamName, value: isValid ? 1 : 0 });
+      }
+      return acc;
+    }, []);
+    // teamIds as a string: the array itself is new on every render
+  }, [tasksResponse, teamIds?.join(",")]);
+
+  // Team view: the response is shown as is
+  const teamData: any[] =
+    !teamIds && scopeTeamId && Array.isArray(tasksResponse) ? tasksResponse : NO_DATA;
+
   const location = useLocation();
   const currentUrl = location.pathname;
 
@@ -59,101 +171,13 @@ const TaskException = (props: Props) => {
     }
   }, [task]);
 
+  // Team view: when the progress arrives, select its first grade stage (as the former effect did)
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (props.teamId) {
-          const teamData = await getGradeStageProgressByTeam(props.teamId!!,selectedCourseBatch.id);
-          if (teamData && teamData.length > 0) {
-            setSoldiersDataForCandles(teamData[0].soldiers);
-            setCertificationSoldiersData(teamData);
-            setChooseGradeStageForSoldiers(teamData[0].gradeStageId);
-          }
-        }
-
-        let feedbacks;
-        if (props.teamIds && props.teamIds.length > 0) {
-          feedbacks = await getOpenFeedbackBySemester(props.teamIds,selectedCourseBatch.id);
-        } else if (props.teamId) {
-          feedbacks = await getOpenFeedbackByTeam(props.teamId,selectedCourseBatch.id);
-        } else {
-          feedbacks = {};
-        }
-const feedbacksArray = Array.isArray(feedbacks) ? feedbacks : [];
-const feedbacksWithColor = feedbacksArray.map(
-  (feedback: any, index: any) => ({
-    ...feedback,
-    color: COLORS[index % COLORS.length],
-  })
-);
-        setFeedbackData(feedbacksWithColor);
-        let response;
-        if (props.teamIds && props.teamIds.length > 0) {
-          response = await getTasksBySemester(props.teamIds,selectedCourseBatch?.id);
-         
-        } else if (props.teamId) {
-          response = await getTasksByTeam(props.teamId, selectedCourseBatch?.id);
-        } else {
-          response = {};
-        }
-
-        ///////////////////////שינוי מIF למעלה תלוי COMPLETED_AT לא למחוק!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // if (props.teamIds && props.teamIds.length > 0) {
-        //   console.log(response);
-        //   const grouped = response.reduce((acc: any[], task: any) => {
-        //     const teamName = task.Team?.name || `משימה ${task.task_id}`;
-        //     const existing = acc.find((item: any) => item.name === teamName);
-        //     const isValid =
-        //       task.timeSinceEnd &&
-        //       (task.timeSinceEnd.days !== null ||
-        //         task.timeSinceEnd.hours !== null);
-        //     if (existing) {
-        //       if (isValid) {
-        //         existing.value++;
-        //       }
-        //     }
-        //     else {
-        //       acc.push({ name: teamName, value: isValid ? 1 : 0 });
-        //     }
-        //     return acc;
-        //   }, []);
-        //   console.log(grouped);
-
-        //   setMissionData(grouped);
-        // }
-
-        ///////////////////////שינוי מIF למעלה תלוי COMPLETED_AT לא למחוק!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if (props.teamIds && props.teamIds.length > 0) {
-          const grouped = response.reduce((acc: any[], task: any) => {
-            const teamName = task.Team?.name || `משימה ${task.task_id}`;
-            const existing = acc.find((item: any) => item.name === teamName);
-
-            // const isValid = task.completed_at === null;
- // בדיקה: לא הושלם + התאריך עבר
-    const deadlinePassed = task.end && new Date(task.end) < new Date();
-
-    
-    const isValid = task.completed_at === null && deadlinePassed;
-            if (existing) {
-              if (isValid) {
-                existing.value++;
-              }
-            } else {
-              acc.push({ name: teamName, value: isValid ? 1 : 0 });
-            }
-            return acc;
-          }, []);
-          setMissionData(grouped);
-        } 
-        else if (props.teamId) {
-          setTeamData(response);
-        }
-      } catch (error) {
-        console.error("Error fetching tasks:", error);
-      }
-    };
-    fetchData();
-  }, [props]);
+    if (certificationSoldiersData.length > 0) {
+      setSoldiersDataForCandles(certificationSoldiersData[0].soldiers);
+      setChooseGradeStageForSoldiers(certificationSoldiersData[0].gradeStageId);
+    }
+  }, [certificationSoldiersData]);
   return (
     <div
       className={style["container"]}
