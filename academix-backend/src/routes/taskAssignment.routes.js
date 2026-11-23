@@ -20,7 +20,6 @@ router.get(
 
 router.get("/", controller.getAllTaskAssignments);
 router.get("/:id", controller.getTaskAssignmentById);
-router.get("/:id", controller.getTaskAssignmentById);
 router.get("/note/:taskAssignmentId", controller.getNoteForStudent);
 router.post("/", controller.createTaskAssignment);
 router.post("/:taskId/team/:teamId", controller.assignToTeam);
