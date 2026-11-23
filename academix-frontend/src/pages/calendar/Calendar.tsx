@@ -98,9 +98,9 @@ import {
 import { showAssignmentModal } from "../../components/layout/Sidebar/DayCalendar/AssignmentActionModal";
 import { showAssignHoefModal } from "../../components/layout/Sidebar/AssignHoefModal";
 import CreateTaskFromCalendar from "./CreateTaskFromCalendar/CreateTaskFromCalendar";
-import { useCourseBatchStore } from "../../store/courseBatchStore";
 import { useTaskGroupsByAxisId } from "../../hooks/useTaskGroupsByAxisId";
 import { NewTaskModal } from "../../components/LazyTaskModals";
+import { useAxisBatchArchiveData } from "../../hooks/useHierarchyData";
 
 interface TaskEvent {
   id?: string;
@@ -1353,7 +1353,7 @@ const MyCalendar: React.FC = () => {
     (item) => item.member_role !== "TEAM_COMMANDER"
   );
 
-  const { axisBatchArchive } = useCourseBatchStore();
+  const axisBatchArchive = useAxisBatchArchiveData();
 
   const filterAxisBatchArchive = axisBatchArchive?.filter(
     (axis) => axis.team_id == null || axis.team_id === selectedTeam?.id

@@ -24,10 +24,10 @@ import {
 } from "../../../services/ApiServices";
 import Notification from "../../../UI/Notification/Notification";
 import { usePermissionStore } from "../../../store/permissionStore";
-import { useDomainStore } from "../../../store/domainStore";
 import { OnSearch } from "../../../utils/OnSearch";
 import { queryClient } from "../../../api/queryClient";
 import { Domain } from "../../../types/types";
+import { updateDomainsData, useDomainsData } from "../../../hooks/useHierarchyData";
 
 type DomainManager = {
   id?: string;
@@ -69,7 +69,7 @@ const EditDomainModal: React.FC<EditDomainModalProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [pendingRemovals, setPendingRemovals] = useState<DomainManager[]>([]); 
 
-  const { domains, setDomains } = useDomainStore();
+  const domains = useDomainsData();
   const { selectedPermission, setSelectedPermission } = usePermissionStore();
 
   useEffect(() => {
@@ -198,7 +198,7 @@ const EditDomainModal: React.FC<EditDomainModalProps> = ({
         const updatedDomains = domains?.map((d) =>
           d.id === domain?.id ? { ...d, name: trimmedName } : d
         );
-        setDomains(updatedDomains);
+        updateDomainsData(() => updatedDomains); // cache of the domains query (#17)
       }
 
       if (pendingRemovals.length > 0) {

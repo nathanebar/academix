@@ -7,15 +7,13 @@ import { useTeamMembers } from "../../../hooks/useTeamMembers";
 import { useFilteredDataStore } from "../../../store/filteredDataStore";
 import { useSelectionsStore } from "../../../store/selectionStore";
 import { useNavigate } from "react-router-dom";
-import { useTeamStore } from "../../../store/teamStore";
 import { useSelectionHandler } from "../../../hooks/useSelectionHandler";
-import { useCourseBatchStore } from "../../../store/courseBatchStore";
-import { useCourseStore } from "../../../store/courseStore";
 import {
   filterBatchesBySelection,
   filterCoursesBySelection,
   filterTeamsByBatch,
 } from "../../../utils/filterUtils";
+import { useCourseBatchesData, useCoursesData, useTeamsData } from "../../../hooks/useHierarchyData";
 
 interface TeamCardProps {
   teamName: string;
@@ -40,9 +38,9 @@ const TeamCard: React.FC<TeamCardProps> = ({
   const { setFilteredCourses, setFilteredCourseBatches, setFilteredTeams } =
     useFilteredDataStore();
 
-  const { courses } = useCourseStore();
-  const { courseBatches } = useCourseBatchStore();
-  const { teams } = useTeamStore();
+  const courses = useCoursesData();
+  const courseBatches = useCourseBatchesData();
+  const teams = useTeamsData();
 
   const { setSelectedCourseBatch, setSelectedCourse } = useSelectionsStore();
   const [showDropdown, setShowDropdown] = useState(false);

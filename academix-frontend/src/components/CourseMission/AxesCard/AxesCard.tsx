@@ -2,7 +2,6 @@ import style from "./AxesCard.module.css";
 import { ConfigProvider, Progress, Tooltip } from "antd";
 import { useTaskCount } from "../../../hooks/useFetchTaskCount";
 import { schemaMap, SchemaName } from "../../../types/types";
-import { useCourseBatchStore } from "../../../store/courseBatchStore";
 import { useSelectionsStore } from "../../../store/selectionStore";
 import { useLocation } from "react-router-dom";
 import { useFilteredDataStore } from "../../../store/filteredDataStore";

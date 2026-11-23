@@ -11,7 +11,7 @@ import { useUserStore } from "../../store/userStore";
 import { usePermissionStore } from "../../store/permissionStore";
 import { useFetchCourseCommanders } from "../../hooks/useFetchCourseCommanders";
 import { useEffect } from "react";
-import { useCourseStore } from "../../store/courseStore";
+import { updateCoursesData } from "../../hooks/useHierarchyData";
 
 const CourseSetting = () => {
   const { selectedCourse, setSelectedCourse } = useSelectionsStore();
@@ -63,13 +63,10 @@ const CourseSetting = () => {
     if (updatingCourse.status === 200) {
       setSelectedCourse(updatingCourse.data);
       setSelectedDuration(updatingCourse.data.duration_months);
-      const { courses, setCourses } = useCourseStore.getState();
-      if (courses) {
-        const updatedCourses = courses.map((c: any) =>
-          c.id === selectedCourse.id ? updatingCourse.data : c
-        );
-        setCourses(updatedCourses);
-      }
+      // cache of the courses query (was the courses store, #17)
+      updateCoursesData((courses) =>
+        courses.map((c: any) => (c.id === selectedCourse.id ? updatingCourse.data : c))
+      );
       Notification({ type: "success", msg: "משך הקורס עודכן בהצלחה!" });
     } else {
       Notification({ type: "error", msg: "חלה שגיאה בעדכון הקורס!" });

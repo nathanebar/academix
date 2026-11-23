@@ -2,7 +2,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import api from "../api/axios";
 
-import { useCourseBatchStore } from "../store/courseBatchStore";
 import { useSelectionsStore } from "../store/selectionStore";
 
 export const useFetchCourseBatches = (
@@ -15,10 +14,6 @@ export const useFetchCourseBatches = (
     : [allowedCourseBatchesIds];
 
   const idsParam = coursesIdsArray?.join(",");
-
-  const { setCourseBatches } = useCourseBatchStore();
-
-  const { setSelectedCourseBatch,selectedCourseBatch, selectedCourse } = useSelectionsStore();
 
 
   return useQuery({
@@ -35,7 +30,9 @@ export const useFetchCourseBatches = (
     },
 
     meta: {
+      // #17: the batches live only in this query (useCourseBatchesData); only the selection is set here.
       onSuccess: (data: any) => {
+        const { selectedCourseBatch, setSelectedCourseBatch } = useSelectionsStore.getState();
         const isSelectedBatchValid = selectedCourseId
           ? data.some((batch: any) => batch.id === selectedCourseBatch?.id)
           : data.some((batch: any) => batch.id === selectedCourseBatch?.id);
@@ -48,8 +45,6 @@ export const useFetchCourseBatches = (
             setSelectedCourseBatch(batchesForCourse[batchesForCourse.length - 1]);
           }
         }
-      
-        setCourseBatches(data);
       },
     },
     enabled: !!allowedCourseBatchesIds && !!selectedCourseId,

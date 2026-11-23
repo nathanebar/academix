@@ -1,7 +1,5 @@
 import CardUI from "../../UI/Card/Card";
 import { PlusOutlined } from "@ant-design/icons";
-import { useTeamStore } from "../../store/teamStore";
-import { useCourseBatchStore } from "../../store/courseBatchStore";
 import TeamCard from "./TeamCard/TeamCard";
 import styles from "./DashboardAdminBody.module.css";
 import HeaderCard from "./HeaderCard/HeaderCard";
@@ -13,10 +11,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import stringCheckAndToolTip from "../../utils/stringCheck";
 import { queryClient } from "../../api/queryClient";
+import { useCourseBatchesData, useTeamsData } from "../../hooks/useHierarchyData";
 
 const DashboardAdminBody = () => {
-  const { teams } = useTeamStore();
-  const { courseBatches } = useCourseBatchStore();
+  const teams = useTeamsData();
+  const courseBatches = useCourseBatchesData();
   const [courseModalOpen, setCourseModalOpen] = useState<boolean>(false);
   const { filteredCourses, filteredDomains, filteredTeams } = useFilteredDataStore();
   const { setSelectedCourse, setSelectedCourseBatch } = useSelectionsStore();

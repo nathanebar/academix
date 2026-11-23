@@ -13,7 +13,6 @@ import {
 } from "@ant-design/icons";
 import { usePermissionStore } from "../../../store/permissionStore";
 import EditTemplateAxisModal from "../../Modals/EditTemplateAxis/EditTemplateAxisModal";
-import { useCourseStore } from "../../../store/courseStore";
 import {
   createTaskGroup,
   deleteAxis,
@@ -22,6 +21,7 @@ import {
 import { useSelectionsStore } from "../../../store/selectionStore";
 import { useQueryClient } from "@tanstack/react-query";
 import { useItemLockStatus } from "../../../hooks/useItemLockStatus";
+import { useCoursesData } from "../../../hooks/useHierarchyData";
 
 type Props = {
   axis: Axis;
@@ -132,7 +132,7 @@ const AxisCard = ({
     }
   }, [AxisTaskGroups, filterOption, isSearchActive, searchResults]);
 
-  const { courses } = useCourseStore();
+  const courses = useCoursesData();
   const [onAddTaskGroup, setOnAddTaskGroup] = useState<boolean>(false);
   const [taskGroupName, setTaskGroupName] = useState<string>("");
 

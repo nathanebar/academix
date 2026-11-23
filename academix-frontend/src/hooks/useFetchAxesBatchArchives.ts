@@ -2,7 +2,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import api from "../api/axios";
 
-import { useCourseBatchStore } from "../store/courseBatchStore";
 import { useSelectionsStore } from "../store/selectionStore";
 import { usePermissionStore } from "../store/permissionStore";
 
@@ -16,22 +15,15 @@ export const useFetchAxesBatchArchives = (
 
   const idsParam = coursesIdsArray?.join(",");
 
-  const { setAxisBatchArchive } = useCourseBatchStore();
-
-  const {
-    selectedCourseBatch,
-    selectedCourse,
-    selectedTeam,
-    selectedTeamMember,
-    activeHeaderType,
-  } = useSelectionsStore();
+  // narrow selectors: this hook is now called by every component that reads the archive
+  const selectedTeamMember = useSelectionsStore((s) => s.selectedTeamMember);
+  const activeHeaderType = useSelectionsStore((s) => s.activeHeaderType);
 
   const isTeamMemberView =
     activeHeaderType === "teamMember" && !!selectedTeamMember;
 
 
-     const { permissions, selectedPermission, setSelectedPermission } =
-        usePermissionStore();
+  const selectedPermission = usePermissionStore((s) => s.selectedPermission);
 
   return useQuery({
     queryKey: [
@@ -56,11 +48,6 @@ export const useFetchAxesBatchArchives = (
       return data;
     },
 
-    meta: {
-      onSuccess: (data: any) => {
-        setAxisBatchArchive(data);
-      },
-    },
     enabled: !!allowedCourseBatcheIds,
   });
 };

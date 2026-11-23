@@ -53,7 +53,6 @@ import {
   Tag,
   Tooltip,
 } from "antd";
-import { useTeamMembersStore } from "../../../../store/teamMemberStore";
 import { useFilteredDataStore } from "../../../../store/filteredDataStore";
 import {
   filterStudentMembers,
@@ -82,6 +81,7 @@ import { showAssignmentModal } from "./AssignmentActionModal";
 import { useAssignHoef } from "../../../../hooks/useHoefAssignment";
 import { showAssignHoefModal } from "../AssignHoefModal";
 import ContextMenu from "./ContextMenu";
+import { useTeamMembersData } from "../../../../hooks/useHierarchyData";
 
 interface Props {
   startHour?: string;
@@ -108,7 +108,7 @@ export default function DayCalendar({
   const [selectedTask, setSelectedTask] = useState<any>(null);
   const calendarRef = useRef<FullCalendar>(null);
   const queryClient = useQueryClient();
-  const { teamMembers } = useTeamMembersStore();
+  const teamMembers = useTeamMembersData();
   const { selectedPermission } = usePermissionStore();
   const {
     selectedTeam,

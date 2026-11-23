@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../api/axios";
-import { useTeamMembersStore } from "../store/teamMemberStore";
 
 export const useFetchTeamMembers = (
   allowedteamsIds: number[] | number,
@@ -11,8 +10,6 @@ export const useFetchTeamMembers = (
     : [allowedteamsIds];
 
   const idsParam = teamsIdsArray?.join(",");
-
-  const setTeamsMembers = useTeamMembersStore((state) => state.setTeamsMembers);
 
   return useQuery({
     queryKey: ["teamMembers", allowedteamsIds, courseBatchId],
@@ -25,12 +22,6 @@ export const useFetchTeamMembers = (
         },
       });
       return data;
-    },
-    meta: {
-      onSuccess: (data: any) => {
-        
-        setTeamsMembers(data);
-      },
     },
     enabled: !!allowedteamsIds,
   });

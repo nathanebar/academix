@@ -22,10 +22,10 @@ import Notification from "../../../UI/Notification/Notification";
 import { useSelectionsStore } from "../../../store/selectionStore";
 import { usePermissionStore } from "../../../store/permissionStore";
 import { useFilteredDataStore } from "../../../store/filteredDataStore";
-import { useDomainStore } from "../../../store/domainStore";
 import { OnSearch } from "../../../utils/OnSearch";
 import { Assignment } from "../../../types/types";
 import { queryClient } from "../../../api/queryClient";
+import { updateDomainsData, useDomainsData } from "../../../hooks/useHierarchyData";
 
 type AddDomainModalProps = {
   isOpen: boolean;
@@ -53,7 +53,7 @@ const AddDomainModal: React.FC<AddDomainModalProps> = ({
   const { selectedSystemId } = useSelectionsStore();
   const { selectedPermission, setSelectedPermission } = usePermissionStore();
   const { setFilteredDomains } = useFilteredDataStore();
-  const { domains, setDomains } = useDomainStore();
+  const domains = useDomainsData();
 
   useEffect(() => {
     if (!isOpen) {
@@ -226,7 +226,7 @@ const AddDomainModal: React.FC<AddDomainModalProps> = ({
         queryKey: ["permissions"],
       });
 
-      setDomains([...domains, creatingDomain.data]);
+      updateDomainsData((ds) => [...ds, creatingDomain.data]); // cache of the domains query (#17)
 
       notification.success({
         message: "מזל טוב!",

@@ -2,7 +2,6 @@ import { isBusinessConflict } from "../../utils/httpStatus";
 import { useNavigate } from "react-router-dom";
 import { useFilteredDataStore } from "../../store/filteredDataStore";
 import { useSelectionsStore } from "../../store/selectionStore";
-import { useTeamMembersStore } from "../../store/teamMemberStore";
 import CourseMission from "../CourseMission/TeamMission";
 import PermmisionsCourseBatch from "../DashboardCourseBatch/PermmisionsCurseBatch/PermmisionsCourseBatch";
 import StudentsCourseBatch from "../DashboardCourseBatch/StudentsCourseBatch/StudentsCourseBatch";
@@ -10,12 +9,7 @@ import ProgressLevelsCard from "../progressLevelsCard/ProgressLevelsCard";
 import style from "./DashboardTeamBody.module.css";
 import TeamFeedback from "./TeamFeedback/TeamFeedback";
 import { useEffect, useMemo, useState } from "react";
-import { useDomainStore } from "../../store/domainStore";
-import { useTeamStore } from "../../store/teamStore";
-import { useCourseBatchStore } from "../../store/courseBatchStore";
-import { useAxesStore } from "../../store/axiStore";
 import { filterDataBySelection } from "../../utils/filterUtils";
-import { useCourseStore } from "../../store/courseStore";
 import TaskException from "../../Exception/TaskException/TaskException";
 import ExceptionTeams from "../DashboardCourseBatch/ExceptionTeams/ExceptionTeams";
 import {
@@ -42,9 +36,10 @@ import SoldiersChartComponent from "./SoldiersChartComponent/SoldiersChartCompon
 import FeedbackCategoryChar from "../FeedbackCategoryChar/FeedbackCategoryChar";
 import { useFetchFeedbacksByCourseId } from "../../hooks/feedback/useFetchFeedbackByCourseId";
 import { BuildOutlined, RocketOutlined } from "@ant-design/icons";
+import { useAxisBatchArchiveData, useCourseBatchesData, useCoursesData, useDomainsData, useTeamMembersData, useTeamsData } from "../../hooks/useHierarchyData";
 
 const DashboardTeamBody = () => {
-  const { teamMembers } = useTeamMembersStore();
+  const teamMembers = useTeamMembersData();
   const { selectedTeam } = useSelectionsStore();
   const teamId = selectedTeam?.id;
 
@@ -75,11 +70,12 @@ const DashboardTeamBody = () => {
     filteredTeamMembers,
     setFilteredAxis,
   } = useFilteredDataStore();
-  const { domains } = useDomainStore();
-  const { teams } = useTeamStore();
-  const { courses } = useCourseStore();
-  const { courseBatches, axisBatchArchive } = useCourseBatchStore();
-  const { axes } = useAxesStore();
+  const domains = useDomainsData();
+  const teams = useTeamsData();
+  const courses = useCoursesData();
+  const courseBatches = useCourseBatchesData();
+  const axisBatchArchive = useAxisBatchArchiveData();
+  const axes: any[] = []; // the axes store was never filled (#17)
 
   const result = filterDataBySelection(
     selectedDomain,

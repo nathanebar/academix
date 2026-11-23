@@ -1,12 +1,11 @@
 import { ConfigProvider, Table } from "antd";
 import style from "./PermissionsTable.module.css";
 import { usePermissionStore } from "../../store/permissionStore";
-import { useTeamMembersStore } from "../../store/teamMemberStore";
-import { useCourseStore } from "../../store/courseStore";
 import { useFilteredDataStore } from "../../store/filteredDataStore";
 import { useLocation } from "react-router-dom";
 import { useSelectionsStore } from "../../store/selectionStore";
 import { useFetchCourseCommanders } from "../../hooks/useFetchCourseCommanders";
+import { useTeamMembersData } from "../../hooks/useHierarchyData";
 
 type User = {
   id?: string | number;
@@ -23,7 +22,7 @@ interface props {
 }
 
 export const PermissionsTable: React.FC<props> = ({ userID }) => {
-  const { teamMembers } = useTeamMembersStore();
+  const teamMembers = useTeamMembersData();
   const { filteredTeams } = useFilteredDataStore();
   const { selectedTeam, selectedCourse } = useSelectionsStore();
   const { data: selectedCourseCommanders } = useFetchCourseCommanders(selectedCourse?.id);

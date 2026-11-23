@@ -1,7 +1,6 @@
 import { MoreOutlined } from "@ant-design/icons";
 import { Dropdown, Popconfirm, Progress } from "antd";
 import style from "./CourseBatchCard.module.css";
-import { useTeamStore } from "../../../store/teamStore";
 import { parseEndDateFromRange } from "../../../utils/CalculateTime";
 import { useNavigate } from "react-router-dom";
 import { useSelectionsStore } from "../../../store/selectionStore";
@@ -17,9 +16,9 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { courseBatchKeys } from "../../../api/queryKeys";
 import { usePermissionStore } from "../../../store/permissionStore";
-import { useTeamMembersStore } from "../../../store/teamMemberStore";
 import { useAddPermission } from "../../../hooks/useAddPermission";
 import { TeamWithBatches } from "../../../types/types";
+import { useTeamsData } from "../../../hooks/useHierarchyData";
 
 type Props = {
   courseBatchName: string;
@@ -29,7 +28,7 @@ type Props = {
 };
 
 const CourseBatchCard = (props: Props) => {
-  const { teams } = useTeamStore();
+  const teams = useTeamsData();
 
   
 

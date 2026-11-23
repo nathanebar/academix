@@ -7,9 +7,6 @@ import {
   filterCoursesBySelection,
   filterBatchesBySelection,
 } from "../utils/filterUtils";
-import { useCourseBatchStore } from "../store/courseBatchStore";
-import { useCourseStore } from "../store/courseStore";
-import { useTeamStore } from "../store/teamStore";
 import { useFilteredDataStore } from "../store/filteredDataStore";
 import { useSelectionHandler } from "../hooks/useSelectionHandler";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +18,7 @@ import {
 import dayjs, { Dayjs } from "dayjs";
 import { Button, ConfigProvider } from "antd";
 import { RightOutlined } from "@ant-design/icons";
+import { useCourseBatchesData, useCoursesData, useTeamsData } from "../hooks/useHierarchyData";
 
 export const HeaderPermissionDisplay = () => {
   const _hasHydrated = useSelectionsStore((s) => s._hasHydrated);
@@ -49,9 +47,9 @@ export const HeaderPermissionDisplay = () => {
     setFilteredTeamMembers,
   } = useFilteredDataStore();
 
-  const { teams } = useTeamStore();
-  const { courses } = useCourseStore();
-  const { courseBatches } = useCourseBatchStore();
+  const teams = useTeamsData();
+  const courses = useCoursesData();
+  const courseBatches = useCourseBatchesData();
 
   const {
     setSelectedDomain,

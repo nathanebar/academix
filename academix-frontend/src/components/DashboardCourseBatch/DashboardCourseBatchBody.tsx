@@ -5,7 +5,6 @@ import PermmisionsCourseBatch from "./PermmisionsCurseBatch/PermmisionsCourseBat
 import TeamCourseBatch from "./TeamsCourseBatch/TeamCourseBatch";
 import StudentsCourseBatch from "./StudentsCourseBatch/StudentsCourseBatch";
 import CourseMission from "../CourseMission/TeamMission";
-import { useTeamMembersStore } from "../../store/teamMemberStore";
 import ExceptionTeams from "./ExceptionTeams/ExceptionTeams";
 import { useFilteredDataStore } from "../../store/filteredDataStore";
 import { useNavigate } from "react-router-dom";
@@ -17,20 +16,16 @@ import { useFetchTeams } from "../../hooks/useFetchTeams";
 import { usePermissionStore } from "../../store/permissionStore";
 import { useSelectionsStore } from "../../store/selectionStore";
 import { filterDataBySelection } from "../../utils/filterUtils";
-import { useDomainStore } from "../../store/domainStore";
-import { useTeamStore } from "../../store/teamStore";
-import { useCourseStore } from "../../store/courseStore";
-import { useCourseBatchStore } from "../../store/courseBatchStore";
-import { useAxesStore } from "../../store/axiStore";
 import AxesMission from "../NewMissions/AxesMission/AxesMission";
 import TaskException from "../../Exception/TaskException/TaskException";
 import { useFetchTagsByCourseId } from "../../hooks/useFetchTagsByCourseId";
 import TagCard from "../../pages/dashboard/CourseDashboard/TagCard/TagCard";
 import { createTag } from "../../services/ApiServices";
 import { queryClient } from "../../api/queryClient";
+import { useAxisBatchArchiveData, useCourseBatchesData, useCoursesData, useDomainsData, useTeamMembersData, useTeamsData } from "../../hooks/useHierarchyData";
 
 const DashboardCourseBatchBody = () => {
-  const { teamMembers } = useTeamMembersStore();
+  const teamMembers = useTeamMembersData();
   const navigate = useNavigate();
   
   const {
@@ -58,11 +53,12 @@ const DashboardCourseBatchBody = () => {
     filteredTeamMembers,
     setFilteredAxis,
   } = useFilteredDataStore();
-  const { domains } = useDomainStore();
-  const { teams } = useTeamStore();
-  const { courses } = useCourseStore();
-  const { courseBatches, axisBatchArchive } = useCourseBatchStore();
-  const { axes } = useAxesStore();
+  const domains = useDomainsData();
+  const teams = useTeamsData();
+  const courses = useCoursesData();
+  const courseBatches = useCourseBatchesData();
+  const axisBatchArchive = useAxisBatchArchiveData();
+  const axes: any[] = []; // the axes store was never filled (#17)
   const result = filterDataBySelection(
     selectedDomain,
     selectedCourse,

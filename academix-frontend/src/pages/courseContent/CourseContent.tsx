@@ -5,7 +5,6 @@ import CircularSelect from "../../components/CircularSelect/CircularSelect";
 import { GenericOptionSwitch } from "../../UI/GenericOptionSwitch/GenericOptionSwitch";
 import AxisBoard from "../../components/Axis/AxisBoard/AxisBoard";
 import { useFilteredDataStore } from "../../store/filteredDataStore";
-import { useCourseBatchStore } from "../../store/courseBatchStore";
 import { useSelectionsStore } from "../../store/selectionStore";
 import { usePermissionStore } from "../../store/permissionStore";
 import { Condition, QueryField, QueryGroup } from "../../types/types";
@@ -14,6 +13,7 @@ import QueryBuilder from "./QueryBuilder/QueryBuilder";
 import { Button, Drawer, Space, Tag, Tooltip } from "antd";
 import { ArrowLeftOutlined, ArrowRightOutlined, CloseOutlined, FileSearchOutlined, FilterOutlined } from "@ant-design/icons";
 import { useSearchNavStore } from "../../store/searchNavStore";
+import { useAxisBatchArchiveData } from "../../hooks/useHierarchyData";
 
 const options = [
   { value: "operational", label: "מאגר משימות" },
@@ -95,7 +95,7 @@ const CourseContent = () => {
   const { setTasks, next, prev, reset, currentIndex, taskIds } = useSearchNavStore();
 
   const { filteredCourses } = useFilteredDataStore();
-  const { axisBatchArchive } = useCourseBatchStore();
+  const axisBatchArchive = useAxisBatchArchiveData();
 
  
   

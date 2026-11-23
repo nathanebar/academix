@@ -6,12 +6,12 @@ import { useFilteredDataStore } from "../../store/filteredDataStore";
 import { schemaMap, SchemaName } from "../../types/types";
 import { useTaskGroupsByAxisIdToCalendar } from "../../hooks/useTaskGroupsByAxisIdToCalendar";
 import TaskGroup from "../TaskGroup/TaskGroup";
-import { useCourseBatchStore } from "../../store/courseBatchStore";
 import { useSelectionsStore } from "../../store/selectionStore";
 import CalendarComponent from "../CalendarComponent/CalendarComponent";
 import { usePermissionStore } from "../../store/permissionStore";
 import { Button, ConfigProvider } from "antd";
 import { useTaskGroupsByAxisId } from "../../hooks/useTaskGroupsByAxisId";
+import { useAxisBatchArchiveData } from "../../hooks/useHierarchyData";
 
 function MissionsRepo() {
   /* --------------------------- STATE --------------------------- */
@@ -23,7 +23,7 @@ function MissionsRepo() {
   /* --------------------------- STORES -------------------------- */
   const { filteredCourseBatches } = useFilteredDataStore();
   const { selectedCourseBatch, selectedTeam } = useSelectionsStore();
-  const { axisBatchArchive } = useCourseBatchStore();
+  const axisBatchArchive = useAxisBatchArchiveData();
   const selectedPermission = usePermissionStore(
     (state) => state.selectedPermission
   );
