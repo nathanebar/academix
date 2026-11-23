@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { notebookKeys } from "../../api/queryKeys";
 import { List, Spin, Empty, Alert, Card, Typography, message, Popconfirm, Button, Modal, Input, Tooltip, Radio } from "antd";
 import { FolderOutlined, FileTextOutlined, ClockCircleOutlined, DeleteColumnOutlined, DeleteFilled, PlusOutlined, CloseOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
 
@@ -47,11 +49,16 @@ interface Note {
   createdAt?: string | null;
 }
 
+const toFolder = (folder: any): Folder => ({
+  id: folder.id,
+  name: folder.name,
+  team_member_id: folder.team_member_id,
+  team_course_batch_id: folder.team_course_batch_id,
+  system_key: folder.system_key,
+});
+
 const Notebook: React.FC = () => {
   const [selectedSoldier, setSelectedSoldier] = useState<Soldier | null>(null);
-  const [folders, setFolders] = useState<Folder[]>([]);
-  const [foldersLoading, setFoldersLoading] = useState(false);
-  const [foldersError, setFoldersError] = useState<string | null>(null);
   const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null);
 
   const [notes, setNotes] = useState<Note[]>([]);
@@ -90,45 +97,45 @@ const [creatingFolder, setCreatingFolder] = useState(false);
 const [isAddingReply, setIsAddingReply] = useState(false);
 const [folderScope, setFolderScope] = useState<"personal" | "team">("personal");
 
+  // Folders of the current scope (React Query, #17)
+  const queryClient = useQueryClient();
+  const foldersKey = notebookKeys.folders(
+    selectedCourseBatch?.id,
+    selectedTeam?.id,
+    selectedTeamMember?.id
+  );
+  const foldersQuery = useQuery({
+    queryKey: foldersKey,
+    // ok: false = the server answered "no folders" (not an exception)
+    queryFn: async (): Promise<{ ok: boolean; folders: Folder[] }> => {
+      const res = await GetNoteBookFolders({
+        courseBatchId: selectedCourseBatch?.id,
+        teamId: selectedTeam?.id,
+        team_member_id: selectedTeamMember?.id,
+      });
+      if (!res?.data?.success) return { ok: false, folders: [] };
+      return { ok: true, folders: res.data.data.map(toFolder) };
+    },
+    staleTime: 0, // refetch on every mount, like the former useEffect
+  });
+  const folders = foldersQuery.data?.folders ?? [];
+  const foldersLoading = foldersQuery.isLoading;
+  const foldersError: string | null = foldersQuery.isError
+    ? (foldersQuery.error as any)?.message || "שגיאה בשליפת תיקיות"
+    : foldersQuery.data && !foldersQuery.data.ok
+    ? // (pre-existing: activeHeaderType is "teamMember", so this is always the first message)
+      activeHeaderType !== "teammember"
+      ? "יש לבחור חבר צוות"
+      : "לא נמצאו תיקיות לחייל זה"
+    : null;
+
+  // Scope change: reset the selection (UI state; the folders come from the query above)
   useEffect(() => {
-    setFolders([]);
     setNotes([]);
     setSelectedFolderId(null);
     setEditingNote(null);
     setIsNewNote(false);
-    setFoldersError(null);
     setNotesError(null);
-
-    const fetchFolders = async () => {
-      setFoldersLoading(true);
-      try {
-        const res = await GetNoteBookFolders({
-          courseBatchId: selectedCourseBatch?.id,
-          teamId: selectedTeam?.id,
-          team_member_id: selectedTeamMember?.id,
-        });
-        if (res?.data?.success) {
-          const folderData: Folder[] = res.data.data.map((folder: any) => ({
-            id: folder.id,
-            name: folder.name,
-            team_member_id: folder.team_member_id,
-            team_course_batch_id: folder.team_course_batch_id,
-            system_key:folder.system_key
-          }));
-          setFolders(folderData);
-        } else {
-            activeHeaderType !== "teammember" ?
-          setFoldersError("יש לבחור חבר צוות") :
-          setFoldersError("לא נמצאו תיקיות לחייל זה");
-        }
-      } catch (error: any) {
-        setFoldersError(error.message || "שגיאה בשליפת תיקיות");
-      } finally {
-        setFoldersLoading(false);
-      }
-    };
-
-    fetchFolders();
   }, [
     selectedSoldier,
     selectedTeamMember?.id,
@@ -174,22 +181,7 @@ const handleCreateFolder = async () => {
       setFolderScope("personal"); // איפוס ברירת מחדל
 
       // רענון רשימת התיקיות
-      const foldersRes = await GetNoteBookFolders({
-        courseBatchId: selectedCourseBatch?.id,
-        teamId: selectedTeam?.id,
-        team_member_id: selectedTeamMember?.id,
-      });
-
-      if (foldersRes?.data?.success) {
-        const folderData: Folder[] = foldersRes.data.data.map((folder: any) => ({
-          id: folder.id,
-          name: folder.name,
-          team_member_id: folder.team_member_id,
-          team_course_batch_id: folder.team_course_batch_id,
-          system_key: folder.system_key,
-        }));
-        setFolders(folderData);
-      }
+      await foldersQuery.refetch();
     } else {
       message.error(res?.data?.message || "שגיאה ביצירת התיקייה");
     }
@@ -235,8 +227,14 @@ const handleCreateFolder = async () => {
     if (res?.data?.success) {
       message.success("התיקייה נמחקה");
 
-      // הסרה מהרשימה
-      setFolders((prev) => prev.filter((folder) => folder.id !== folderId));
+      // הסרה מהרשימה (in the query cache)
+      queryClient.setQueryData(
+        foldersKey,
+        (old: { ok: boolean; folders: Folder[] } | undefined) =>
+          old
+            ? { ...old, folders: old.folders.filter((folder: Folder) => folder.id !== folderId) }
+            : old
+      );
 
     
       if (selectedFolderId === folderId) {
