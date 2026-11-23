@@ -1,6 +1,6 @@
 const { TaskGroup, TaskGroupBatchStatus, File, Task, Axis } = require("../../models");
 const { sequelize } = require("../../models/index");
-const fileController = require("../controllers/file.controller");
+const { deleteFileRecords, deleteUnreferencedObjects } = require("../services/fileCleanup.service");
 const logger = require("../utils/logger");
 const { catchError } = require("../utils/errorHandler");
 
@@ -114,30 +114,36 @@ module.exports = {
     const taskGroupId = req.params.id;
     try {
       const taskGroup = await TaskGroup.findByPk(taskGroupId);
-      const reletedTasks = await Task.findAll({
-        where: { taskGroupId: taskGroupId },
-      });
-      if (reletedTasks && reletedTasks?.length > 0) {
-        for (const t of reletedTasks) {
-          const reletedFiles = await File.findAll({
-            where: {
-              task_id: t?.id,
-            },
-          });
-          if (reletedFiles && reletedFiles?.length > 0) {
-            for (const f of reletedFiles) {
-              await fileController.deleteFile(f?.id); // For Deleting Also From S3
-            }
-          }
-        }
-      }
       if (!taskGroup)
         return res.status(404).json({ error: "TaskGroup not found" });
-      await taskGroup.destroy();
+
+      // The files of all the group's tasks in one go, in the same transaction as the group; their
+      // S3 objects after the commit. It was one File.findAll per task and one deleteFile() per file
+      // (outside any transaction, S3 deleted first).
+      const transaction = await sequelize.transaction();
+      let reletedTasks;
+      let s3Objects;
+      try {
+        reletedTasks = await Task.findAll({
+          where: { taskGroupId: taskGroupId },
+          attributes: ["id"],
+          transaction,
+        });
+        const taskIds = reletedTasks.map((t) => t.id);
+        s3Objects = taskIds.length ? await deleteFileRecords({ task_id: taskIds }, transaction) : [];
+        await taskGroup.destroy({ transaction });
+        await transaction.commit();
+      } catch (error) {
+        await transaction.rollback();
+        throw error;
+      }
+      const s3Result = await deleteUnreferencedObjects(s3Objects);
 
       logger.info("TaskGroup deleted", {
         taskGroupId: taskGroupId,
         tasksDeleted: reletedTasks?.length || 0,
+        filesCount: s3Objects.length,
+        s3: s3Result,
         userId: req.headers["x-user-id"],
       });
 

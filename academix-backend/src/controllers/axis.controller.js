@@ -219,18 +219,16 @@ exports.getTaskCountByAxisId = async (req, res) => {
       ? { course_batch_id: Number(selectedCourseBatch) }
       : {};
 
-    // מערך תוצאות פר ציר
-    const results = [];
+    // Everything is read once for all the axes (it was 5 queries per axis), then split per axis.
+    // The team's students and their count don't depend on the axis at all.
+    const teamMemberWhere = { team_id: teamIdNum, member_role: "STUDENT" };
+    if (selectedCourseBatch) teamMemberWhere.course_batch_id = Number(selectedCourseBatch);
 
-    // לולאה על כל ציר
-    for (const axis of axes) {
-      const axisId = axis.id;
-      const axisName = axis.name;
-
-      // שליפת קבוצות משימות של הציר הנוכחי
-      const taskGroups = await TaskGroup.findAll({
+    const axisIdList = axes.map((a) => a.id);
+    const [allTaskGroups, teamMembers] = await Promise.all([
+      TaskGroup.findAll({
         where: {
-          axisId: axisId,
+          axisId: { [Op.in]: axisIdList },
           [Op.or]: [{ team_id: teamIdNum }, { team_id: null }],
         },
         include: [
@@ -242,7 +240,55 @@ exports.getTaskCountByAxisId = async (req, res) => {
             },
           },
         ],
-      });
+      }),
+      // Only needed to filter the assignments by batch (as before); otherwise only the count is used.
+      selectedCourseBatch
+        ? TeamMember.findAll({ where: teamMemberWhere, attributes: ["id"], raw: true })
+        : null,
+    ]);
+    const studentCount = teamMembers ? teamMembers.length : await TeamMember.count({ where: teamMemberWhere });
+
+    const allTaskGroupIds = allTaskGroups.map((tg) => tg.id);
+    const allTasks = allTaskGroupIds.length
+      ? await Task.findAll({
+          where: {
+            taskGroupId: { [Op.in]: allTaskGroupIds },
+            [Op.or]: [{ team_id: teamIdNum }, { team_id: null }],
+            status: "operational",
+          },
+          attributes: ["id", "taskGroupId"],
+        })
+      : [];
+
+    const allTaskIds = allTasks.map((t) => t.id);
+    const taskAssignmentWhere = { task_id: { [Op.in]: allTaskIds } };
+    if (teamMembers) taskAssignmentWhere.user_id = { [Op.in]: teamMembers.map((m) => m.id) };
+    const allTaskAssignments =
+      allTaskIds.length && (!teamMembers || teamMembers.length > 0)
+        ? await TaskAssignment.findAll({ where: taskAssignmentWhere, attributes: ["id", "completed_at", "task_id"] })
+        : [];
+
+    const tasksByGroup = new Map();
+    allTasks.forEach((t) => {
+      if (!tasksByGroup.has(t.taskGroupId)) tasksByGroup.set(t.taskGroupId, []);
+      tasksByGroup.get(t.taskGroupId).push(t.id);
+    });
+    const assignmentsByTask = new Map();
+    allTaskAssignments.forEach((ta) => {
+      if (!assignmentsByTask.has(ta.task_id)) assignmentsByTask.set(ta.task_id, []);
+      assignmentsByTask.get(ta.task_id).push(ta);
+    });
+
+    // מערך תוצאות פר ציר
+    const results = [];
+
+    // לולאה על כל ציר
+    for (const axis of axes) {
+      const axisId = axis.id;
+      const axisName = axis.name;
+
+      // קבוצות משימות של הציר הנוכחי
+      const taskGroups = allTaskGroups.filter((tg) => tg.axisId === axisId);
 
       if (!taskGroups.length) {
         results.push({
@@ -257,20 +303,9 @@ exports.getTaskCountByAxisId = async (req, res) => {
         continue;
       }
 
-      const taskGroupIds = taskGroups.map((tg) => tg.id);
-
-      // שליפת משימות
-      const tasks = await Task.findAll({
-        where: {
-          taskGroupId: { [Op.in]: taskGroupIds },
-          [Op.or]: [{ team_id: teamIdNum }, { team_id: null }],
-          status: "operational",
-        },
-        attributes: ["id"],
-      });
-
-      const missionCount = tasks.length;
-      const taskIds = tasks.map((t) => t.id);
+      // משימות
+      const taskIds = taskGroups.flatMap((tg) => tasksByGroup.get(tg.id) || []);
+      const missionCount = taskIds.length;
 
       if (taskIds.length === 0) {
         results.push({
@@ -288,48 +323,25 @@ exports.getTaskCountByAxisId = async (req, res) => {
         continue;
       }
 
-      // בניית תנאי לשליפת TaskAssignments
-      const taskAssignmentWhere = {
-        task_id: { [Op.in]: taskIds },
-      };
-
-      if (selectedCourseBatch) {
-        const teamMembers = await TeamMember.findAll({
-          where: {
-            team_id: teamIdNum,
-            member_role: "STUDENT",
-            course_batch_id: Number(selectedCourseBatch),
-          },
-          attributes: ["id"],
-          raw: true,
+      if (teamMembers && teamMembers.length === 0) {
+        results.push({
+          axisId,
+          name: axisName,
+          missionCount,
+          completedTaskCount: 0,
+          completedPercent: 0,
+          totalTaskAssignments: 0,
+          studentCount: 0,
+          message: "No team members in this batch",
+          taskGroups: taskGroups.map((tg) => ({
+            taskGroupId: tg.id,
+            taskGroupName: tg.name,
+          })),
         });
-
-        if (teamMembers.length === 0) {
-          results.push({
-            axisId,
-            name: axisName,
-            missionCount,
-            completedTaskCount: 0,
-            completedPercent: 0,
-            totalTaskAssignments: 0,
-            studentCount: 0,
-            message: "No team members in this batch",
-            taskGroups: taskGroups.map((tg) => ({
-              taskGroupId: tg.id,
-              taskGroupName: tg.name,
-            })),
-          });
-          continue;
-        }
-
-        const validUserIds = teamMembers.map((m) => m.id);
-        taskAssignmentWhere.user_id = { [Op.in]: validUserIds };
+        continue;
       }
 
-      const taskAssignments = await TaskAssignment.findAll({
-        where: taskAssignmentWhere,
-        attributes: ["id", "completed_at"],
-      });
+      const taskAssignments = taskIds.flatMap((id) => assignmentsByTask.get(id) || []);
 
       const completedTaskCount = taskAssignments.filter(
         (ta) => ta.completed_at !== null && ta.completed_at !== undefined
@@ -341,20 +353,6 @@ exports.getTaskCountByAxisId = async (req, res) => {
           ((completedTaskCount / taskAssignments.length) * 100).toFixed(0)
         );
       }
-
-      // ספירת סטודנטים
-      const teamMemberWhere = {
-        team_id: teamIdNum,
-        member_role: "STUDENT",
-      };
-
-      if (selectedCourseBatch) {
-        teamMemberWhere.course_batch_id = Number(selectedCourseBatch);
-      }
-
-      const studentCount = await TeamMember.count({
-        where: teamMemberWhere,
-      });
 
       // הוספה למערך התוצאות
       results.push({
@@ -377,6 +375,7 @@ exports.getTaskCountByAxisId = async (req, res) => {
       data: results,
     });
   } catch (error) {
-    catchError(error, req, res, { function: "getTaskCountByAxisId", axisId });
+    // was { axisId }: not defined here (only inside the loop), so the catch itself threw
+    catchError(error, req, res, { function: "getTaskCountByAxisId", axisIds });
   }
 };

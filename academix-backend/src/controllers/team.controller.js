@@ -1,5 +1,5 @@
 const { Team, Axis, TaskGroup, Task, File, sequelize, TeamCourseBatch, CourseBatch, Course } = require("../../models");
-const fileController = require("../controllers/file.controller");
+const { deleteFileRecords, deleteUnreferencedObjects } = require("../services/fileCleanup.service");
 const logger = require('../utils/logger');
 const { catchError } = require('../utils/errorHandler');
 
@@ -145,44 +145,43 @@ exports.update = async (req, res) => {
 exports.remove = async (req, res) => {
   const teamId = req.params.id;
   try {
-    const reletedAxes = await Axis.findAll({ where: { team_id: teamId } });
-    if (reletedAxes && reletedAxes?.length > 0) {
-      for (const a of reletedAxes) {
-        const reletedTaskGroups = await TaskGroup.findAll({
+    // Axes -> task groups -> tasks -> files, one query per level (it was one query per axis, per
+    // task group and per task, then one deleteFile() per file). The Files rows go in the same
+    // transaction as the team; their S3 objects are deleted after the commit, so a team that is
+    // not found (404) or a failed delete no longer loses its files.
+    const transaction = await sequelize.transaction();
+    let reletedAxes;
+    let s3Objects;
+    try {
+      reletedAxes = await Axis.findAll({ where: { team_id: teamId }, attributes: ["id"], transaction });
+      const axisIds = reletedAxes.map((a) => a.id);
+      const taskGroups = axisIds.length
+        ? await TaskGroup.findAll({ where: { axisId: axisIds }, attributes: ["id"], transaction })
+        : [];
+      const taskGroupIds = taskGroups.map((tg) => tg.id);
+      const tasks = taskGroupIds.length
+        ? await Task.findAll({ where: { taskGroupId: taskGroupIds }, attributes: ["id"], transaction })
+        : [];
+      const taskIds = tasks.map((t) => t.id);
+      s3Objects = taskIds.length ? await deleteFileRecords({ task_id: taskIds }, transaction) : [];
 
-          where: {
-            axisId: a?.id,
-          },
-        });
-        if (reletedTaskGroups && reletedTaskGroups?.length > 0) {
-          for (const tg of reletedTaskGroups) {
-            const reletedTasks = await Task.findAll({
-              where: { taskGroupId: tg?.id },
-            });
-            if (reletedTasks && reletedTasks?.length > 0) {
-              for (const t of reletedTasks) {
-                const reletedFiles = await File.findAll({
-                  where: {
-                    task_id: t?.id,
-                  },
-                });
-                if (reletedFiles && reletedFiles?.length > 0) {
-                  for (const f of reletedFiles) {
-                    await fileController.deleteFile(f?.id); // For Deleting Also From S3
-                  }
-                }
-              }
-            }
-          }
-        }
+      const deleted = await Team.destroy({ where: { id: teamId }, transaction });
+      if (!deleted) {
+        await transaction.rollback();
+        return res.status(404).send("Team not found");
       }
+      await transaction.commit();
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
     }
-    const deleted = await Team.destroy({ where: { id: teamId } });
-    if (!deleted) return res.status(404).send("Team not found");
+    const s3Result = await deleteUnreferencedObjects(s3Objects);
 
     logger.info('Team deleted', {
       teamId: teamId,
       axesDeleted: reletedAxes?.length || 0,
+      filesCount: s3Objects.length,
+      s3: s3Result,
       userId: req.headers['x-user-id']
     });
 
