@@ -1,5 +1,6 @@
 const { TeamTaskAssignment } = require('../../models');
 const logger = require('../utils/logger');
+const { catchError } = require("../utils/errorHandler");
 
 exports.create = async (req, res) => {
   try {
@@ -14,7 +15,7 @@ exports.create = async (req, res) => {
 
     res.status(201).json(teamTaskAssignment);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    catchError(error, req, res, { function: "TeamTaskAssignment.create", status: 400 });
   }
 };
 
@@ -23,7 +24,7 @@ exports.getAll = async (req, res) => {
     const teamTaskAssignments = await TeamTaskAssignment.findAll();
     res.status(200).json(teamTaskAssignments);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    catchError(error, req, res, { function: "TeamTaskAssignment.getAll" });
   }
 };
 
@@ -35,7 +36,7 @@ exports.getById = async (req, res) => {
     }
     res.status(200).json(teamTaskAssignment);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    catchError(error, req, res, { function: "TeamTaskAssignment.getById" });
   }
 };
 
@@ -55,7 +56,7 @@ exports.update = async (req, res) => {
     await teamTaskAssignment.update(req.body);
     res.status(200).json(teamTaskAssignment);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    catchError(error, req, res, { function: "TeamTaskAssignment.update", status: 400 });
   }
 };
 
@@ -76,6 +77,6 @@ exports.delete = async (req, res) => {
     await teamTaskAssignment.destroy();
     res.status(204).send();
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    catchError(error, req, res, { function: "TeamTaskAssignment.delete" });
   }
 };

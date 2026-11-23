@@ -1,6 +1,7 @@
 const { FormSubmissionAnswer, File } = require("../../models");
 const { Op } = require("sequelize");
 const logger = require('../utils/logger');
+const { catchError } = require("../utils/errorHandler");
 
 module.exports = {
   async create(req, res) {
@@ -31,7 +32,7 @@ module.exports = {
       });
       res.status(201).json(FormAnswers);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      catchError(err, req, res, { function: "formSubmissionsAnswers.create", status: 400 });
     }
   },
 
@@ -112,7 +113,6 @@ module.exports = {
         formSubmissionId: answers[0]?.form_submission_id,
         createdCount: createdAnswers.length,
         answersCount: answers.length,
-        userId: req.headers['x-user-id']
       });
 
       return {
@@ -120,8 +120,13 @@ module.exports = {
         data: createdAnswers,
       };
     } catch (err) {
+      logger.error("FormSubmissionAnswers bulk create failed", {
+        formSubmissionId: answers?.[0]?.form_submission_id,
+        originalError: err.message,
+        stack: err.stack,
+      });
       return {
-        error: err.message,
+        error: "failed to create the answers",
       };
     }
   },

@@ -1,5 +1,6 @@
 
 const { NoteBookNote, NoteBookFolder, TeamCourseBatch } = require("../../models");
+const { catchError } = require("../utils/errorHandler");
 
 exports.updateNote = async (req, res) => {
   try {
@@ -25,7 +26,7 @@ exports.updateNote = async (req, res) => {
     return res.json({ success: true, data: note });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ success: false, message: "שגיאת שרת", error: error.message });
+    return catchError(error, req, res, { function: "NotebookNote.updateNote" });
   }
 };
 
@@ -64,11 +65,7 @@ exports.createNote = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      success: false,
-      message: "שגיאת שרת",
-      error: error.message,
-    });
+    return catchError(error, req, res, { function: "NotebookNote.createNote" });
   }
 };
 exports.deleteNote = async (req, res) => {
@@ -93,10 +90,6 @@ exports.deleteNote = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      success: false,
-      message: "שגיאת שרת",
-      error: error.message,
-    });
+    return catchError(error, req, res, { function: "NotebookNote.deleteNote" });
   }
 };

@@ -136,9 +136,8 @@ REACT_APP_API_BASE_URL=https://<api>:8007/api REACT_APP_S3_BASE_URL=https://<min
 
 מנוהלות בתוכנית העבודה ([#23](https://github.com/nathanebar/academix/issues/23)):
 
-- כ-30 handlers עדיין בונים בעצמם תשובות 5xx עם `error.message` ([#53](https://github.com/nathanebar/academix/issues/53)); ‏`catchError` וה-handler הגלובלי כבר מסתירים אותו בייצור.
 - לוגים מהייצור שנכתבו **לפני** הלוגר החדש (`academix-backend/logs/errors.log`, ‏`info.log`, ‏`debug.log`, ‏git מתעלם מהם) מכילים כתובות IP, שמות משתמשים ותוכן בקשות: למחוק אותם לפני שמשתפים משהו. הלוגר הנוכחי כבר לא כותב את תוכן הבקשות.
 
-תוקן מאז הסקירה: זהות והרשאות שנקבעו בצד הלקוח ([#13](https://github.com/nathanebar/academix/issues/13)), הזרקת SQL ‏([#8](https://github.com/nathanebar/academix/issues/8)), כותרות אבטחה, הגבלת ניסיונות התחברות, הודעות שגיאה פנימיות ו-TLS לא מאומת מול האלפון ([#15](https://github.com/nathanebar/academix/issues/15)).
+תוקן מאז הסקירה: זהות והרשאות שנקבעו בצד הלקוח ([#13](https://github.com/nathanebar/academix/issues/13)), הזרקת SQL ‏([#8](https://github.com/nathanebar/academix/issues/8)), כותרות אבטחה, הגבלת ניסיונות התחברות, הודעות שגיאה פנימיות ו-TLS לא מאומת מול האלפון ([#15](https://github.com/nathanebar/academix/issues/15), [#53](https://github.com/nathanebar/academix/issues/53)).
 
 </div>

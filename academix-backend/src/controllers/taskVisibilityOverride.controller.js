@@ -1,6 +1,7 @@
 const { TaskVisibilityOverride, Task, Team, User } = require("../../models");
 const { Op } = require("sequelize");
 const logger = require('../utils/logger');
+const { catchError } = require("../utils/errorHandler");
 
 exports.createVisibilityOverride = async (req, res) => {
     try {
@@ -75,7 +76,7 @@ exports.createVisibilityOverride = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        catchError(error, req, res, { function: "taskVisibilityOverride.createVisibilityOverride" });
     }
 };
 
@@ -96,7 +97,7 @@ exports.getVisibilityOverridesByTask = async (req, res) => {
             data: overrides
         });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        catchError(error, req, res, { function: "taskVisibilityOverride.getVisibilityOverridesByTask" });
     }
 };
 
@@ -118,7 +119,7 @@ exports.getVisibilityOverridesByTeam = async (req, res) => {
             data: overrides
         });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        catchError(error, req, res, { function: "taskVisibilityOverride.getVisibilityOverridesByTeam" });
     }
 };
 
@@ -143,7 +144,7 @@ exports.getVisibilityOverrideByTaskAndTeam = async (req, res) => {
             data: override
         });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        catchError(error, req, res, { function: "taskVisibilityOverride.getVisibilityOverrideByTaskAndTeam" });
     }
 };
 
@@ -173,7 +174,7 @@ exports.deleteVisibilityOverride = async (req, res) => {
             message: "הגדרת החשיפה נמחקה בהצלחה"
         });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        catchError(error, req, res, { function: "taskVisibilityOverride.deleteVisibilityOverride" });
     }
 };
 
@@ -230,6 +231,6 @@ exports.updateVisibilityOverride = async (req, res) => {
             data: updatedOverride
         });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        catchError(error, req, res, { function: "taskVisibilityOverride.updateVisibilityOverride" });
     }
 };
