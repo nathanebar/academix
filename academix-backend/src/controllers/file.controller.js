@@ -21,6 +21,7 @@ const { catchError } = require("../utils/errorHandler");
 const { fileStream } = require("../middlewares/upload");
 const { sendS3Object } = require("../utils/s3Stream");
 const { canUserAccessKey, canUserAccessFolderFile } = require("../services/fileAccess.service");
+const { deleteFileRecords, deleteUnreferencedObjects } = require("../services/fileCleanup.service");
 const { CourseBatchFolderFile } = require("../../models");
 
 config({ quiet: true });
@@ -378,41 +379,19 @@ exports.deleteFile = async (id) => {
 exports.deleteAllFilesByTaskId = async (req, res) => {
   try {
     const { taskid, ispatbass } = req.headers;
-    const filesRecords = await File.findAll({
-      where: {
-        task_id: Number(taskid),
-        isPatbass: ispatbass,
-      },
-    });
+    // One DELETE for the rows, then the S3 objects in batches, keeping any key still used by
+    // another row. It was a forEach(async ...): one lookup + one S3 call + one DELETE per file,
+    // not awaited (the response went out before the deletes, and their errors were never caught),
+    // and the "still used" check looked at other tasks only.
+    const s3Objects = await deleteFileRecords({ task_id: Number(taskid), isPatbass: ispatbass });
 
-    if (filesRecords && filesRecords?.length > 0) {
-      filesRecords?.forEach(async (file) => {
-        const sameFileInOtherTask = await File.findAll({
-          where: {
-            s3BucketName: file?.s3BucketName,
-            s3Key: file?.s3Key,
-            task_id: {
-              [Sequelize.Op.ne]: Number(taskid),
-            },
-          },
-        });
-
-        if (!sameFileInOtherTask || sameFileInOtherTask?.length === 0) {
-          const commandOptions = {
-            Bucket: file?.s3BucketName,
-            Key: file?.s3Key,
-          };
-          await s3Client.send(new DeleteObject(commandOptions));
-        }
-
-        await File.destroy({
-          where: { id: Number(file?.id) },
-        });
-      });
+    if (s3Objects.length > 0) {
+      const s3Result = await deleteUnreferencedObjects(s3Objects);
 
       logger.info("All files deleted", {
         taskId: taskid,
-        filesCount: filesRecords?.length,
+        filesCount: s3Objects.length,
+        s3: s3Result,
         userId: req.headers["x-user-id"],
       });
 
