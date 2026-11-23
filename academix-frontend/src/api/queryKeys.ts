@@ -95,6 +95,29 @@ export const taskKeys = {
     courseBatchId: number | undefined,
     skipVisibility: boolean = false
   ) => [...taskKeys.all, "byUser", userId, teamId, roleCode, courseBatchId, skipVisibility] as const,
+  // getTasksByUser with a date range (team member's small calendar)
+  byUserInRange: (
+    userId: number | undefined,
+    teamId: number | undefined,
+    roleCode: string | undefined,
+    courseBatchId: number | undefined,
+    start: string | undefined,
+    end: string | undefined
+  ) => [...taskKeys.all, "byUserInRange", userId, teamId, roleCode, courseBatchId, start, end] as const,
+  // team member dashboard: the member's tasks (±1 year) + their queue tasks.
+  // memberDashboardAll is invalidated when a task status changes (TaskUserTag).
+  memberDashboardAll: () => [...taskKeys.all, "memberDashboard"] as const,
+  memberDashboard: (
+    teamMemberId: number | undefined,
+    userId: number | undefined,
+    teamId: number | undefined,
+    roleCode: string | undefined,
+    courseBatchId: number | undefined
+  ) =>
+    [...taskKeys.memberDashboardAll(), teamMemberId, userId, teamId, roleCode, courseBatchId] as const,
+  // completed tasks per member of a team (team dashboard)
+  completedByTeam: (teamId: number | undefined, courseBatchId: number | undefined) =>
+    [...taskKeys.all, "completedByTeam", teamId, courseBatchId] as const,
 };
 
 export const gradeStageKeys = {

@@ -21,16 +21,16 @@ import ProgressLevelsCard from "../../components/progressLevelsCard/ProgressLeve
 import { Button, Menu, notification, Tabs } from "antd";
 import TaskUserTag from "../Task/TaskTag/TaskUserTag";
 import { FileTextOutlined } from "@ant-design/icons";
-import { useTaskTeamMemberRefreshStore } from "../../store/taskTeamMemberRefreshStore";
 import TabPane from "antd/es/tabs/TabPane";
 import { getQueueTasksByMemberFlat } from "../../services/ApiServices";
+import { useQuery } from "@tanstack/react-query";
+import { taskKeys } from "../../api/queryKeys";
 
 const DashboardTeamMember = () => {
   const { selectedTeamMember, selectedTeam, selectedCourseBatch } =
     useSelectionsStore();
   const { selectedPermission } = usePermissionStore();
   const isCommanderOrAdmin = selectedPermission?.role_code !== "STUDENT";
-  const [missionData, setMissionData] = useState<any>();
   const [selectedTaskId, setSelectedTaskId] = useState<number>(-1);
   const { data: forms, refetch } = useFetchFormsByUser(
     Number(selectedTeamMember?.id),
@@ -50,14 +50,51 @@ const DashboardTeamMember = () => {
   const [openUserModal, setOpenUserModal] = useState<boolean>(false);
   const [selectedEvent, setSelectedEvent] = useState<any | null>(null);
   const [dateFilterType, setDateFilterType] = useState<string>("0"); // 🆕 שינוי
-  const [queueTasks, setQueueTasks] = useState<any[]>([]);
-  const [refreshCount, setRefreshCount] = useState(0);
-  const needsRefresh = useTaskTeamMemberRefreshStore(
-    (state) => state.needsRefresh,
-  );
-  const clearRefresh = useTaskTeamMemberRefreshStore(
-    (state) => state.clearRefresh,
-  );
+
+  // React Query (#17): the member's tasks (±1 year, without occurrences) + their queue tasks.
+  // Refreshed by the task modal (onRefresh) and, after a status change in TaskUserTag, by
+  // invalidating taskKeys.memberDashboardAll() (was a Zustand "needsRefresh" flag).
+  const teamMemberId = selectedTeamMember?.id;
+  const memberUserId = Number(selectedTeamMember?.user_id);
+  const teamId = selectedTeam?.id ? Number(selectedTeam.id) : undefined;
+  const courseBatchId = selectedCourseBatch?.id;
+  const roleCode = selectedPermission?.role_code;
+  const { data: missionData, refetch: refetchMissions } = useQuery({
+    queryKey: taskKeys.memberDashboard(teamMemberId, memberUserId, teamId, roleCode, courseBatchId),
+    queryFn: async () => {
+      const data = await getTasksByUser(
+        memberUserId,
+        teamId ?? null,
+        roleCode,
+        courseBatchId,
+        roleCode !== "STUDENT", // skipVisibility
+        dayjs().subtract(1, "year"), // 🆕 תמיד שולף הרבה נתונים
+        dayjs().add(1, "year"),
+      );
+      const filteredData = data.filter((t: any) => !t.isOccurrence);
+      const queueData = await getQueueTasksByMemberFlat(teamId ?? 0, courseBatchId!, teamMemberId!);
+      return [...filteredData, ...queueData];
+    },
+    enabled: !!teamMemberId && !!teamId && !!courseBatchId,
+    staleTime: 0, // refetch on every mount, like the former useEffect
+  });
+
+  // Keep the open task modal's completion date in sync with refreshed data (as before).
+  useEffect(() => {
+    if (!missionData || !selectedEvent?.id) return;
+    const updatedTask = missionData.find(
+      (t: any) => !t.isQueueTask && t.id === selectedEvent.id,
+    );
+    if (updatedTask && updatedTask.completed_at !== selectedEvent.extendedProps?.completed_at) {
+      setSelectedEvent((prev: any) => ({
+        ...prev,
+        extendedProps: {
+          ...prev.extendedProps,
+          completed_at: updatedTask.completed_at,
+        },
+      }));
+    }
+  }, [missionData, selectedEvent?.id, selectedEvent?.extendedProps?.completed_at]);
 
   // 🆕 פונקציה לסינון לפי קטגוריות חדשות
   const changeDateFilters = (activeKey: string) => {
@@ -162,62 +199,6 @@ const DashboardTeamMember = () => {
     return missionData.filter((t: any) => t.isQueueTask).length;
   }, [missionData]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (selectedTeamMember?.id && selectedTeam?.id) {
-        const skipVisibility = selectedPermission?.role_code !== "STUDENT";
-        const data = await getTasksByUser(
-          Number(selectedTeamMember?.user_id),
-          selectedTeam?.id ? Number(selectedTeam?.id) : null,
-          selectedPermission?.role_code,
-          selectedCourseBatch.id,
-          skipVisibility,
-          dayjs().subtract(1, "year"), // 🆕 תמיד שולף הרבה נתונים
-          dayjs().add(1, "year"),
-        );
-        const filteredData = data.filter((t: any) => !t.isOccurrence);
-
-        const queueData = await getQueueTasksByMemberFlat(
-          selectedTeam?.id ? Number(selectedTeam?.id) : 0,
-          selectedCourseBatch.id,
-          selectedTeamMember.id
-        );
-
-        const allTasks = [...filteredData, ...queueData];
-
-        setMissionData(allTasks);
-        setQueueTasks(queueData);
-
-        if (selectedEvent?.id) {
-          const taskAssignmentId = selectedEvent?.id;
-          const updatedTask = filteredData.find(
-            (t: any) => t.id === taskAssignmentId,
-          );
-          if (updatedTask) {
-            setSelectedEvent((prev: any) => ({
-              ...prev,
-              extendedProps: {
-                ...prev.extendedProps,
-                completed_at: updatedTask.completed_at,
-              },
-            }));
-          }
-        }
-        clearRefresh();
-      }
-    };
-
-    fetchData();
-  }, [
-    selectedTeamMember,
-    selectedPermission?.role_code,
-    selectedTeam,
-    selectedCourseBatch,
-    refreshCount,
-    needsRefresh,
-    clearRefresh,
-  ]);
-
   const { data, isLoading, isError, error } = useFetchFeedbackByUserId(
     selectedTeamMember?.id || selectedTeamMember?.User?.id,
     selectedPermission?.role_code,
@@ -225,7 +206,7 @@ const DashboardTeamMember = () => {
 
   // 🆕 סינון המשימות לפי הקטגוריה שנבחרה
   const filteredTasks = useMemo(() => {
-    return filterTasksByCategory(missionData);
+    return filterTasksByCategory(missionData ?? []);
   }, [missionData, filterTasksByCategory]);
 
   const nextTask = useMemo(() => {
@@ -567,7 +548,7 @@ const DashboardTeamMember = () => {
           task={filteredTasks?.find((t: any) => t.id === selectedEvent.id)} // 🆕 שינוי
           openModal={openUserModal}
           setOpenModal={setOpenUserModal}
-          onRefresh={() => setRefreshCount((c) => c + 1)}
+          onRefresh={() => refetchMissions()}
         />
       )}
       {selectedTaskId !== -1 && nextTask && (
@@ -579,7 +560,7 @@ const DashboardTeamMember = () => {
           setOpenModal={(open) => {
             if (!open) setSelectedTaskId(-1);
           }}
-          onRefresh={() => setRefreshCount((c) => c + 1)}
+          onRefresh={() => refetchMissions()}
         />
       )}
     </>

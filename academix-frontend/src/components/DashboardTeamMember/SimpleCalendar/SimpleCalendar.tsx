@@ -23,6 +23,8 @@ import { notification, Tooltip } from "antd";
 import { usePermissionStore } from "../../../store/permissionStore";
 import { useTeamEventAssignment } from "../../../hooks/useFetchTeamEventAssignments";
 import { useTeamEvent } from "../../../hooks/useTeamEvent";
+import { useQuery } from "@tanstack/react-query";
+import { taskKeys } from "../../../api/queryKeys";
 
 interface Task {
   id?: number;
@@ -42,7 +44,6 @@ interface Props {
 
 const SimpleCalendar: React.FC<Props> = ({ student, filters }) => {
   const [date, setDate] = useState(dayjs());
-  const [tasksByUser, setTasksByUser] = useState<Task[]>([]);
   const [selectedTask, setSelectedTask] = useState<any>(null);
   const [openUserModal, setOpenUserModal] = useState<boolean>(false);
 
@@ -53,23 +54,33 @@ const SimpleCalendar: React.FC<Props> = ({ student, filters }) => {
   const { selectedPermission } = usePermissionStore();
   const calendarRef = useRef<FullCalendar>(null);
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      if (student?.user_id && selectedTeam?.id) {
-        const tasks = await getTasksByUser(
-          student.user_id,
-          selectedTeam.id,
-          selectedPermission?.role_code,
-          selectedCourseBatch.id,
-          false,
-          filters.startFilter,
-          filters.endFilter,
-        );
-        setTasksByUser(tasks || []);
-      }
-    };
-    fetchTasks();
-  }, [student?.user_id, selectedTeam?.id, filters]);
+  // React Query (#17). The parent passes a new `filters` object on every render, so the former
+  // useEffect re-sent the request on every render of the dashboard; the key holds the dates as
+  // strings, so the same range gives the same key.
+  const startKey = filters.startFilter?.toISOString();
+  const endKey = filters.endFilter?.toISOString();
+  const { data: tasksByUser = [], refetch: refetchTasks } = useQuery<Task[]>({
+    queryKey: taskKeys.byUserInRange(
+      student?.user_id,
+      selectedTeam?.id,
+      selectedPermission?.role_code,
+      selectedCourseBatch?.id,
+      startKey,
+      endKey
+    ),
+    queryFn: async () =>
+      (await getTasksByUser(
+        student.user_id,
+        selectedTeam.id,
+        selectedPermission?.role_code,
+        selectedCourseBatch.id,
+        false,
+        filters.startFilter,
+        filters.endFilter,
+      )) || [],
+    enabled: !!student?.user_id && !!selectedTeam?.id && !!selectedCourseBatch?.id,
+    staleTime: 0, // refetch on every mount, like the former useEffect
+  });
 
   useEffect(() => {
     if (calendarRef.current && date) {
@@ -271,20 +282,8 @@ const SimpleCalendar: React.FC<Props> = ({ student, filters }) => {
           task={selectedTask}
           openModal={openUserModal}
           setOpenModal={setOpenUserModal}
-          onRefresh={() => {
-            const fetchTasks = async () => {
-              if (student?.user_id && selectedTeam?.id) {
-                const tasks = await getTasksByUser(
-                  student.user_id,
-                  selectedTeam.id,
-                  selectedPermission?.role_code,
-                  selectedCourseBatch.id,
-                );
-                setTasksByUser(tasks || []);
-              }
-            };
-            fetchTasks();
-          }}
+          // same range as the query (it used to reload without the date filters)
+          onRefresh={() => refetchTasks()}
         />
       )}
     </>
