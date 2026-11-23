@@ -5,7 +5,7 @@ import "rc-slider/assets/index.css";
 import { useFetchGradeStagesByCourseId } from "../../hooks/useFetchGradeStagesByCourseId";
 import { useSelectionsStore } from "../../store/selectionStore";
 import { useLocation } from "react-router-dom";
-import { useFilteredDataStore } from "../../store/filteredDataStore";
+import { useFilteredData } from "../../hooks/useFilteredData";
 import { useFetchCountByGradeStages } from "../../hooks/useFetchCountByGradeStages";
 import { Tooltip } from "antd";
 import { CaretLeftOutlined, CaretRightOutlined } from "@ant-design/icons";
@@ -147,7 +147,7 @@ function ProgressLevelsCard({ style, isGenericGraph, openTagModal, openCommandMo
     Number(selectedCourse?.id)
   );
   const { pathname } = useLocation();
-  const { filteredTeams } = useFilteredDataStore();
+  const { filteredTeams } = useFilteredData();
   const teamIds = pathname?.includes("dashboard/team")
     ? [selectedTeam?.id]
     : pathname?.includes("dashboard/courseBatch")

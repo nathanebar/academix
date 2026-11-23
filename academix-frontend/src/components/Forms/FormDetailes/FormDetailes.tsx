@@ -5,7 +5,7 @@ import { useFetchSameUsersInTeamAndTask } from "../../../hooks/Forms/useFetchSam
 import { useSelectionsStore } from "../../../store/selectionStore";
 import Notification from "../../../UI/Notification/Notification";
 import FormMembers from "../../../utils/FormMembers/FormMembers";
-import { useFilteredDataStore } from "../../../store/filteredDataStore";
+import { useFilteredData } from "../../../hooks/useFilteredData";
 
 const FormDetailes = () => {
   const location = useLocation();
@@ -29,7 +29,7 @@ const FormDetailes = () => {
     selectedCourseBatch.id
   );
 
-  const { filteredTeamMembers } = useFilteredDataStore();
+  const { filteredTeamMembers } = useFilteredData();
 
   useEffect(() => {
     if (!form) {

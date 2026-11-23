@@ -14,7 +14,6 @@ import EditPermissionsModal from "../../Modals/EditPermissions/EditPermissionsMo
 import { deleteCourse, updateCourse } from "../../../services/ApiServices";
 import Notification from "../../../UI/Notification/Notification";
 import { useSelectionsStore } from "../../../store/selectionStore";
-import { useFilteredDataStore } from "../../../store/filteredDataStore";
 import { useNavigate } from "react-router-dom";
 import { usePermissionStore } from "../../../store/permissionStore";
 import AddCourseBatchesModal from "../../Modals/AddCourseBatches/AddCourseBatchesModal";
@@ -59,9 +58,7 @@ const HeaderCard: React.FC<headerProps> = ({
   const teams = useTeamsData();
   const { setSelectedDomain, setSelectedTeam, setSelectedTeamMember } =
     useSelectionsStore();
-  const { setFilteredCourses, setFilteredCourseBatches, setFilteredTeams } =
-    useFilteredDataStore();
-  const [showDropdown, setShowDropdown] = useState(false);
+    const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
   const { removePermissionById } = useAddPermission();
 
@@ -124,9 +121,6 @@ const HeaderCard: React.FC<headerProps> = ({
     setSelectedCourseBatch,
     setSelectedTeam,
     setSelectedTeamMember,
-    setFilteredCourses,
-    setFilteredCourseBatches,
-    setFilteredTeams,
     setShowDropdown,
     filterCoursesBySelection,
     filterBatchesBySelection,

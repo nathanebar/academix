@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { GenericOptionSwitch } from "../../UI/GenericOptionSwitch/GenericOptionSwitch";
 import style from "./MissionsRepo.module.css";
 import RegularInput from "../../UI/Input/Input/RegularInput";
-import { useFilteredDataStore } from "../../store/filteredDataStore";
+import { useFilteredData } from "../../hooks/useFilteredData";
 import { schemaMap, SchemaName } from "../../types/types";
 import { useTaskGroupsByAxisIdToCalendar } from "../../hooks/useTaskGroupsByAxisIdToCalendar";
 import TaskGroup from "../TaskGroup/TaskGroup";
@@ -21,7 +21,7 @@ function MissionsRepo() {
   const [filterNames, setFilterNames] = useState<string[]>([]); // שמות הצירים שסומנו
 
   /* --------------------------- STORES -------------------------- */
-  const { filteredCourseBatches } = useFilteredDataStore();
+  const { filteredCourseBatches } = useFilteredData();
   const { selectedCourseBatch, selectedTeam } = useSelectionsStore();
   const axisBatchArchive = useAxisBatchArchiveData();
   const selectedPermission = usePermissionStore(

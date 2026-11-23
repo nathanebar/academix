@@ -7,7 +7,7 @@ import {
   filterCoursesBySelection,
   filterBatchesBySelection,
 } from "../utils/filterUtils";
-import { useFilteredDataStore } from "../store/filteredDataStore";
+import { useFilteredData } from "../hooks/useFilteredData";
 import { useSelectionHandler } from "../hooks/useSelectionHandler";
 import { useNavigate } from "react-router-dom";
 import { usePermissionStore } from "../store/permissionStore";
@@ -35,17 +35,7 @@ export const HeaderPermissionDisplay = () => {
   );
   const navigate = useNavigate();
 
-  const {
-    filteredDomains,
-    filteredCourses,
-    setFilteredCourses,
-    filteredCourseBatches,
-    setFilteredCourseBatches,
-    filteredTeams,
-    setFilteredTeams,
-    filteredTeamMembers,
-    setFilteredTeamMembers,
-  } = useFilteredDataStore();
+  const { filteredDomains, filteredCourses, filteredCourseBatches, filteredTeams, filteredTeamMembers } = useFilteredData();
 
   const teams = useTeamsData();
   const courses = useCoursesData();
@@ -73,9 +63,6 @@ export const HeaderPermissionDisplay = () => {
     setSelectedCourseBatch,
     setSelectedTeam,
     setSelectedTeamMember,
-    setFilteredCourses,
-    setFilteredCourseBatches,
-    setFilteredTeams,
     setShowDropdown,
     filterCoursesBySelection,
     filterBatchesBySelection,

@@ -53,7 +53,6 @@ import {
   Tag,
   Tooltip,
 } from "antd";
-import { useFilteredDataStore } from "../../../../store/filteredDataStore";
 import {
   filterStudentMembers,
   TeamMember,

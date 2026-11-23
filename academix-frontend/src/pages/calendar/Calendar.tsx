@@ -71,7 +71,7 @@ import {
   updateToUser,
 } from "../../services/ApiServices";
 import { UserTaskModal } from "../../components/LazyTaskModals";
-import { useFilteredDataStore } from "../../store/filteredDataStore";
+import { useFilteredData } from "../../hooks/useFilteredData";
 import { useCalendarStore } from "../../store/calendarStore";
 import { usePermissionStore } from "../../store/permissionStore";
 import { EventContent } from "./EventContent/EventContent";
@@ -176,8 +176,7 @@ const MyCalendar: React.FC = () => {
   // }, [selectedPermission?.role_code]);
 
   const realDate = selectedDate?.format("DD/MM/YYYY");
-  const { filteredCourseBatches, filteredTeamMembers, filteredTeams } =
-    useFilteredDataStore();
+  const { filteredCourseBatches, filteredTeamMembers, filteredTeams } = useFilteredData();
   const [displayMode, setDisplayMode] = useState<"full" | "split">("full");
   const { isFetched } = useFetchBlockDates(
     selectedTeam?.id,

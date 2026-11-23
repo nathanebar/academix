@@ -1,7 +1,7 @@
 import { ConfigProvider, Table } from "antd";
 import Photo from "../UI/Photo/Photo";
 import { useSelectionsStore } from "../store/selectionStore";
-import { useFilteredDataStore } from "../store/filteredDataStore";
+import { useFilteredData } from "../hooks/useFilteredData";
 
 type Props = {
   users?: any;
@@ -11,7 +11,7 @@ type Props = {
 const FormMembers = (props: Props) => {
   const { selectedTeam, selectedTeamMember, setSelectedTeamMember } =
     useSelectionsStore();
-  const { filteredTeamMembers } = useFilteredDataStore();
+  const { filteredTeamMembers } = useFilteredData();
   const statusStyle = (record: any) => {
     if (record.score && record.hasSubmission) {
       return {

@@ -4,7 +4,6 @@ import Photo from "../../../UI/Photo/Photo";
 import { CaretLeftOutlined } from "@ant-design/icons";
 import stringCheckAndToolTip from "../../../utils/stringCheck";
 import { useTeamMembers } from "../../../hooks/useTeamMembers";
-import { useFilteredDataStore } from "../../../store/filteredDataStore";
 import { useSelectionsStore } from "../../../store/selectionStore";
 import { useNavigate } from "react-router-dom";
 import { useSelectionHandler } from "../../../hooks/useSelectionHandler";
@@ -35,9 +34,7 @@ const TeamCard: React.FC<TeamCardProps> = ({
 
   const { setSelectedDomain, setSelectedTeam, setSelectedTeamMember } =
     useSelectionsStore();
-  const { setFilteredCourses, setFilteredCourseBatches, setFilteredTeams } =
-    useFilteredDataStore();
-
+  
   const courses = useCoursesData();
   const courseBatches = useCourseBatchesData();
   const teams = useTeamsData();
@@ -56,9 +53,6 @@ const TeamCard: React.FC<TeamCardProps> = ({
     setSelectedCourseBatch,
     setSelectedTeam,
     setSelectedTeamMember,
-    setFilteredCourses,
-    setFilteredCourseBatches,
-    setFilteredTeams,
     setShowDropdown,
     filterCoursesBySelection,
     filterBatchesBySelection,

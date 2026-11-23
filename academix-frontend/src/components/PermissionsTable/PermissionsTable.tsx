@@ -1,7 +1,7 @@
 import { ConfigProvider, Table } from "antd";
 import style from "./PermissionsTable.module.css";
 import { usePermissionStore } from "../../store/permissionStore";
-import { useFilteredDataStore } from "../../store/filteredDataStore";
+import { useFilteredData } from "../../hooks/useFilteredData";
 import { useLocation } from "react-router-dom";
 import { useSelectionsStore } from "../../store/selectionStore";
 import { useFetchCourseCommanders } from "../../hooks/useFetchCourseCommanders";
@@ -23,7 +23,7 @@ interface props {
 
 export const PermissionsTable: React.FC<props> = ({ userID }) => {
   const teamMembers = useTeamMembersData();
-  const { filteredTeams } = useFilteredDataStore();
+  const { filteredTeams } = useFilteredData();
   const { selectedTeam, selectedCourse } = useSelectionsStore();
   const { data: selectedCourseCommanders } = useFetchCourseCommanders(selectedCourse?.id);
   const location = useLocation();

@@ -1,7 +1,7 @@
 import style from "./CourseBatchList.module.css";
 import BlackButton from "../../UI/Button/BlackButton";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
-import { useFilteredDataStore } from "../../store/filteredDataStore";
+import { useFilteredData } from "../../hooks/useFilteredData";
 import CourseBatchCard from "./CourseBatchCard/CourseBatchCard";
 import { Input } from "antd";
 import { calculateCourseLenght } from "../../utils/CalculateTime";
@@ -9,12 +9,7 @@ import { useState, useMemo } from "react";
 import AddCourseBatchesModal from "../Modals/AddCourseBatches/AddCourseBatchesModal";
 
 const CourseBatchList = () => {
-  const {
-    filteredCourseBatches,
-    filteredCourses,
-    filteredAxis,
-    filteredTeamMembers,
-  } = useFilteredDataStore();
+  const { filteredCourseBatches, filteredCourses, filteredAxis, filteredTeamMembers } = useFilteredData();
 
   const [courseBatchModalOpen, setCourseBatchModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");

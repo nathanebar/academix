@@ -6,7 +6,7 @@ import TeamCourseBatch from "./TeamsCourseBatch/TeamCourseBatch";
 import StudentsCourseBatch from "./StudentsCourseBatch/StudentsCourseBatch";
 import CourseMission from "../CourseMission/TeamMission";
 import ExceptionTeams from "./ExceptionTeams/ExceptionTeams";
-import { useFilteredDataStore } from "../../store/filteredDataStore";
+import { useFilteredData } from "../../hooks/useFilteredData";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useFetchDomains } from "../../hooks/useFetchDomains";
@@ -40,19 +40,7 @@ const DashboardCourseBatchBody = () => {
       member?.course_batch_id === selectedCourseBatch?.id
   );
 
-  const {
-    filteredDomains,
-    setFilteredDomains,
-    filteredCourses,
-    setFilteredCourses,
-    filteredCourseBatches,
-    setFilteredCourseBatches,
-    filteredTeams,
-    setFilteredTeams,
-    setFilteredTeamMembers,
-    filteredTeamMembers,
-    setFilteredAxis,
-  } = useFilteredDataStore();
+  const { filteredDomains, filteredCourses, filteredCourseBatches, filteredTeams, filteredTeamMembers } = useFilteredData();
   const domains = useDomainsData();
   const teams = useTeamsData();
   const courses = useCoursesData();

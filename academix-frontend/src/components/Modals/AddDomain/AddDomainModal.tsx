@@ -21,7 +21,6 @@ import {
 import Notification from "../../../UI/Notification/Notification";
 import { useSelectionsStore } from "../../../store/selectionStore";
 import { usePermissionStore } from "../../../store/permissionStore";
-import { useFilteredDataStore } from "../../../store/filteredDataStore";
 import { OnSearch } from "../../../utils/OnSearch";
 import { Assignment } from "../../../types/types";
 import { queryClient } from "../../../api/queryClient";
@@ -52,8 +51,7 @@ const AddDomainModal: React.FC<AddDomainModalProps> = ({
 
   const { selectedSystemId } = useSelectionsStore();
   const { selectedPermission, setSelectedPermission } = usePermissionStore();
-  const { setFilteredDomains } = useFilteredDataStore();
-  const domains = useDomainsData();
+    const domains = useDomainsData();
 
   useEffect(() => {
     if (!isOpen) {

@@ -2,7 +2,7 @@ import { ConfigProvider, Table } from "antd";
 import { useNavigate } from "react-router-dom";
 import Photo from "../../../../UI/Photo/Photo";
 import { useSelectionsStore } from "../../../../store/selectionStore";
-import { useFilteredDataStore } from "../../../../store/filteredDataStore";
+import { useFilteredData } from "../../../../hooks/useFilteredData";
 import styles from "./SurveyMembersPage.module.css";
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
 
 const SurveyMembers = (props: Props) => {
   const { selectedTeam } = useSelectionsStore();
-  const { filteredTeamMembers } = useFilteredDataStore();
+  const { filteredTeamMembers } = useFilteredData();
 
   const statusStyle = (hasResponded: boolean) => {
     if (hasResponded) {

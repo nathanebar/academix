@@ -1,7 +1,7 @@
 import { ConfigProvider, Dropdown, Popconfirm, Table, Tooltip } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import Photo from "../UI/Photo/Photo";
-import { useFilteredDataStore } from "../store/filteredDataStore";
+import { useFilteredData } from "../hooks/useFilteredData";
 import { TeamMembers } from "../types/types";
 import { useLocation } from "react-router-dom";
 import DeleteStudentModal from "../components/Modals/DeleteStudent/DeleteStudentModal";
@@ -44,7 +44,7 @@ const StudentsTable: React.FC<dataSourceProps> = ({ filterdTeamsMembers, assignm
   };
 });
 
-  const { filteredTeams } = useFilteredDataStore();
+  const { filteredTeams } = useFilteredData();
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [student, setStudent] = useState<User>({});

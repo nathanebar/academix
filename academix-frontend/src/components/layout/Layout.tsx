@@ -3,20 +3,11 @@ import "./Layout.css";
 import Topbar from "./Topbar";
 import { useFetchPermissions } from "../../hooks/useFetchPermissions";
 import { usePermissionStore } from "../../store/permissionStore";
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense } from "react";
 import { Spin } from "antd";
 import { useRoleNavigation } from "../../hooks/useRoleNavigation";
 import { useSelectionsStore } from "../../store/selectionStore";
-import { filterDataBySelection } from "../../utils/filterUtils";
-import { useFilteredDataStore } from "../../store/filteredDataStore";
-import {
-  useAxisBatchArchiveData,
-  useCourseBatchesData,
-  useCoursesData,
-  useDomainsData,
-  useTeamMembersData,
-  useTeamsData,
-} from "../../hooks/useHierarchyData";
+import { FilteredDataContext, useComputeFilteredData } from "../../hooks/useFilteredData";
 import { useBlockColorEnabled } from "../../hooks/useTeamBlockColor";
 
 // The sidebar (calendars, day view, task modal) is only shown on /calendar and /courseContent:
@@ -38,62 +29,16 @@ export default function Layout() {
     selectedTeam,
     selectedTeamMember,
   } = useSelectionsStore();
-  const {
-    setFilteredDomains,
-    setFilteredCourses,
-    setFilteredCourseBatches,
-    filteredTeams,
-    setFilteredTeams,
-    filteredTeamMembers,
-    setFilteredTeamMembers,
-    setFilteredAxis,
-  } = useFilteredDataStore();
 
   useFetchPermissions();
 
-  // #17: server data of the hierarchy, from React Query (these hooks run the queries that
-  // used to be mounted here and copied into Zustand stores)
-  const domains = useDomainsData();
-  const courses = useCoursesData();
-  const courseBatches = useCourseBatchesData();
-  const teams = useTeamsData();
-  const axisBatchArchive = useAxisBatchArchiveData();
-  const teamMembers = useTeamMembersData();
+  // #17: the hierarchy lists filtered by the selection, derived from the React Query data
+  // (useHierarchyData) and provided to the app through FilteredDataContext. They used to be
+  // written into a Zustand store by an effect here.
+  const filteredData = useComputeFilteredData();
+  const { filteredTeamMembers } = filteredData;
   useBlockColorEnabled(selectedTeam?.id, selectedCourseBatch?.id);
 
-  useEffect(() => {
-    const result = filterDataBySelection(
-      selectedDomain,
-      selectedCourse,
-      selectedCourseBatch,
-      selectedTeam,
-      domains,
-      teams,
-      courses,
-      courseBatches,
-      axisBatchArchive,
-      [], // axes: the axes store was never filled (its only writer, useFetchAxes, was unused)
-      teamMembers
-    );
-    setFilteredDomains(result.filteredDomains);
-    setFilteredTeams(result.filteredTeams);
-    setFilteredCourses(result.filteredCourses);
-    setFilteredCourseBatches(result.filteredBatches);
-
-    setFilteredTeamMembers(result.filteredTeamMembers);
-    setFilteredAxis(result.filteredAxes);
-  }, [
-    selectedDomain,
-    selectedCourse,
-    selectedCourseBatch,
-    selectedTeam,
-    domains,
-    teams,
-    courses,
-    courseBatches,
-    axisBatchArchive, // was missing: the filtered axes did not follow the archive
-    teamMembers,
-  ]);
 
   const currentPath = location.pathname;
 
@@ -109,6 +54,7 @@ export default function Layout() {
   }
   // maybe need to make save the block color by team store here
   return (
+    <FilteredDataContext.Provider value={filteredData}>
     <div className="layout">
       {isSidebarVisible && (
         <Suspense fallback={null}>
@@ -131,5 +77,6 @@ export default function Layout() {
         </div>
       </div>
     </div>
+    </FilteredDataContext.Provider>
   );
 }

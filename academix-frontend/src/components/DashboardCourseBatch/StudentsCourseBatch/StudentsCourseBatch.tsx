@@ -8,7 +8,7 @@ import {
 import BlackButton from "../../../UI/Button/BlackButton";
 import StudentsTable from "../../../utils/StudentsTable";
 import style from "./StudentsCourseBatch.module.css";
-import { useFilteredDataStore } from "../../../store/filteredDataStore";
+import { useFilteredData } from "../../../hooks/useFilteredData";
 import { useState } from "react";
 import { OnSearch } from "../../../utils/OnSearch";
 import Notification from "../../../UI/Notification/Notification";
@@ -46,7 +46,7 @@ const StudentsCourseBatch = (props: StudentsCourseBatchProps) => {
   const [showNoResultsValidation, setShowNoResultsValidation] = useState(false);
 
   const teamMembers = useTeamMembersData();
-  const { filteredTeams } = useFilteredDataStore();
+  const { filteredTeams } = useFilteredData();
   const { selectedTeam, setSelectedTeam, selectedCourseBatch, selectedCourse,selectedDomain } =
     useSelectionsStore();
   const location = useLocation();

@@ -4,7 +4,7 @@ import style from "./CourseBatchCard.module.css";
 import { parseEndDateFromRange } from "../../../utils/CalculateTime";
 import { useNavigate } from "react-router-dom";
 import { useSelectionsStore } from "../../../store/selectionStore";
-import { useFilteredDataStore } from "../../../store/filteredDataStore";
+import { useFilteredData } from "../../../hooks/useFilteredData";
 import stringCheckAndToolTip from "../../../utils/stringCheck";
 import {
   deleteCourseBatch,
@@ -44,7 +44,7 @@ const CourseBatchCard = (props: Props) => {
 
   const navigate = useNavigate();
   const { setSelectedCourseBatch } = useSelectionsStore();
-  const { filteredCourseBatches } = useFilteredDataStore();
+  const { filteredCourseBatches } = useFilteredData();
   const [courseBatchModalOpen, setCourseBatchModalOpen] = useState<boolean>(false);
   const { selectedPermission, setSelectedPermission, permissions } = usePermissionStore();
   const { removePermissionById } = useAddPermission();

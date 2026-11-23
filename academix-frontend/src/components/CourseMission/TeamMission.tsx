@@ -1,12 +1,12 @@
 import style from "./TeamMission.module.css";
 import AxesCard from "./AxesCard/AxesCard";
-import { useFilteredDataStore } from "../../store/filteredDataStore";
+import { useFilteredData } from "../../hooks/useFilteredData";
 import { useSelectionsStore } from "../../store/selectionStore";
 import { useTaskCount } from "../../hooks/useFetchTaskCount";
 import { useAxisBatchArchiveData } from "../../hooks/useHierarchyData";
 
 const TeamMission = () => {
-  const { filteredCourseBatches } = useFilteredDataStore();
+  const { filteredCourseBatches } = useFilteredData();
   const axes = useAxisBatchArchiveData();
   const { selectedTeam, selectedCourseBatch } = useSelectionsStore();
 
