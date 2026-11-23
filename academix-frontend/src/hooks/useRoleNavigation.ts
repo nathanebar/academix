@@ -3,10 +3,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { usePermissionStore } from "../store/permissionStore";
 import { useSelectionsStore } from "../store/selectionStore";
 import { useUserStore } from "../store/userStore";
-import { getTeamMemberByUserIdAndTeamId } from "../services/ApiServices";
+import { useQueryClient } from "@tanstack/react-query";
+import { studentTeamMemberQuery } from "./useStudentTeamMember";
 
 export const useRoleNavigation = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const location = useLocation();
   
   const selectedPermission = usePermissionStore(
@@ -43,10 +45,12 @@ export const useRoleNavigation = () => {
       case "STUDENT":
         // 🔽 תיקון: בדיקה ש-user.id ו-scope_id קיימים
         if (selectedPermission.user_id && selectedPermission.scope_id) {
-          getTeamMemberByUserIdAndTeamId(selectedPermission.user_id, selectedPermission.scope_id)
-            .then((response: any) => {
-              if (response?.data) {
-                setSelectedTeamMember(response.data);
+          // same query as RoleSelect: shares its request instead of sending a second one
+          queryClient
+            .fetchQuery(studentTeamMemberQuery(selectedPermission.user_id, selectedPermission.scope_id))
+            .then((teamMember: any) => {
+              if (teamMember) {
+                setSelectedTeamMember(teamMember);
               }
             })
             .catch((error: any) => {

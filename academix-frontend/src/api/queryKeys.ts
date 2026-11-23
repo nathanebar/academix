@@ -58,6 +58,13 @@ export const axisTemplateKeys = {
   byAxis: (axisId: number | undefined) => [...axisTemplateKeys.all, axisId] as const,
 };
 
+export const teamMemberKeys = {
+  // the root of the existing ["teamMembers", ...] queries: their invalidations reach this one too
+  all: ["teamMembers"] as const,
+  byUserAndTeam: (userId: number | undefined, teamId: number | undefined) =>
+    [...teamMemberKeys.all, "byUserAndTeam", userId, teamId] as const,
+};
+
 export const userKeys = {
   all: ["users"] as const,
   // rank from the people directory (PEOPLE_API on the closed network)
