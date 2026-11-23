@@ -1,9 +1,11 @@
 /* דרישת הגופן שלך */
 @font-face {
   font-family: "myFont";
-  /* The file is a TrueType font: the old format("woff2") hint did not match it */
-  src: url("../src/fonts/NotoSansHebrew-VariableFont_wdth,wght.ttf")
-    format("truetype");
+  /* woff2 subset of NotoSansHebrew-VariableFont_wdth,wght.ttf (kept as the source): Hebrew, Latin-1,
+     punctuation, ₪ and €, with the variable axes and every layout feature (#86). Rebuilt once with fontTools
+     (not a project dependency): pip install fonttools brotli, then
+     pyftsubset "NotoSansHebrew-VariableFont_wdth,wght.ttf" --unicodes="U+0000-00FF,U+02C6-02DD,U+0300-036F,U+0590-05FF,U+FB1D-FB4F,U+2000-206F,U+20AA,U+20AC,U+2122,U+2212,U+25CC" --layout-features="*" --notdef-outline --flavor=woff2 --output-file=NotoSansHebrew-VariableFont-subset.woff2 */
+  src: url("../src/fonts/NotoSansHebrew-VariableFont-subset.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
   /* show the text right away with the fallback font, swap when the font is loaded */
