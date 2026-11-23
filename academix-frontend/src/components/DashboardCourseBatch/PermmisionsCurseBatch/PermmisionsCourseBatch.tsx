@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { ReactComponent as AddIcon } from "../../../media/Group 2.svg";
-import { useTeamMembersStore } from "../../../store/teamMemberStore";
 import EditPermissionsModal from "../../Modals/EditPermissions/EditPermissionsModal";
 import style from "./PermmisionsCourseBatch.module.css";
 import Photo from "../../../UI/Photo/Photo";
@@ -8,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import { useSelectionsStore } from "../../../store/selectionStore";
 import { usePermissionStore } from "../../../store/permissionStore";
 import { useFetchCourseCommanders } from "../../../hooks/useFetchCourseCommanders";
+import { useTeamMembersData } from "../../../hooks/useHierarchyData";
 type PermmisionsCourseBatchProps = {
   height?: string;
 };
@@ -15,7 +15,7 @@ type PermmisionsCourseBatchProps = {
 const PermmisionsCourseBatch: React.FC<PermmisionsCourseBatchProps> = (
   props: PermmisionsCourseBatchProps
 ) => {
-  const { teamMembers } = useTeamMembersStore();
+  const teamMembers = useTeamMembersData();
   const { selectedPermission, setSelectedPermission } = usePermissionStore();
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [isEditSolider, setIsEditSolider] = useState<boolean>(false);

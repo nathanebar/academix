@@ -17,7 +17,6 @@ import {
   createRoleAssigment,
   createUser,
 } from "../../../services/ApiServices";
-import { useTeamMembersStore } from "../../../store/teamMemberStore";
 import { useLocation } from "react-router-dom";
 import { useSelectionsStore } from "../../../store/selectionStore";
 import { Team, Assignment, ROLE_CODE } from "../../../types/types";
@@ -27,6 +26,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useUserStore } from "../../../store/userStore";
 import { useAddPermission } from "../../../hooks/useAddPermission";
 import he_IL from "antd/locale/he_IL";
+import { useTeamMembersData } from "../../../hooks/useHierarchyData";
 
 type StudentsCourseBatchProps = {
   height?: string;
@@ -45,7 +45,7 @@ const StudentsCourseBatch = (props: StudentsCourseBatchProps) => {
   const [isUserSelectedFromDropdown, setIsUserSelectedFromDropdown] = useState(false);
   const [showNoResultsValidation, setShowNoResultsValidation] = useState(false);
 
-  const { teamMembers } = useTeamMembersStore();
+  const teamMembers = useTeamMembersData();
   const { filteredTeams } = useFilteredDataStore();
   const { selectedTeam, setSelectedTeam, selectedCourseBatch, selectedCourse,selectedDomain } =
     useSelectionsStore();

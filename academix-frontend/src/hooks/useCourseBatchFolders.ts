@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSelectionsStore } from "../store/selectionStore";
-import { useCourseBatchStore } from "../store/courseBatchStore";
 import {
   getCourseBatchFolders,
   createCourseBatchFolder,
@@ -11,6 +10,7 @@ import {
   uploadFileToFolder,
   deleteFolderFile as deleteFolderFileApi,
 } from "../services/ApiServices";
+import { useAxisBatchArchiveData } from "./useHierarchyData";
 
 export interface FolderFile {
   id: number;
@@ -60,7 +60,7 @@ export const useCourseBatchFolders = (options?: {
     selectedTeamMember,
     activeHeaderType,
   } = useSelectionsStore();
-  const { axisBatchArchive } = useCourseBatchStore();
+  const axisBatchArchive = useAxisBatchArchiveData();
   const queryClient = useQueryClient();
 
   const isTeamMemberView =

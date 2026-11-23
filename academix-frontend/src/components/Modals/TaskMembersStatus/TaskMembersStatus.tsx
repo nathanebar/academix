@@ -35,7 +35,7 @@ import { useFilteredDataStore } from "../../../store/filteredDataStore";
 import { useLocation } from "react-router-dom";
 import { useSelectionsStore } from "../../../store/selectionStore";
 import dayjs, { Dayjs } from "dayjs";
-import { useCourseBatchStore } from "../../../store/courseBatchStore";
+import { useCourseBatchesData } from "../../../hooks/useHierarchyData";
 
 interface TaskAssignmentWithUser {
   id: number;
@@ -137,7 +137,7 @@ const TaskMembersStatus: React.FC<TaskProps> = ({
   endTime: null,
   });
   const isCalendarPage = pathname.includes("calendar");
-  const { courseBatches } = useCourseBatchStore();
+  const courseBatches = useCourseBatchesData();
   const isOnCalendarPage =
     isCalendarPage ||
     pathname.includes("missionsRepo") ||

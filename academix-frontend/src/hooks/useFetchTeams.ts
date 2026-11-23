@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import api from "../api/axios";
-import { useTeamStore } from "../store/teamStore";
 import { useMemo } from "react";
 import { useSelectionsStore } from "../store/selectionStore";
 
@@ -20,10 +19,6 @@ export const useFetchTeams = (allowedTeamsIds: number[] | number,courseBatches:a
     [allowedTeamsIds,courseBatches]
   );
 
-  const { selectedTeam,setSelectedTeam } = useSelectionsStore();
-
-  const { setTeams } = useTeamStore();
-
   return useQuery({
     queryKey: memoizedQueryKey,
     queryFn: async () => {
@@ -39,11 +34,9 @@ export const useFetchTeams = (allowedTeamsIds: number[] | number,courseBatches:a
     },
 
     meta: {
+      // #17: the teams live only in this query (useTeamsData); only the selection is set here.
       onSuccess: (data: any) => {
-       
-      
-        
-        setTeams(data);
+        const { selectedTeam, setSelectedTeam } = useSelectionsStore.getState();
         const isSelectedTeamValid = data.some(
           (team: any) => team.id === selectedTeam?.id
         );

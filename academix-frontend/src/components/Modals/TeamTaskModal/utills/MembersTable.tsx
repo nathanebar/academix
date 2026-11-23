@@ -1,13 +1,13 @@
 import React from "react";
 import style from "../teamTaskModal.module.css";
 import { Card, Table } from "antd";
-import { useTeamMembersStore } from "../../../../store/teamMemberStore";
 import { useSelectionsStore } from "../../../../store/selectionStore";
 import { feedbackType, TeamMembers, User } from "../../../../types/types";
 import Photo from "../../../../UI/Photo/Photo";
 import { Task } from "../../../../store/taskStore";
 
 import { useFetchFeedbacksByCourseId } from "../../../../hooks/feedback/useFetchFeedbackByCourseId";
+import { useTeamMembersData } from "../../../../hooks/useHierarchyData";
 const hasUserAnswered = (
   record: any,
   task: Task | undefined,
@@ -34,7 +34,7 @@ const hasUserAnswered = (
 type Props = { task?: Task; feedbacks: feedbackType[]; usersTask?: [] };
 
 const MembersTable = (props: Props) => {
-  const { teamMembers } = useTeamMembersStore();
+  const teamMembers = useTeamMembersData();
   const { selectedTeam } = useSelectionsStore();
 
   if (!selectedTeam) {

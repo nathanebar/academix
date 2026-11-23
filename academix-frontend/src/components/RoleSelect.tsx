@@ -8,9 +8,6 @@ import { useUserStore } from "../store/userStore";
 import { useRoleNavigation } from "../hooks/useRoleNavigation";
 import { useSelectionHandler } from "../hooks/useSelectionHandler";
 import { useFilteredDataStore } from "../store/filteredDataStore";
-import { useTeamStore } from "../store/teamStore";
-import { useCourseStore } from "../store/courseStore";
-import { useCourseBatchStore } from "../store/courseBatchStore";
 import { useSelectionsStore } from "../store/selectionStore";
 
 import {
@@ -22,6 +19,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { studentTeamMemberQuery } from "../hooks/useStudentTeamMember";
 
 import Photo from "../UI/Photo/Photo";
+import { useCourseBatchesData, useCoursesData, useTeamsData } from "../hooks/useHierarchyData";
 
 export const RoleSelect = () => {
   const { permissions, selectedPermission, setSelectedPermission } =
@@ -39,9 +37,9 @@ export const RoleSelect = () => {
     filteredTeamMembers,
   } = useFilteredDataStore();
 
-  const { teams } = useTeamStore();
-  const { courses } = useCourseStore();
-  const { courseBatches } = useCourseBatchStore();
+  const teams = useTeamsData();
+  const courses = useCoursesData();
+  const courseBatches = useCourseBatchesData();
 
   const {
     setSelectedDomain,

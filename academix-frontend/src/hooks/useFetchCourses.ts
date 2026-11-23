@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../api/axios";
-import { useCourseStore } from "../store/courseStore";
 import { useSelectionsStore } from "../store/selectionStore";
 
 export const useFetchCourses = (allowedCoursesIds: number[] | number,selectedDomainId:number) => {
@@ -9,9 +8,6 @@ export const useFetchCourses = (allowedCoursesIds: number[] | number,selectedDom
     : [allowedCoursesIds];
 
   const idsParam = coursesIdsArray?.join(",");
-
-  const { setSelectedCourse,selectedCourse, selectedDomain } = useSelectionsStore();
-  const { setCourses } = useCourseStore();
 
   return useQuery({
     queryKey: ["courses", allowedCoursesIds,selectedDomainId],
@@ -28,7 +24,9 @@ export const useFetchCourses = (allowedCoursesIds: number[] | number,selectedDom
     },
 
     meta: {
+      // #17: the courses live only in this query (useCoursesData); only the selection is set here.
       onSuccess: (data: any) => {
+        const { selectedCourse, setSelectedCourse } = useSelectionsStore.getState();
         const isSelectedCourseValid = selectedDomainId 
         ? data.some((course: any) => course.id === selectedCourse?.id)
         : data.some((course: any) => course.id === selectedCourse?.id);
@@ -43,7 +41,6 @@ export const useFetchCourses = (allowedCoursesIds: number[] | number,selectedDom
           setSelectedCourse(data[data.length - 1]);
         }
       }
-        setCourses(data);
       },
     },
     enabled: !!allowedCoursesIds && !!selectedDomainId,

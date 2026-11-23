@@ -19,17 +19,12 @@ import { useSelectionsStore } from "../../../store/selectionStore";
 import GrdaeStageCard from "./GrdaeStageCard/GrdaeStageCard";
 import { createGradeStage, createTag } from "../../../services/ApiServices";
 import { queryClient } from "../../../api/queryClient";
-import { useDomainStore } from "../../../store/domainStore";
-import { useTeamStore } from "../../../store/teamStore";
-import { useCourseStore } from "../../../store/courseStore";
-import { useCourseBatchStore } from "../../../store/courseBatchStore";
-import { useAxesStore } from "../../../store/axiStore";
 import { filterDataBySelection } from "../../../utils/filterUtils";
-import { useTeamMembersStore } from "../../../store/teamMemberStore";
 import { useNavigate } from "react-router-dom";
 
 import { useFetchTagsByCourseId } from "../../../hooks/useFetchTagsByCourseId";
 import TagCard from "./TagCard/TagCard";
+import { useAxisBatchArchiveData, useCourseBatchesData, useCoursesData, useDomainsData, useTeamMembersData, useTeamsData } from "../../../hooks/useHierarchyData";
 
 const CourseDashboard = () => {
   const { filteredAxis, filteredCourseBatches } = useFilteredDataStore();
@@ -47,12 +42,13 @@ const CourseDashboard = () => {
   const fetchedTags = useFetchTagsByCourseId(Number(selectedCourse?.id));
   const navigate = useNavigate();
 
-  const { teamMembers } = useTeamMembersStore();
-  const { domains } = useDomainStore();
-  const { teams } = useTeamStore();
-  const { courses } = useCourseStore();
-  const { courseBatches, axisBatchArchive } = useCourseBatchStore();
-  const { axes } = useAxesStore();
+  const teamMembers = useTeamMembersData();
+  const domains = useDomainsData();
+  const teams = useTeamsData();
+  const courses = useCoursesData();
+  const courseBatches = useCourseBatchesData();
+  const axisBatchArchive = useAxisBatchArchiveData();
+  const axes: any[] = []; // the axes store was never filled (#17)
   const { selectedDomain, selectedTeam, selectedCourseBatch } =
     useSelectionsStore();
 

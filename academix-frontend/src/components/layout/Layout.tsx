@@ -3,25 +3,20 @@ import "./Layout.css";
 import Topbar from "./Topbar";
 import { useFetchPermissions } from "../../hooks/useFetchPermissions";
 import { usePermissionStore } from "../../store/permissionStore";
-import { useFetchDomains } from "../../hooks/useFetchDomains";
-import { useFetchTeams } from "../../hooks/useFetchTeams";
-import { useFetchCourses } from "../../hooks/useFetchCourses";
-import { useFetchCourseBatches } from "../../hooks/useFetchCourseBatch";
 import { lazy, Suspense, useEffect } from "react";
 import { Spin } from "antd";
 import { useRoleNavigation } from "../../hooks/useRoleNavigation";
-import { useDomainStore } from "../../store/domainStore";
-import { useTeamStore } from "../../store/teamStore";
-import { useCourseStore } from "../../store/courseStore";
-import { useCourseBatchStore } from "../../store/courseBatchStore";
-import { useAxesStore } from "../../store/axiStore";
 import { useSelectionsStore } from "../../store/selectionStore";
 import { filterDataBySelection } from "../../utils/filterUtils";
 import { useFilteredDataStore } from "../../store/filteredDataStore";
-import { useTeamMembersStore } from "../../store/teamMemberStore";
-import { useFetchTeamMembers } from "../../hooks/useFetchTeamMembers";
-import { useFetchAxesBatchArchives } from "../../hooks/useFetchAxesBatchArchives";
-import { useFetchCourseCommanders } from "../../hooks/useFetchCourseCommanders";
+import {
+  useAxisBatchArchiveData,
+  useCourseBatchesData,
+  useCoursesData,
+  useDomainsData,
+  useTeamMembersData,
+  useTeamsData,
+} from "../../hooks/useHierarchyData";
 import { useBlockColorEnabled } from "../../hooks/useTeamBlockColor";
 
 // The sidebar (calendars, day view, task modal) is only shown on /calendar and /courseContent:
@@ -31,16 +26,10 @@ const Sidebar = lazy(() => import("./Sidebar/Sidebar"));
 export default function Layout() {
   useRoleNavigation();
   const location = useLocation();
-  const { domains } = useDomainStore();
-  const { teams } = useTeamStore();
-  const { courses } = useCourseStore();
-  const { courseBatches, axisBatchArchive } = useCourseBatchStore();
-  const { axes } = useAxesStore();
   const isInitialized = usePermissionStore((state) => state.isInitialized);
   const selectedPermission = usePermissionStore(
     (state) => state.selectedPermission
   );
-  const { teamMembers } = useTeamMembersStore();
 
   const {
     selectedDomain,
@@ -62,25 +51,14 @@ export default function Layout() {
 
   useFetchPermissions();
 
-  useFetchDomains(selectedPermission?.allowedDomainIds || []);
-  useFetchCourses(
-    selectedPermission?.allowedCourseIds || [],
-    selectedDomain?.id
-  );
-  useFetchCourseBatches(
-    selectedPermission?.allowedCourseBatcheIds || [],
-    selectedCourse?.id
-  );
-  useFetchTeams(selectedPermission?.allowedTeamIds || [], courseBatches);
-  // useFetchCourseCommanders(selectedCourse?.id);
-  useFetchAxesBatchArchives(
-    selectedPermission?.allowedCourseBatcheIds || [],
-    selectedCourseBatch?.id ? selectedCourseBatch.id : null
-  );
-  useFetchTeamMembers(
-    filteredTeams.map((team) => team.id),
-    selectedCourseBatch?.id ? selectedCourseBatch?.id : null
-  );
+  // #17: server data of the hierarchy, from React Query (these hooks run the queries that
+  // used to be mounted here and copied into Zustand stores)
+  const domains = useDomainsData();
+  const courses = useCoursesData();
+  const courseBatches = useCourseBatchesData();
+  const teams = useTeamsData();
+  const axisBatchArchive = useAxisBatchArchiveData();
+  const teamMembers = useTeamMembersData();
   useBlockColorEnabled(selectedTeam?.id, selectedCourseBatch?.id);
 
   useEffect(() => {
@@ -94,7 +72,7 @@ export default function Layout() {
       courses,
       courseBatches,
       axisBatchArchive,
-      axes,
+      [], // axes: the axes store was never filled (its only writer, useFetchAxes, was unused)
       teamMembers
     );
     setFilteredDomains(result.filteredDomains);
@@ -113,7 +91,7 @@ export default function Layout() {
     teams,
     courses,
     courseBatches,
-    axes,
+    axisBatchArchive, // was missing: the filtered axes did not follow the archive
     teamMembers,
   ]);
 

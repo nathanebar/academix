@@ -37,9 +37,9 @@ import {
 } from "../../hooks/useCourseBatchFolders";
 import { schemaMap } from "../../types/types";
 import { HeaderPermissionDisplay } from "../../components/HeaderPermissionDisplay";
-import { useCourseBatchStore } from "../../store/courseBatchStore";
 import styles from "./KnowledgeRetention.module.css";
 import { useSelectionsStore } from "../../store/selectionStore";
+import { useAxisBatchArchiveData } from "../../hooks/useHierarchyData";
 
 interface UserInfo {
   name?: string;
@@ -244,7 +244,7 @@ const KnowledgeRetention = () => {
     selectedTeamMember,
     activeHeaderType,
   } = useSelectionsStore();
-  const { axisBatchArchive } = useCourseBatchStore();
+  const axisBatchArchive = useAxisBatchArchiveData();
   const queryClient = useQueryClient();
   const { data: filesData = [], isLoading: isLoadingFiles } =
     useCourseBatchFiles();

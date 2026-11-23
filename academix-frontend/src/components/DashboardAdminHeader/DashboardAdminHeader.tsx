@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./AdminHeader.module.css";
-import { useDomainStore } from "../../store/domainStore";
 import {
   Button,
   Dropdown,
@@ -18,9 +17,6 @@ import BlackButton from "../../UI/Button/BlackButton";
 import { useSelectionsStore } from "../../store/selectionStore";
 import { useSelectionHandler } from "../../hooks/useSelectionHandler";
 import { useFilteredDataStore } from "../../store/filteredDataStore";
-import { useCourseBatchStore } from "../../store/courseBatchStore";
-import { useCourseStore } from "../../store/courseStore";
-import { useTeamStore } from "../../store/teamStore";
 import {
   filterTeamsByBatch,
   filterCoursesBySelection,
@@ -36,6 +32,7 @@ import AddDomainModal from "../Modals/AddDomain/AddDomainModal";
 import EditDomainModal from "../Modals/EditDomain/EditDomainModal";
 import { Domain } from "../../types/types";
 import { queryClient } from "../../api/queryClient";
+import { updateDomainsData, useCourseBatchesData, useCoursesData, useDomainsData, useTeamsData } from "../../hooks/useHierarchyData";
 
 const DashboardAdminHeader = () => {
   const [currentDomain, setCurrentDomain] = useState<string | number>();
@@ -59,10 +56,10 @@ const DashboardAdminHeader = () => {
     useFilteredDataStore();
   const { selectedPermission, setSelectedPermission } = usePermissionStore();
   const { filteredDomains, setFilteredDomains } = useFilteredDataStore();
-  const { domains, setDomains } = useDomainStore();
-  const { teams } = useTeamStore();
-  const { courses } = useCourseStore();
-  const { courseBatches } = useCourseBatchStore();
+  const domains = useDomainsData();
+  const teams = useTeamsData();
+  const courses = useCoursesData();
+  const courseBatches = useCourseBatchesData();
   
   const { handleSelectionChange } = useSelectionHandler(
     courses,
@@ -192,7 +189,7 @@ const DashboardAdminHeader = () => {
                                     ? { ...domainItem, name: domainName }
                                     : domainItem
                               );
-                              setDomains(updatedDomains);
+                              updateDomainsData(() => updatedDomains); // cache of the domains query (#17)
                               setEditDomainName(false);
                             }
                           }
@@ -242,7 +239,7 @@ const DashboardAdminHeader = () => {
                                 ? { ...domainItem, name: domainName }
                                 : domainItem
                             );
-                            setDomains(updatedDomains);
+                            updateDomainsData(() => updatedDomains); // cache of the domains query (#17)
                             setEditDomainName(false);
                           }
                         }}

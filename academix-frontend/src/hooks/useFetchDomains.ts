@@ -1,8 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import api from "../api/axios";
-import { useDomainStore } from "../store/domainStore";
-import { useMemo } from "react";
 import { useSelectionsStore } from "../store/selectionStore";
 
 type ScopeType = "system" | "domain" | "course" | "team";
@@ -13,9 +11,6 @@ export const useFetchDomains = (allowedDomainsIds: number[] | number) => {
     : [allowedDomainsIds];
 
   const idsParam = domainsIdsArray?.join(",");
-
-  const { setDomains } = useDomainStore();
-  const { setSelectedDomain, selectedDomain } = useSelectionsStore();
 
   return useQuery({
     queryKey: ["domains", allowedDomainsIds],
@@ -31,7 +26,10 @@ export const useFetchDomains = (allowedDomainsIds: number[] | number) => {
       return data;
     },
     meta: {
+      // #17: the domains live only in this query (read through useDomainsData). The selection
+      // (UI state) still falls back to the first domain; read at success time, not at render.
       onSuccess: (data: any) => {
+        const { selectedDomain, setSelectedDomain } = useSelectionsStore.getState();
         const isSelectedDomainValid = data.some(
           (domain: any) => domain.id === selectedDomain?.id
         );
@@ -39,7 +37,6 @@ export const useFetchDomains = (allowedDomainsIds: number[] | number) => {
         if (!isSelectedDomainValid && data.length > 0) {
           setSelectedDomain(data[0]);
         }
-        setDomains(data);
       },
     },
     enabled: !!allowedDomainsIds,

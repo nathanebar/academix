@@ -8,11 +8,9 @@ import {
 import React, { useState } from "react";
 import styles from "./HeaderCard.module.css";
 import { Dropdown, Input, Popconfirm, Tooltip } from "antd";
-import { useCourseStore } from "../../../store/courseStore";
 import stringCheckAndToolTip from "../../../utils/stringCheck";
 import { calculateCourseLenght } from "../../../utils/CalculateTime";
 import EditPermissionsModal from "../../Modals/EditPermissions/EditPermissionsModal";
-import { useCourseBatchStore } from "../../../store/courseBatchStore";
 import { deleteCourse, updateCourse } from "../../../services/ApiServices";
 import Notification from "../../../UI/Notification/Notification";
 import { useSelectionsStore } from "../../../store/selectionStore";
@@ -21,7 +19,6 @@ import { useNavigate } from "react-router-dom";
 import { usePermissionStore } from "../../../store/permissionStore";
 import AddCourseBatchesModal from "../../Modals/AddCourseBatches/AddCourseBatchesModal";
 import { useSelectionHandler } from "../../../hooks/useSelectionHandler";
-import { useTeamStore } from "../../../store/teamStore";
 import {
   filterBatchesBySelection,
   filterCoursesBySelection,
@@ -29,6 +26,7 @@ import {
 } from "../../../utils/filterUtils";
 import { CourseBatch } from "../../../types/types";
 import { useAddPermission } from "../../../hooks/useAddPermission";
+import { useCourseBatchesData, useCoursesData, useTeamsData } from "../../../hooks/useHierarchyData";
 
 interface headerProps {
   course: string;
@@ -49,8 +47,8 @@ const HeaderCard: React.FC<headerProps> = ({
   selectedBatch,
   courseBatch,
 }) => {
-  const { courses } = useCourseStore();
-  const { courseBatches } = useCourseBatchStore();
+  const courses = useCoursesData();
+  const courseBatches = useCourseBatchesData();
   const { setSelectedCourseBatch, setSelectedCourse } = useSelectionsStore();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [courseName, setCourseName] = useState<string>(course);
@@ -58,7 +56,7 @@ const HeaderCard: React.FC<headerProps> = ({
   const [inputError, setInputError] = useState<boolean>(false);
   const [courseBatchModalOpen, setCourseBatchModalOpen] = useState(false);
   const { selectedPermission, setSelectedPermission, permissions } = usePermissionStore();
-  const { teams } = useTeamStore();
+  const teams = useTeamsData();
   const { setSelectedDomain, setSelectedTeam, setSelectedTeamMember } =
     useSelectionsStore();
   const { setFilteredCourses, setFilteredCourseBatches, setFilteredTeams } =
