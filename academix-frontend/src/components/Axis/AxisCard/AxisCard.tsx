@@ -14,12 +14,10 @@ import {
 import { usePermissionStore } from "../../../store/permissionStore";
 import EditTemplateAxisModal from "../../Modals/EditTemplateAxis/EditTemplateAxisModal";
 import { useCourseStore } from "../../../store/courseStore";
-import { useAxisTemplate } from "../../../store/AxisTemplateStore";
 import {
   createTaskGroup,
   deleteAxis,
   updateAxis,
-  getTemplateAxisByAxisId,
 } from "../../../services/ApiServices";
 import { useSelectionsStore } from "../../../store/selectionStore";
 import { useQueryClient } from "@tanstack/react-query";
@@ -146,7 +144,6 @@ const AxisCard = ({
     }
   }, [onAddTaskGroup]);
 
-  const { setAxisTemplates, axisTemplates } = useAxisTemplate();
   const [isOpenTemplatesModal, setIsOpenTemplatesModal] =
     useState<boolean>(false);
 
@@ -204,16 +201,6 @@ const AxisCard = ({
       } catch (error) {
         console.error("Failed to create axis:", error);
       }
-    }
-  };
-
-  const fetchAxisTemplates = async () => {
-    try {
-      const res = await getTemplateAxisByAxisId(axis.id!);
-      axisTemplates.push(res.data[0]);
-      setAxisTemplates(Array.from(new Set(axisTemplates)));
-    } catch (err) {
-      console.log(err);
     }
   };
 
@@ -371,7 +358,6 @@ const AxisCard = ({
                 axisId={axis.id}
                 open={isOpenTemplatesModal}
                 setOpen={setIsOpenTemplatesModal}
-                fetchAxisTemplates={fetchAxisTemplates}
               />
             )}
           </div>

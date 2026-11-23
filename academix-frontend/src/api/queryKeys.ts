@@ -58,6 +58,12 @@ export const axisTemplateKeys = {
   byAxis: (axisId: number | undefined) => [...axisTemplateKeys.all, axisId] as const,
 };
 
+export const userKeys = {
+  all: ["users"] as const,
+  // rank from the people directory (PEOPLE_API on the closed network)
+  rank: (username: string | undefined) => [...userKeys.all, "rank", username] as const,
+};
+
 export const systemKeys = {
   all: ["systems"] as const,
 };
