@@ -36,7 +36,8 @@ import UploadFiles from "./Inputs/UploadFiles/UploadFiles";
 import ResponseFile from "./Inputs/ResponseFile/ResponseFile";
 import { useUserStore } from "../../store/userStore";
 import { useSelectionsStore } from "../../store/selectionStore";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { axisTemplateKeys } from "../../api/queryKeys";
 import { useFetchCheckListsByTaskId } from "../../hooks/useFetchCheckListsByTaskId";
 import { useFetchFilesByTaskId } from "../../hooks/useFetchFilesByTaskId";
 import { isEqual } from "es-toolkit/compat";
@@ -129,7 +130,7 @@ const NewTaskModal = (props: NewMissionProps) => {
   const [hasCheckList, setHasCheckList] = useState<any[]>([]);
   const [hasFiles, setHasFiles] = useState<any[]>([]);
   const { activeHeaderType, selectedTeam } = useSelectionsStore();
-  const [items, setItems] = useState<AxisTemplate | null>(null);
+  // items: see the axis template query below
   const { refetch: refetchCheckLists } = checkLists;
   const { refetch: refetchFileData } = fileData;
   const { refetch: refetchTagData } = tagsData;
@@ -196,13 +197,14 @@ const NewTaskModal = (props: NewMissionProps) => {
       survey: surveyId ? { id: surveyId, title: "סקר" } : null,
     });
   }, [formId, surveyId]);
-  useEffect(() => {
-    if (!props.axisId) return;
-    const load = async (axisId: number) => {
+  // The axis template (which task fields are required): read-only server data.
+  const { data: items = null } = useQuery({
+    queryKey: axisTemplateKeys.byAxis(props.axisId),
+    queryFn: async (): Promise<AxisTemplate> => {
+      const axisId = props.axisId!;
       const data = await getTemplateByAxisId(axisId);
       const tmpl = data && data.length > 0 ? data[0] : null;
-
-      setItems(
+      return (
         tmpl ?? {
           axisId,
           files: false,
@@ -219,9 +221,10 @@ const NewTaskModal = (props: NewMissionProps) => {
           tags: false,
         }
       );
-    };
-    load(props.axisId);
-  }, [props.axisId]);
+    },
+    enabled: !!props.axisId,
+    staleTime: 0, // refetch on every mount, like the former useEffect
+  });
 
   useEffect(() => {
     if (!props.editingTask) {

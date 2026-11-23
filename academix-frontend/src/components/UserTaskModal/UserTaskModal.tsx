@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { feedbackKeys } from "../../api/queryKeys";
 import style from "./UserTaskModal.module.css";
 import {
   Modal,
@@ -103,7 +105,6 @@ const UserTaskModal = (props: UserTaskModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState<number | null>(null);
   const [isCancelling, setIsCancelling] = useState<number | null>(null);
   const [assignerName, setAssignerName] = useState<string | null>(null);
-  const [feedbackStatus, setFeedbackStatus] = useState<any>(null);
 
   const navigate = useNavigate();
 
@@ -199,12 +200,15 @@ const UserTaskModal = (props: UserTaskModalProps) => {
     fetchAssProgress();
   }, [checklistsData.data]);
 
-  useEffect(() => {
-    if (!taskAssId) return;
-    getFeedbackStatus(taskAssId).then((res) => {
-      if (res?.success) setFeedbackStatus(res.data?.data);
-    });
-  }, [taskAssId]);
+  const { data: feedbackStatus = null } = useQuery({
+    queryKey: feedbackKeys.statusByAssignment(taskAssId),
+    queryFn: async () => {
+      const res = await getFeedbackStatus(taskAssId);
+      return res?.success ? res.data?.data ?? null : null;
+    },
+    enabled: !!taskAssId,
+    staleTime: 0, // refetch on every mount, like the former useEffect
+  });
 
   useEffect(() => {
     if (props.isPreview) return;
