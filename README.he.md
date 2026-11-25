@@ -51,6 +51,8 @@ npm start                       # http://localhost:3000 -> login page
 
 יצירת משתמשים נוספים: `npm run user:create -- <username> <password> [name] [militaryid]` (בתוך `academix-backend/`).
 
+נתוני דמו (פיתוח מקומי בלבד): `npm run db:seed:demo` (בתוך `academix-backend/`, אחרי `db:seed`) יוצר תחומים, קורסים, מחזורים, צוותים, חניכים ומשימות עם תאריכים. הסיסמה של כל משתמשי הדמו היא `1234`: ‏`domain1`, ‏`course1`, ‏`tc_c1b1t1` (מפקד צוות), ‏`st_c1b1t1_1` (חניך). אם הנתונים כבר קיימים הוא לא עושה כלום, והוא מסרב לרוץ עם `NODE_ENV=production`.
+
 ### פורטים של התשתית
 
 אם פורט כבר תפוס (למשל PostgreSQL שמותקן ב-Windows מאזין כבר על 5432), יש ליצור קובץ `.env` בשורש המאגר (git מתעלם ממנו):

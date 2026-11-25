@@ -11,6 +11,7 @@
     "dev": "nodemon app.js",
     "db:init": "node scripts/db-init.js",
     "db:seed": "node scripts/seed.js",
+    "db:seed:demo": "node scripts/seed-demo.js",
     "user:create": "node scripts/create-user.js",
     "db:check-duplicates": "node scripts/check-duplicate-pairs.js"
   },
