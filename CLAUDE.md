@@ -33,6 +33,7 @@ The rules below exist so that **there are never merge conflicts**. Follow them s
 - **Hot files**: even inside a zone, only one task/branch at a time may touch them:
   - Backend: `app.js`, `models/*`, `src/controllers/task.controller.js`, `src/controllers/taskAssignment.controller.js`
   - Frontend: `src/services/ApiServices.ts`, `src/types/types.ts`, `src/routes/AppRoutes.tsx`, `package.json`
+- **Temporary exception (from 2026-11-25, while @shneorshr1 is on vacation):** @nathanebar may work in `academix-frontend/**`, **only on the issues of the redesign-prep Epic #97** (label `redesign-prep`). Each of those issues lists the exact files it may change; stay inside that list. The exception ends when @shneorshr1 is back: issues not yet started can then be reassigned, and an issue in progress keeps its single assignee until its PR is merged. All other frontend work still needs @shneorshr1.
 
 ## 2. Cross-zone changes (API contract)
 
