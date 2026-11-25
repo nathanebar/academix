@@ -1,0 +1,111 @@
+/* Design tokens as CSS variables (redesign-prep Epic #97, issue #100).
+   Generated from src/theme/tokens.ts and kept in sync by src/theme/tokens.test.ts: change both together.
+   Imported once in src/index.tsx. Usage: see src/theme/README.md. */
+:root {
+  /* semantic */
+  --ax-app-bg: #f8f6f2;
+  --ax-surface: #ffffff;
+  --ax-nav-accent: #6de1e3;
+  --ax-input-placeholder: #333333;
+  --ax-modal-mask: rgba(0, 0, 0, 0.1);
+  --ax-scrollbar-thumb: #e6e1d8;
+  --ax-scrollbar-thumb-hover: #dad5ce;
+
+  /* palette: neutrals */
+  --ax-white: #ffffff;
+  --ax-black: #000000;
+  --ax-grey333: #333333;
+  --ax-grey666: #666666;
+  --ax-grey999: #999999;
+  --ax-grey-aaa: #aaaaaa;
+  --ax-grey-ccc: #cccccc;
+  --ax-grey-e0: #e0e0e0;
+  --ax-grey-e8: #e8e8e8;
+  /* palette: antd v4 defaults */
+  --ax-ant-blue: #1890ff;
+  --ax-ant-blue1: #e6f7ff;
+  --ax-antd-primary: #1677ff;
+  --ax-ant-red: #ff4d4f;
+  --ax-ant-red1: #fff1f0;
+  --ax-ant-red2: #ffccc7;
+  --ax-ant-error-bg: #fff2f0;
+  --ax-ant-green: #52c41a;
+  --ax-ant-green1: #f6ffed;
+  --ax-ant-green3: #b7eb8f;
+  --ax-ant-gold: #faad14;
+  --ax-ant-purple: #722ed1;
+  --ax-ant-gray2: #fafafa;
+  --ax-ant-gray3: #f5f5f5;
+  --ax-ant-gray4: #f0f0f0;
+  --ax-ant-gray5: #d9d9d9;
+  --ax-ant-gray6: #bfbfbf;
+  --ax-ant-gray7: #8c8c8c;
+  --ax-ant-gray8: #595959;
+  --ax-ant-gray9: #262626;
+  /* palette: warm beiges */
+  --ax-sand50: #faf9f6;
+  --ax-sand100: #f4f1eb;
+  --ax-sand150: #ece8df;
+  --ax-sand200: #ece5d6;
+  --ax-sand250: #e7e2d6;
+  --ax-sand300: #e6e1d8;
+  --ax-sand400: #d4c7ad;
+  --ax-sand500: #bfac8b;
+  --ax-sand600: #a09a8c;
+  --ax-cream50: #fffaf0;
+  --ax-honey200: #f2ddb0;
+  --ax-honey700: #c77f00;
+  /* palette: cool greys and dark blues */
+  --ax-steel400: #a3a6a8;
+  --ax-steel600: #6e7072;
+  --ax-steel700: #5b6472;
+  --ax-navy800: #2b2f3e;
+  --ax-navy900: #232b3a;
+  --ax-denim: #2b5d8a;
+  --ax-plum: #611f69;
+  /* palette: slate / gray */
+  --ax-slate50: #f8fafc;
+  --ax-slate100: #f1f5f9;
+  --ax-slate200: #e2e8f0;
+  --ax-slate300: #cbd5e1;
+  --ax-slate400: #94a3b8;
+  --ax-slate500: #64748b;
+  --ax-slate800: #1e293b;
+  --ax-gray200: #e5e7eb;
+  --ax-gray400: #9ca3af;
+  --ax-gray500: #6b7280;
+  /* palette: accents */
+  --ax-blue500: #3b82f6;
+  --ax-emerald600: #059669;
+  --ax-amber500: #f59e0b;
+  --ax-red500: #ef4444;
+  /* palette: bootstrap-like */
+  --ax-bs-blue: #007bff;
+  --ax-bs-gray100: #f8f9fa;
+  --ax-bs-gray200: #e9ecef;
+
+  /* radius */
+  --ax-radius-xs: 4px;
+  --ax-radius-sm: 6px;
+  --ax-radius-md: 8px;
+  --ax-radius-lg: 10px;
+  --ax-radius-xl: 12px;
+  --ax-radius-15: 15px;
+  --ax-radius-16: 16px;
+  --ax-radius-20: 20px;
+  --ax-radius-30: 30px;
+  --ax-radius-50: 50px;
+  --ax-radius-pill: 999px;
+  --ax-radius-round: 50%;
+
+  /* shadow */
+  --ax-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --ax-shadow-soft: 0 2px 6px rgba(0, 0, 0, 0.06);
+  --ax-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --ax-shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --ax-shadow-tw: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --ax-shadow-navy: 0 4px 18px rgba(35, 43, 58, 0.05);
+
+  /* font */
+  --ax-font-family: "myFont", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
