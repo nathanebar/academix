@@ -41,6 +41,8 @@ npm start                       # http://localhost:3000 -> login page
 
 Create more accounts: `npm run user:create -- <username> <password> [name] [militaryid]` (in `academix-backend/`).
 
+Demo data (local only): `npm run db:seed:demo` (in `academix-backend/`, after `db:seed`) creates domains, courses, batches, teams, students and dated tasks. Every demo user has the password `1234`: `domain1`, `course1`, `tc_c1b1t1` (team commander), `st_c1b1t1_1` (student). It does nothing if the data already exists and refuses to run with `NODE_ENV=production`.
+
 ### Infrastructure ports
 
 If a port is already in use (for example a PostgreSQL installed on Windows already listens on 5432), create a `.env` file at the root of the repository (ignored by git):
