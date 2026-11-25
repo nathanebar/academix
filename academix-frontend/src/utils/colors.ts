@@ -1,6 +1,6 @@
 // colors.ts (או בתוך אותו קובץ)
 
-import { gradientColors } from "../types/types";
+import { gradientColors } from "../theme/taskColors";
 
 type Gradient = { from: string; to: string };
 

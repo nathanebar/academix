@@ -12,6 +12,7 @@ import { useQueryDebugger } from "./hooks/useQueryDebugger";
 import { useEffect, useRef } from "react";
 import { useDateValidation } from "./hooks/useDateValidation";
 import { TopProgressBar } from "./loading/TopProgressBar";
+import { antdTheme } from "./theme/antdTheme";
 
 function App() {
   const authStatus = useUserAuth();
@@ -79,18 +80,7 @@ function App() {
     <ConfigProvider
       direction="rtl"
       locale={heIL}
-      theme={{
-        components: {
-          Modal: {
-            colorBgMask: "rgba(0, 0, 0, 0.1)",
-          },
-          Input: {
-            colorTextPlaceholder: "#333",
-            activeBorderColor: "none",
-            hoverBorderColor: "none",
-          },
-        },
-      }}
+      theme={antdTheme}
     >
       {authStatus === "loading" ? (
         <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>

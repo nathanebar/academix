@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  background-color: #f8f6f2;
+  background-color: var(--ax-app-bg);
 }
 
 .App-logo {
@@ -27,7 +27,7 @@
 }
 
 .App-link {
-  color: #61dafb;
+  color: #61dafb; /* TODO(tokens): one-off, leftover from the CRA template */
 }
 .ant-modal-mask{
   backdrop-filter: blur(8px) !important;
@@ -39,12 +39,12 @@
 
 
 ::-webkit-scrollbar-thumb {
-    background: #E6E1D8;
+    background: var(--ax-scrollbar-thumb);
     border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #dad5ce;
+    background: var(--ax-scrollbar-thumb-hover);
 }
 
 @keyframes App-logo-spin {
