@@ -74,7 +74,7 @@ git archive --format=tar.gz -o academix-code.tar.gz HEAD -- . ":(exclude)academi
 
 > **חשוב:** לעולם לא להעתיק את `academix-frontend/src/media` מ-GitHub אל הרשת. התמונות האמיתיות נמצאות רק ב-GitLab הפנימי, והעתקה תדרוס אותן בריבועים אפורים. (נכון לגרסה הזו, לא נוספה שום תמונה חדשה מחוץ לרשת. אם בעתיד תתווסף, היא תועבר בנפרד.)
 
-> משתמשים ב-`tar.gz` ולא ב-zip: `git archive` ו-`tar` קיימים גם ב-Linux וגם ב-Windows (Git Bash / Windows 10 ומעלה), ו-`zip` לא תמיד מותקן.
+> משתמשים ב-`tar.gz` ולא ב-zip: `git archive` ו-`tar` קיימים גם ב-Linux וגם ב-Windows (Git Bash / Windows 10 ומעלה), ו-`zip` לא תמיד מותקן. אם בכל זאת מגיע zip, ראו את הדרך החלופית בסעיף 3.3.
 
 ### 2.3 תלויות (node_modules)
 **אפשרות א' – יש registry פנימי:** לבדוק שהחבילות החדשות זמינות בו (`helmet`, `compression`, `express-rate-limit` והתלויות שלהן). קבצי `package-lock.json` מגדירים את הגרסאות המדויקות. במקרה הזה אין צורך להעביר `node_modules`.
@@ -133,6 +133,33 @@ git checkout main -- academix-frontend/src/media
 # 4. להכניס את הכול: git רושם גם את הקבצים שנמחקו
 git add -A
 ```
+
+#### אם הקוד הגיע כקובץ zip (במקום tar.gz)
+מחליפים רק את שלב 2, ואז ממשיכים לשלבים 3 ו-4 כרגיל. שלב 1 נשאר אותו דבר.
+
+```bash
+# 2. לפרוס את ה-zip: הפקודה הראשונה שעובדת
+unzip -q /path/to/academix.zip -d .                      # אם unzip מותקן
+/c/Windows/System32/tar.exe -xf /path/to/academix.zip -C .   # ה-tar של Windows 10 ומעלה פותח גם zip
+```
+ב-PowerShell אפשר גם: `Expand-Archive -Path C:\path\academix.zip -DestinationPath . -Force`.
+
+לפני שלב 3, שתי בדיקות:
+
+1. **תיקייה מיותרת:** zip שהורד מ-GitHub (כפתור "Download ZIP") שם הכול בתוך תיקייה אחת, למשל `academix-main/`. בודקים עם `ls`. אם רואים רק את התיקייה הזו, מעלים את התוכן שלה רמה אחת (`dotglob` מעביר גם קבצים נסתרים כמו `.gitignore`, `.gitattributes` ו-`.github`):
+   ```bash
+   shopt -s dotglob
+   mv academix-main/* .
+   rmdir academix-main
+   ```
+2. **תמונות ממלא-מקום:** zip מ-GitHub כולל את `academix-frontend/src/media` עם הריבועים האפורים. מוחקים את התיקייה, ושלב 3 מחזיר את התמונות האמיתיות:
+   ```bash
+   rm -rf academix-frontend/src/media
+   ```
+
+> `SHA256SUMS.txt` מסעיף 2.4 מתאים ל-tar.gz בלבד. עבור zip צריך לחשב טביעת אצבע לקובץ ה-zip עצמו לפני ההעברה (`sha256sum academix.zip > SHA256SUMS.txt`).
+
+> zip שנפתח ב-Windows יכול להמיר סופי שורות ל-CRLF, ואז `git status` מראה כמעט כל קובץ כמשתנה. `git add -A` מחזיר אותם ל-LF בזכות `.gitattributes`, ולכן בודקים את `git status` רק אחרי שלב 4: צריכים להישאר רק השינויים האמיתיים.
 
 ### 3.4 לבדוק לפני commit
 ```bash
