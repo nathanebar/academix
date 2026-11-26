@@ -116,10 +116,14 @@ const NoteEditor: React.FC<NoteEditorProps> = ({
     setSaving(true);
     try {
       const ok = await onSave?.(t, c);
-      setJustSaved(true);
-      setTimeout(() => setJustSaved(false), 1500);
-      if (ok === false) message.error("שמירה נכשלה");
-      else setIsEditMode(false); // חזרה למצב תצוגה אחרי שמירה מוצלחת
+      if (ok === false) {
+        // the only error toast of a failed save (the page's onSave just returns false)
+        message.error("שמירה נכשלה");
+      } else {
+        setJustSaved(true);
+        setTimeout(() => setJustSaved(false), 1500);
+        setIsEditMode(false); // חזרה למצב תצוגה אחרי שמירה מוצלחת
+      }
     } finally {
       setSaving(false);
     }

@@ -29,7 +29,7 @@
 .foldersPanel {
   width: 280px;
   flex-shrink: 0;
-  border-left: 1px solid #e8e8e8;
+  border-left: 1px solid var(--ax-grey-e8);
   padding-left: 8px;
   overflow-y: auto;
 }
@@ -59,7 +59,7 @@
   align-items: center;
   gap: 10px;
   padding: 6px 8px;
-  border-radius: 8px;
+  border-radius: var(--ax-radius-md);
   cursor: pointer;
   transition: background 0.2s;
   width: 100%;
@@ -67,11 +67,11 @@
 }
 
 .folderItem:hover {
-  background: #f7f3f8;
+  background: #f7f3f8; /* TODO(tokens) */
 }
 
 .folderItemSelected {
-  background: #ede4ee; /* סגול בהיר של סלאק */
+  background: #ede4ee; /* סגול בהיר של סלאק */ /* TODO(tokens) */
 }
 
 /* האליפסה */
@@ -79,7 +79,7 @@
   width: 36px;
   height: 30px;
   border-radius: 50% / 50%; /* צורת אליפסה */
-  background: #f0f0f0;
+  background: var(--ax-ant-gray4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -88,21 +88,21 @@
 }
 
 .ellipseSelected {
-  background: #611f69; /* הסגול של סלאק */
+  background: var(--ax-plum); /* הסגול של סלאק */
 }
 
 .ellipseIcon {
   font-size: 16px;
-  color: #8c8c8c;
+  color: var(--ax-ant-gray7);
   transition: color 0.2s;
 }
 
 .ellipseIconSelected {
-  color: #ffffff;
+  color: var(--ax-white);
 }
 
 .folderName {
-  color: #333333;
+  color: var(--ax-grey333);
   font-weight: 400;
   white-space: nowrap;
   overflow: hidden;
@@ -110,7 +110,7 @@
 }
 
 .folderNameSelected {
-  color: #611f69;
+  color: var(--ax-plum);
   font-weight: 600;
 }
 
@@ -170,33 +170,33 @@
 
 /* כרטיסית פתק */
 .noteCard {
-  border-radius: 10px;
+  border-radius: var(--ax-radius-lg);
   overflow: hidden;
-  border: 1px solid #f0f0f0;
-  background: #ffffff;
+  border: 1px solid var(--ax-ant-gray4);
+  background: var(--ax-white);
   width: 100%;
   height: auto;
   min-height: 90px;
 }
 
 .noteCard:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--ax-shadow-card);
 }
 
 .noteCardSelected {
-  border-color: #611f69;
-  box-shadow: 0 0 0 2px rgba(97, 31, 105, 0.2);
-  background: #faf8fb;
+  border-color: var(--ax-plum);
+  box-shadow: 0 0 0 2px rgba(97, 31, 105, 0.2); /* TODO(tokens) */
+  background: #faf8fb; /* TODO(tokens) */
 }
 
 .noteCardSelected .noteCardTopBar {
-  background: #611f69;
+  background: var(--ax-plum);
   opacity: 1;
 }
 
 .noteCardTopBar {
   height: 4px;
-  background: #611f69;
+  background: var(--ax-plum);
   opacity: 0.85;
 }
 
@@ -208,7 +208,7 @@
 }
 
 .noteCardIcon {
-  color: #611f69;
+  color: var(--ax-plum);
   margin-top: 2px;
 }
 
@@ -222,13 +222,13 @@
   align-items: center;
   gap: 6px;
   padding: 0 12px 10px;
-  border-top: 1px solid #f5f5f5;
+  border-top: 1px solid var(--ax-ant-gray3);
   margin-top: 2px;
   padding-top: 8px;
 }
 
 .noteCardDateIcon {
-  color: #8c8c8c;
+  color: var(--ax-ant-gray7);
   font-size: 12px;
 }
 
@@ -244,14 +244,14 @@
 }
 
 .deleteIcon {
-  color: #999;
+  color: var(--ax-grey999);
   cursor: pointer;
   transition: color 0.2s;
   font-size: 16px;
 }
 
 .deleteIcon:hover {
-  color: #ff4d4f;
+  color: var(--ax-ant-red);
 }
 
 .notesHeader {
@@ -300,30 +300,30 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border-radius: 10px;
-  background: #611f69;
-  border-color: #611f69;
+  border-radius: var(--ax-radius-lg);
+  background: var(--ax-plum);
+  border-color: var(--ax-plum);
   font-weight: 500;
   font-size: 14px;
   padding: 6px 16px;
   height: 38px;
-  box-shadow: 0 2px 6px rgba(97, 31, 105, 0.25);
+  box-shadow: 0 2px 6px rgba(97, 31, 105, 0.25); /* TODO(tokens) */
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
 }
 
 .newNoteButton:hover,
 .newNoteButton:focus {
-  background: #7c2b86;
-  border-color: #7c2b86;
-  box-shadow: 0 4px 12px rgba(97, 31, 105, 0.35);
+  background: #7c2b86; /* TODO(tokens) */
+  border-color: #7c2b86; /* TODO(tokens) */
+  box-shadow: 0 4px 12px rgba(97, 31, 105, 0.35); /* TODO(tokens) */
   transform: translateY(-1px);
 }
 
 .newNoteButton:active {
-  background: #4a1550;
-  border-color: #4a1550;
-  box-shadow: 0 2px 4px rgba(97, 31, 105, 0.2);
+  background: #4a1550; /* TODO(tokens) */
+  border-color: #4a1550; /* TODO(tokens) */
+  box-shadow: 0 2px 4px rgba(97, 31, 105, 0.2); /* TODO(tokens) */
   transform: translateY(0);
 }
 
@@ -336,7 +336,7 @@
   align-items: center;
   gap: 6px;
   padding: 8px 12px 10px;
-  border-top: 1px solid #f5f5f5;
+  border-top: 1px solid var(--ax-ant-gray3);
 }
 
 .noteCardDeleteWrapper {
@@ -346,14 +346,14 @@
 }
 
 .noteCardDeleteIcon {
-  color: #bbb;
+  color: #bbb; /* TODO(tokens) */
   cursor: pointer;
   transition: color 0.2s;
   font-size: 14px;
 }
 
 .noteCardDeleteIcon:hover {
-  color: #ff4d4f;
+  color: var(--ax-ant-red);
 }
 
 
@@ -373,23 +373,23 @@
 }
 
 .threadCard {
-  background: #fff;
-  border: 1px solid #e8e8e8;
-  border-radius: 10px;
+  background: var(--ax-white);
+  border: 1px solid var(--ax-grey-e8);
+  border-radius: var(--ax-radius-lg);
   padding: 12px 16px;
   cursor: pointer;
   transition: all 0.2s;
-  border-top: 3px solid #611f69;
+  border-top: 3px solid var(--ax-plum);
 }
 
 .threadCard:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: var(--ax-shadow-card);
 }
 
 .threadCardSelected {
-  border-color: #611f69;
-  box-shadow: 0 0 0 2px rgba(97,31,105,0.2);
-  background: #faf8fb;
+  border-color: var(--ax-plum);
+  box-shadow: 0 0 0 2px rgba(97,31,105,0.2); /* TODO(tokens) */
+  background: #faf8fb; /* TODO(tokens) */
 }
 
 .threadCardHeader {
@@ -399,7 +399,7 @@
 }
 
 .threadCardIcon {
-  color: #611f69;
+  color: var(--ax-plum);
 }
 
 .threadCardTitle {
@@ -408,19 +408,19 @@
 }
 
 .threadCardDeleteIcon {
-  color: #bbb;
+  color: #bbb; /* TODO(tokens) */
   cursor: pointer;
 }
 
 .threadCardDeleteIcon:hover {
-  color: #ff4d4f;
+  color: var(--ax-ant-red);
 }
 
 .threadReplies {
    width: 100%;
   margin-inline-start: 0;
   padding-inline-start: 16px;
-  border-inline-start: 2px solid #f0f0f0;
+  border-inline-start: 2px solid var(--ax-ant-gray4);
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -433,9 +433,9 @@
 }
 
 .threadReplyCard {
-  background: #fafafa;
-  border: 1px solid #f0f0f0;
-  border-radius: 8px;
+  background: var(--ax-ant-gray2);
+  border: 1px solid var(--ax-ant-gray4);
+  border-radius: var(--ax-radius-md);
   padding: 8px 12px;
   cursor: pointer;
   transition: all 0.2s;
@@ -445,19 +445,19 @@
 }
 
 .threadReplyCard:hover {
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  background: var(--ax-white);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); /* TODO(tokens) */
 }
 
 .threadReplyCardOpen {
-  background: #ffffff;
-  border-color: #611f69;
-  box-shadow: 0 0 0 2px rgba(97, 31, 105, 0.15);
+  background: var(--ax-white);
+  border-color: var(--ax-plum);
+  box-shadow: 0 0 0 2px rgba(97, 31, 105, 0.15); /* TODO(tokens) */
 }
 
 .threadReplyEditorWrapper {
   margin-inline-start: 16px;
-  border-inline-start: 2px solid #e8e8e8;
+  border-inline-start: 2px solid var(--ax-grey-e8);
   padding-inline-start: 12px;
 }
 
@@ -468,7 +468,7 @@
 }
 
 .threadReplyIcon {
-  color: #611f69;
+  color: var(--ax-plum);
   font-size: 13px;
 }
 
@@ -483,12 +483,12 @@
   align-items: center;
   gap: 4px;
   padding-top: 4px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--ax-ant-gray4);
 }
 
 .threadReplyDateIcon {
   font-size: 11px;
-  color: #8c8c8c;
+  color: var(--ax-ant-gray7);
 }
 
 .threadReplyDate {
@@ -504,10 +504,10 @@
 }
 
 .cancelNewReplyButton {
-  color: #ff4d4f;
-  border: 1px solid #ff4d4f;
-  background: #fff;
-  border-radius: 6px;
+  color: var(--ax-ant-red);
+  border: 1px solid var(--ax-ant-red);
+  background: var(--ax-white);
+  border-radius: var(--ax-radius-sm);
   padding: 4px 16px;
   font-weight: 500;
   font-size: 13px;
@@ -518,9 +518,9 @@
 }
 
 .cancelNewReplyButton:hover {
-  background: #fff1f0;
-  border-color: #ff4d4f;
-  color: #d9363e;
+  background: var(--ax-ant-red1);
+  border-color: var(--ax-ant-red);
+  color: #d9363e; /* TODO(tokens) */
 }
 
 .noteCardFooter {
@@ -528,7 +528,7 @@
   align-items: center;
   gap: 6px;
   padding: 8px 12px 10px;
-  border-top: 1px solid #f5f5f5;
+  border-top: 1px solid var(--ax-ant-gray3);
   flex-wrap: wrap; /* לשטח צפוף */
 }
 
@@ -536,11 +536,11 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  background: #f9f5fb;
+  background: #f9f5fb; /* TODO(tokens) */
   padding: 2px 8px;
-  border-radius: 10px;
+  border-radius: var(--ax-radius-lg);
   font-size: 12px;
-  color: #611f69;
+  color: var(--ax-plum);
   margin-inline-start: 4px;
 }
 
@@ -550,7 +550,7 @@
 
 .noteCardCreatorName {
   font-size: 12px;
-  color: #611f69;
+  color: var(--ax-plum);
   max-width: 100px;
   white-space: nowrap;
   overflow: hidden;
