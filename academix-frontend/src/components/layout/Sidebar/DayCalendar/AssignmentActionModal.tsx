@@ -7,6 +7,7 @@ import {
   FileAddOutlined,
   RightOutlined,
 } from "@ant-design/icons";
+import { cssVar, radius } from "../../../../theme/tokens";
 
 interface AssignmentActionModalProps {
   type: "team" | "teamMember";
@@ -16,9 +17,9 @@ interface AssignmentActionModalProps {
 const BUTTON_STYLE = {
   width: "100%",
   padding: "16px 20px",
-  border: "1px solid #e2e8f0",
-  borderRadius: "12px",
-  backgroundColor: "#f8fafc",
+  border: `1px solid ${cssVar("slate200")}`,
+  borderRadius: radius.xl,
+  backgroundColor: cssVar("slate50"),
   cursor: "pointer",
   transition: "all 0.2s ease",
   textAlign: "right" as const,
@@ -30,7 +31,7 @@ const BUTTON_STYLE = {
 const ICON_WRAPPER = (bg: string) => ({
   width: "40px",
   height: "40px",
-  borderRadius: "10px",
+  borderRadius: radius.lg,
   backgroundColor: bg,
   display: "flex",
   alignItems: "center",
@@ -46,7 +47,7 @@ export const AssignmentModalContent = ({ type, onSelect }: AssignmentActionModal
 
   return (
     <div style={{ padding: "8px 0 16px" }}>
-      <p style={{ marginBottom: "20px", color: "#64748b", fontSize: "14px", direction: "rtl" }}>
+      <p style={{ marginBottom: "20px", color: cssVar("slate500"), fontSize: "14px", direction: "rtl" }}>
         מה תרצה לעשות עם השיבוץ החדש?
       </p>
 
@@ -59,16 +60,16 @@ export const AssignmentModalContent = ({ type, onSelect }: AssignmentActionModal
             onSelect("expand");
           }}
         >
-          <div style={ICON_WRAPPER("#d1fae5")}>
-            <PlusCircleOutlined style={{ fontSize: "20px", color: "#059669" }} />
+          <div style={ICON_WRAPPER("#d1fae5") /* TODO(tokens) */}>
+            <PlusCircleOutlined style={{ fontSize: "20px", color: cssVar("emerald600") }} />
           </div>
           <div style={{ flex: 1, direction: "rtl" }}>
-            <div style={{ fontWeight: 600, color: "#1e293b", fontSize: "14px" }}>
+            <div style={{ fontWeight: 600, color: cssVar("slate800"), fontSize: "14px" }}>
               הוסף מועד למשימה הנוכחית
             </div>
-            <div style={{ fontSize: "12px", color: "#64748b" }}>הרחבת השיבוץ הקיים</div>
+            <div style={{ fontSize: "12px", color: cssVar("slate500") }}>הרחבת השיבוץ הקיים</div>
           </div>
-          <RightOutlined style={{ color: "#94a3b8", fontSize: "12px" }} />
+          <RightOutlined style={{ color: cssVar("slate400"), fontSize: "12px" }} />
         </button>
 
         {/* משימה חדשה */}
@@ -79,16 +80,16 @@ export const AssignmentModalContent = ({ type, onSelect }: AssignmentActionModal
             onSelect("new");
           }}
         >
-          <div style={ICON_WRAPPER("#dbeafe")}>
-            <FileAddOutlined style={{ fontSize: "20px", color: "#2563eb" }} />
+          <div style={ICON_WRAPPER("#dbeafe") /* TODO(tokens) */}>
+            <FileAddOutlined style={{ fontSize: "20px", color: "#2563eb" /* TODO(tokens) */ }} />
           </div>
           <div style={{ flex: 1, direction: "rtl" }}>
-            <div style={{ fontWeight: 600, color: "#1e293b", fontSize: "14px" }}>
+            <div style={{ fontWeight: 600, color: cssVar("slate800"), fontSize: "14px" }}>
               צור משימה חדשה
             </div>
-            <div style={{ fontSize: "12px", color: "#64748b" }}>שיבוץ במשימה נפרדת</div>
+            <div style={{ fontSize: "12px", color: cssVar("slate500") }}>שיבוץ במשימה נפרדת</div>
           </div>
-          <RightOutlined style={{ color: "#94a3b8", fontSize: "12px" }} />
+          <RightOutlined style={{ color: cssVar("slate400"), fontSize: "12px" }} />
         </button>
 
         {/* ביטול */}
@@ -97,10 +98,10 @@ export const AssignmentModalContent = ({ type, onSelect }: AssignmentActionModal
             width: "100%",
             padding: "12px",
             border: "none",
-            borderRadius: "10px",
+            borderRadius: radius.lg,
             backgroundColor: "transparent",
             cursor: "pointer",
-            color: "#94a3b8",
+            color: cssVar("slate400"),
             fontSize: "13px",
             fontWeight: 500,
             marginTop: "4px",
@@ -127,7 +128,7 @@ export const showAssignmentModal = (type: "team" | "teamMember"): Promise<string
     Modal.confirm({
       title: (
         <div style={{ display: "flex", alignItems: "center", gap: "12px", direction: "rtl" }}>
-          <WarningOutlined style={{ color: "#f59e0b", fontSize: "24px" }} />
+          <WarningOutlined style={{ color: cssVar("amber500"), fontSize: "24px" }} />
           <span style={{ direction: "rtl" }}>{title}</span>
         </div>
       ),
