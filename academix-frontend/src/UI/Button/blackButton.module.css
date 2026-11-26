@@ -1,22 +1,85 @@
+/* BlackButton styles, on the tokens of src/theme (issue #103). Variants: see BlackButton.tsx. */
+
+/* primary (default) */
 .button {
-  background-color: #2b2f3e;
-  border-radius: 50px;
-  color: white;
+  background-color: var(--ax-navy800);
+  border-radius: var(--ax-radius-50);
+  color: var(--ax-white);
   font-weight: 500;
   font-size: 13px;
   border:none;
   box-shadow: none;
 }
 .button:hover {
-  background-color: #2b2f3e !important;
-  border-color: black !important;
-  color: white !important;
+  background-color: var(--ax-navy800) !important;
+  border-color: var(--ax-black) !important;
+  color: var(--ax-white) !important;
 }
 .focusBtn{
-  color: black;
+  color: var(--ax-black);
 }
 .focusBtn:focus {
-  background-color: #ffffff !important;
+  background-color: var(--ax-white) !important;
   border: none !important;
-  color: black !important;
+  color: var(--ax-black) !important;
+}
+
+/* secondary: sand pill, grey text */
+.secondary {
+  background-color: var(--ax-sand100);
+  color: var(--ax-steel600);
+}
+.secondary:hover {
+  background-color: var(--ax-sand100) !important;
+  color: var(--ax-steel600) !important;
+}
+
+/* outline: white pill, black text */
+.outline {
+  background-color: var(--ax-white);
+  color: var(--ax-black);
+}
+.outline:hover {
+  background-color: var(--ax-white) !important;
+  color: var(--ax-black) !important;
+}
+
+/* danger: antd danger red */
+.danger {
+  background-color: var(--ax-ant-red);
+  color: var(--ax-white);
+}
+.danger:hover {
+  background-color: var(--ax-ant-red) !important;
+  color: var(--ax-white) !important;
+}
+
+/* dashed: "add ..." action */
+.dashed {
+  background-color: transparent;
+  border: 1px dashed var(--ax-navy800);
+  color: var(--ax-navy800);
+}
+.dashed:hover {
+  background-color: transparent !important;
+  border: 1px dashed var(--ax-navy800) !important;
+  color: var(--ax-navy800) !important;
+}
+
+/* icon: round, icon only */
+.icon {
+  border-radius: var(--ax-radius-round);
+  padding: 0;
+  min-width: 32px;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* disabled, for every variant */
+.button:disabled,
+.button:disabled:hover {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
