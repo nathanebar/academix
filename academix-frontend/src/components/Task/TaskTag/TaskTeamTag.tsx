@@ -1,6 +1,7 @@
 import { useTaskUsers } from "../../../hooks/useTaskUsers";
 import { useSelectionsStore } from "../../../store/selectionStore";
 import style from "./TaskTag.module.css";
+import { cssVar } from "../../../theme/tokens";
 import {
   Tag,
   Tooltip as AntTooltip,
@@ -339,7 +340,7 @@ const TaskTeamTag: React.FC<TaskProps> = ({
                 <div key={index}>
                   {sol?.name || sol?.userName}
                   {!allSameDate && sol?.start && (
-                    <span style={{ color: "#aaa", marginRight: 8 }}>
+                    <span style={{ color: cssVar("greyAaa"), marginRight: 8 }}>
                       {" - "}
                       {sol?.start}
                     </span>
@@ -377,7 +378,7 @@ const TaskTeamTag: React.FC<TaskProps> = ({
                 <div key={index}>
                   {sol?.name}
                   {!allSameDate && sol?.start && (
-                    <span style={{ color: "#aaa", marginRight: 8 }}>
+                    <span style={{ color: cssVar("greyAaa"), marginRight: 8 }}>
                       {"- "}
                       {sol?.start}
                     </span>

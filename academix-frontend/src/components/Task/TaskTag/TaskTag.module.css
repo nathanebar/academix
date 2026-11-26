@@ -1,10 +1,10 @@
 .task-assigned-full {
   width: fit-content;
-  border: 2px solid #28a983;
+  border: 2px solid #28a983; /* TODO(tokens) */
   font-weight: bold;
-  border-radius: 12px;
-  color: #3bc183;
-  background-color: #e7fcf6;
+  border-radius: var(--ax-radius-xl);
+  color: #3bc183; /* TODO(tokens) */
+  background-color: #e7fcf6; /* TODO(tokens) */
   padding: 2px 12px;             
   line-height: 1.4;            
   white-space: nowrap;
@@ -15,12 +15,12 @@
 
 .task-assigned-half {
   width: fit-content;
-  border: 2px solid #f49833;
+  border: 2px solid #f49833; /* TODO(tokens) */
   font-size: 12px;
   font-weight: bold;
-  border-radius: 12px;
-  color: #ffa52d;
-  background-color: #fff7e2;
+  border-radius: var(--ax-radius-xl);
+  color: #ffa52d; /* TODO(tokens) */
+  background-color: #fff7e2; /* TODO(tokens) */
   padding: 2px 12px;             
   line-height: 1.4;             
   white-space: nowrap;
