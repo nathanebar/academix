@@ -173,6 +173,7 @@ export default function ErrorPage({ code: codeProp }: ErrorPageProps) {
             <span>4</span>
             <svg className={styles.zero} viewBox="0 0 46 46">
               <g className={styles.m}>
+                {/* Logo artwork colors: no exact token, TODO(tokens) */}
                 <path fill="#CFCAC2" d="M22 2A20 20 0 0 0 2 22h20z" />
                 <path fill="#CFCAC2" d="M24 24v20a20 20 0 0 0 20-20z" />
                 <circle cx="33" cy="11" r="9" fill="#F7A823" />
