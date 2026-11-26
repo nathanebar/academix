@@ -20,6 +20,7 @@ import { studentTeamMemberQuery } from "../hooks/useStudentTeamMember";
 
 import Photo from "../UI/Photo/Photo";
 import { useCourseBatchesData, useCoursesData, useTeamsData } from "../hooks/useHierarchyData";
+import { palette } from "../theme/tokens";
 
 export const RoleSelect = () => {
   const { permissions, selectedPermission, setSelectedPermission } =
@@ -246,12 +247,12 @@ export const RoleSelect = () => {
       theme={{
         components: {
           Dropdown: {
-            colorBgElevated: "white",
-            colorText: "black",
-            colorPrimary: "black",
-            controlItemBgActive: "rgb(244, 241, 235)",
+            colorBgElevated: palette.white,
+            colorText: palette.black,
+            colorPrimary: palette.black,
+            controlItemBgActive: palette.sand100,
             controlItemBgActiveHover: "none",
-            borderRadius: 50,
+            borderRadius: 50, // TODO(tokens): antd needs a number, radius["50"] is "50px"
           },
         },
       }}

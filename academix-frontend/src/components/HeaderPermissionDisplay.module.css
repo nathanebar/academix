@@ -13,44 +13,44 @@
 .permissionLabel {
   cursor: pointer;
   padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: var(--ax-radius-xs);
   font-size: 22px;
   display: inline-block;
   transition: background-color 0.2s;
 }
 
 .permissionLabel:hover {
-  background-color: #e0e0e0;
+  background-color: var(--ax-grey-e0);
 }
 .permissionLabelNA {
   /* cursor: pointer; */
   padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: var(--ax-radius-xs);
   font-size: 22px;
   display: inline-block;
   transition: background-color 0.2s;
 }
 .permissionLabel.active {
-  background-color: #e0e0e0;
+  background-color: var(--ax-grey-e0);
   /* color: white; */
 }
 
 .permissionCaretDownOutlined {
   cursor: pointer;
   padding: 4px 8px;
-  border-radius: 50%;
+  border-radius: var(--ax-radius-round);
   font-size: 22px;
   display: inline-block;
   transition: background-color 0.2s;
 }
 
 .permissionCaretDownOutlined:hover {
-  background-color: #e0e0e0;
+  background-color: var(--ax-grey-e0);
 }
 .permissionCaretDownOutlinedNotTeamM {
   cursor: pointer;
   padding: 4px 8px;
-  border-radius: 50%;
+  border-radius: var(--ax-radius-round);
   font-size: 22px;
   display: inline-block;
   transition: background-color 0.2s;
@@ -59,10 +59,10 @@
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--ax-white);
+  border: 1px solid var(--ax-grey-ccc);
+  border-radius: var(--ax-radius-xs);
+  box-shadow: var(--ax-shadow-md);
   z-index: 999;
   min-width: 100%;
   direction: rtl;
@@ -72,11 +72,11 @@
 .dropdownItem {
   padding: 8px 12px;
   cursor: pointer;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #eee; /* TODO(tokens) */
 }
 
 .dropdownItem:hover {
-  background-color: #f5f5f5;
+  background-color: var(--ax-ant-gray3);
 }
 
 .dropdownItem:last-child {
@@ -87,6 +87,6 @@
   height: 2.5rem;
   width: 2.5rem;
   align-self: end;
-  background-color: rgb(209, 206, 206);
-  color: white;
+  background-color: rgb(209, 206, 206); /* TODO(tokens) */
+  color: var(--ax-white);
 }

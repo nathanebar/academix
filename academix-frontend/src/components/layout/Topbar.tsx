@@ -1,6 +1,7 @@
 import React, { lazy, Suspense, useEffect, useState } from "react";
 import { ConfigProvider, Layout, Menu, Modal, Tooltip } from "antd";
 import "./Topbar.css";
+import { cssVar, semantic } from "../../theme/tokens";
 import { useLocation, useNavigate } from "react-router-dom";
 import { RoleSelect } from "../RoleSelect";
 import { usePermissionStore } from "../../store/permissionStore";
@@ -146,7 +147,7 @@ const Topbar: React.FC<TopbarProps> = ({ isSidebarVisible = false }) => {
         theme={{
           components: {
             Menu: {
-              colorPrimary: "#6DE1E3",
+              colorPrimary: semantic.navAccent, // antd theme tokens need a real color
             },
           },
         }}
@@ -210,7 +211,7 @@ const Topbar: React.FC<TopbarProps> = ({ isSidebarVisible = false }) => {
               fontSize: "15px",
               fontWeight: 600,
               gap: 10,
-              backgroundColor: "#f8f6f2",
+              backgroundColor: cssVar("appBg"),
             }}
           />
         </Header>
@@ -278,39 +279,6 @@ const Topbar: React.FC<TopbarProps> = ({ isSidebarVisible = false }) => {
         </div>
       </Modal>
 
-      <style>
-        {`
-           .fixed-logos {
-      position: fixed;
-      left: 7px;
-      top: 15px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 1000;
-    }
-    
-    .fixed-logos .logo {
-      height: 50px;
-      width: auto;
-      cursor: pointer;
-      position: static; 
-    }
-          
-          :where(.css-dev-only-do-not-override-12htj1p).ant-menu .ant-menu-title-content {
-            transition: color 0.3s;
-            color: black;
-          }
-          :where(.css-dev-only-do-not-override-12htj1p).ant-menu-light.ant-menu-horizontal >.ant-menu-item-selected::after, 
-          :where(.css-dev-only-do-not-override-12htj1p).ant-menu-light>.ant-menu.ant-menu-horizontal >.ant-menu-item-selected::after, 
-          :where(.css-dev-only-do-not-override-12htj1p).ant-menu-light.ant-menu-horizontal >.ant-menu-submenu-selected::after, 
-          :where(.css-dev-only-do-not-override-12htj1p).ant-menu-light>.ant-menu.ant-menu-horizontal >.ant-menu-submenu-selected::after {
-            border-bottom-width: 4px;
-            border-bottom-color: #6DE1E3;
-            margin-bottom: 1.5vh;
-          }
-        `}
-      </style>
     </>
   );
 };

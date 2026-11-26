@@ -1,6 +1,6 @@
 .layout {
   display: flex;
-  background-color: #f8f6f2;
+  background-color: var(--ax-app-bg);
    min-height: 100vh; 
 }
 

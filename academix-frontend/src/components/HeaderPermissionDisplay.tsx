@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import styles from "./HeaderPermissionDisplay.module.css";
+import { cssVar, palette } from "../theme/tokens";
 import { SelectionDropdown } from "./SelectionDropdown";
 import { useSelectionsStore } from "../store/selectionStore";
 import {
@@ -251,9 +252,9 @@ export const HeaderPermissionDisplay = () => {
       theme={{
         components: {
           Button: {
-            defaultHoverBg: "black",
-            defaultHoverBorderColor: "black",
-            defaultHoverColor: "white",
+            defaultHoverBg: palette.black,
+            defaultHoverBorderColor: palette.black,
+            defaultHoverColor: palette.white,
           },
         },
       }}
@@ -265,7 +266,7 @@ export const HeaderPermissionDisplay = () => {
           position: "sticky",
           top: 64,
           zIndex: 999,
-          background: "#f8f6f2",
+          background: cssVar("appBg"),
         }}
       >
         <Button onClick={handleBack} className={styles.navButton}>
