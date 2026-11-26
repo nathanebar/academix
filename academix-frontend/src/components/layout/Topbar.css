@@ -5,7 +5,7 @@
 
 .ant-menu {
   padding-inline: 0 !important;
-  background-color: #f8f9fa;
+  background-color: var(--ax-bs-gray100);
 }
 .hiChatLogo {
   width: 1vw !important;
@@ -13,7 +13,7 @@
 }
 .topbar {
   /* background-color: #f8f9fa; */
-  background-color: #f8f6f2;
+  background-color: var(--ax-app-bg);
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -96,7 +96,7 @@
 
 .mail {
   margin-right: 10px;
-  color: rgb(179, 118, 187);
+  color: rgb(179, 118, 187); /* TODO(tokens) */
   font-weight: bold;
   text-decoration: none;
 }
@@ -106,7 +106,7 @@
   flex-shrink: 0;
   border-width: 0px 0px 0px thin;
   border-style: solid;
-  border-color: rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.12); /* TODO(tokens) */
   height: 8vh;
 }
 
@@ -124,12 +124,29 @@
   padding: 1vh;
   padding-bottom: 0.2vh;
   padding-top: 0.2vh;
-  border-radius: 15px;
-  background-color: white;
+  border-radius: var(--ax-radius-15);
+  background-color: var(--ax-white);
   text-align: right;
 }
 
 .titleInModal {
   border-bottom: 1px solid;
   margin-bottom: 4vh;
+}
+/* Moved from the inline <style> of Topbar.tsx (#101). */
+.fixed-logos {
+  position: fixed;
+  left: 7px;
+  top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.fixed-logos .logo {
+  height: 50px;
+  width: auto;
+  cursor: pointer;
+  position: static;
 }

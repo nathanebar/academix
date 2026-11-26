@@ -1,15 +1,15 @@
 .sidebar {
   width: 300px;
   min-width: 300px;
-  background-color: white;
+  background-color: var(--ax-white);
   border-right: none;
   padding: 20px;
   padding-top: 0px;
   box-sizing: border-box;
   direction: rtl;
   height: 91vh;             
-  border-top-right-radius: 30px;
-  border-bottom-right-radius: 30px;
+  border-top-right-radius: var(--ax-radius-30);
+  border-bottom-right-radius: var(--ax-radius-30);
   margin-top: 82px;         
   overflow-y: auto;
 }
