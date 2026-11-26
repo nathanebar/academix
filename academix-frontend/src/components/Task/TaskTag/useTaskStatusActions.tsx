@@ -18,25 +18,6 @@ export function useTaskStatusActions(
   taskAssId: number | string | undefined,
   displayName: string | undefined
 ): TaskStatusActions {
-  // Fonction pour recharger les données
-  const refetchData = () => {
-    queryClient.invalidateQueries({
-      queryKey: ["taskCountByGradeStages"],
-    });
-    queryClient.invalidateQueries({
-      queryKey: ["taskCountByAxis"],
-    });
-    queryClient.invalidateQueries({
-      queryKey: ["taskGroupsToCalendar"],
-    });
-    queryClient.invalidateQueries({
-      queryKey: ["group-tasks"],
-    });
-    queryClient.invalidateQueries({
-      queryKey: ["tasks-range"],
-    });
-  };
-
   const statusMutation = useMutation({
     mutationFn: async ({
       assignmentId,
@@ -46,40 +27,22 @@ export function useTaskStatusActions(
       action: string;
     }) => TaskAssignmentsCompletedByCommander(assignmentId, action),
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["team-queue-tasks"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["taskCountByGradeStages"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["taskCountByAxis"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["taskGroupsToCalendar"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["group-tasks"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["tasks-range"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["group-tasks"],
-      });
-
-      queryClient.invalidateQueries({
-        queryKey: ["hoefs"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["tasks-day"],
-      });
-
+      // Each key once (#137): the old code invalidated group-tasks twice and
+      // repeated 4 keys through refetchData().
+      for (const key of [
+        "team-queue-tasks",
+        "taskCountByGradeStages",
+        "taskCountByAxis",
+        "taskGroupsToCalendar",
+        "group-tasks",
+        "tasks-range",
+        "hoefs",
+        "tasks-day",
+      ]) {
+        queryClient.invalidateQueries({ queryKey: [key] });
+      }
       // the team member dashboard (was a Zustand "needsRefresh" flag, #17)
       queryClient.invalidateQueries({ queryKey: taskKeys.memberDashboardAll() });
-
-      // Rafraîchir les données
-      refetchData();
       message.success("הסטטוס עודכן בהצלחה");
     },
     onError: () => {

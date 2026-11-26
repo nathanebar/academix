@@ -116,13 +116,12 @@ const TaskUserTag: React.FC<TaskProps> = ({
               alignItems: "center",
             }}
           >
+            {/* No own onClick: the click reaches the tooltip trigger and opens the
+                status actions (#137). */}
             <Button
               type="text"
               size="small"
               icon={<CheckCircleOutlined />}
-              onClick={(e) => {
-                e.stopPropagation(); // עצירת propagation לכפתור
-              }}
               style={{
                 color: config.color === "green" ? cssVar("antGreen") : cssVar("grey999"),
               }}
