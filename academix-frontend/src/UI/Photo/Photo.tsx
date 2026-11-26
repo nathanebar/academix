@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import unknownUserSrc from "../../media/unkownUserPhoto.jpg";
 import { Tooltip } from "antd";
+import { radius } from "../../theme/tokens";
 
 interface Props {
   username: string | number | undefined;
@@ -102,7 +103,7 @@ const Photo = React.memo((props: Props) => {
         height={props.height || "40vh"}
         width={props.width || "40vw"}
         style={{
-          borderRadius: "50%",
+          borderRadius: radius.round,
           backgroundSize: "cover",
           backgroundPosition: "center",
           ...props.style,
