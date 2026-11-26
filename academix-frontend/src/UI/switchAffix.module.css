@@ -1,6 +1,6 @@
 .container {
-  background-color: #adadad;
-  border-radius: 10px;
+  background-color: #adadad; /* TODO(tokens) */
+  border-radius: var(--ax-radius-lg);
   height: 1vh;
   align-items: end;
   display: grid;
@@ -29,27 +29,27 @@
 }
 .container_animate_false {
   animation: 0.7s conatiner_false ease-in-out;
-  background-color: #adadad;
+  background-color: #adadad; /* TODO(tokens) */
 }
 .container_animate_true {
-  background-color: rgba(85, 112, 241, 0.4);
+  background-color: rgba(85, 112, 241, 0.4); /* TODO(tokens) */
   animation: 0.7s conatiner_true ease-in-out;
 }
 @keyframes conatiner_true {
   0% {
-    background: linear-gradient(90deg, #adadad 100%);
+    background: linear-gradient(90deg, #adadad 100%); /* TODO(tokens) */
   }
 
   100% {
-    background: linear-gradient(90deg, rgba(85, 112, 241, 0.4) 100%);
+    background: linear-gradient(90deg, rgba(85, 112, 241, 0.4) 100%); /* TODO(tokens) */
   }
 }
 @keyframes conatiner_false {
   0% {
-    background: linear-gradient(90deg, rgba(85, 112, 241, 0.4) 100%);
+    background: linear-gradient(90deg, rgba(85, 112, 241, 0.4) 100%); /* TODO(tokens) */
   }
 
   100% {
-    background: #adadad;
+    background: #adadad; /* TODO(tokens) */
   }
 }
