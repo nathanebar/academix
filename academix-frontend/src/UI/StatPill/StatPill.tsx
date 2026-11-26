@@ -10,6 +10,7 @@ import AddAxisForm from "../../components/Axis/AxisBoard/addAxisForm/AddAxisForm
 import { updateAxis } from "../../services/ApiServices";
 import { useQueryClient } from "@tanstack/react-query";
 import stringCheckAndToolTip from "../../utils/stringCheck";
+import { cssVar } from "../../theme/tokens";
 
 type Props = {
   axisId: number;
@@ -29,8 +30,8 @@ type Props = {
 
 const baseStyle: React.CSSProperties = {
   padding: "8px 16px",
-  borderRadius: "9999px",
-  color: "white",
+  borderRadius: "9999px", // TODO(tokens): radius.pill is 999px, not the same value
+  color: cssVar("white"),
   fontWeight: "bold",
   display: "inline-flex",
   alignItems: "center",
@@ -82,8 +83,8 @@ const StatPill = ({
       operational: gradient
         ? `linear-gradient(to right, ${gradient.from}, ${gradient.to})`
         : "none",
-      assignment_bank: "#3a547f",
-      archives: "#917c57",
+      assignment_bank: "#3a547f", // TODO(tokens)
+      archives: "#917c57", // TODO(tokens)
     };
     return {
       ...baseStyle,
@@ -146,7 +147,7 @@ const StatPill = ({
     const baseItems: Record<string, Omit<ItemType, "key">> = {
       editAxis: {
         label: "עריכת ציר",
-        style: { borderBottom: "1px solid #f0f0f0" },
+        style: { borderBottom: `1px solid ${cssVar("antGray4")}` },
         onClick: () => setIsEditingAxis(true),
       },
       archive: {
@@ -161,16 +162,16 @@ const StatPill = ({
             <span>העברה לארכיון</span>
           </Popconfirm>
         ),
-        style: { borderBottom: "1px solid #f0f0f0" },
+        style: { borderBottom: `1px solid ${cssVar("antGray4")}` },
       },
       operational: {
         label: "העברה למאגר משימות",
-        style: { borderBottom: "1px solid #f0f0f0" },
+        style: { borderBottom: `1px solid ${cssVar("antGray4")}` },
         onClick: () => handleArchivedAxis(axisId, "operational"),
       },
       bank: {
         label: "העברה לאופליין",
-        style: { borderBottom: "1px solid #f0f0f0" },
+        style: { borderBottom: `1px solid ${cssVar("antGray4")}` },
         onClick: () => handleArchivedAxis(axisId, "assignment_bank"),
       },
       ...(1 && {
@@ -185,10 +186,10 @@ const StatPill = ({
               description={
                 isHighHierarchy ? (
                   <div>
-                    <p style={{ margin: 0, fontWeight: 600, color: "#ff4d4f" }}>
+                    <p style={{ margin: 0, fontWeight: 600, color: cssVar("antRed") }}>
                       ⚠️ אתה עומד למחוק ציר שנוצר בהיררכיה גבוהה!
                     </p>
-                    <p style={{ margin: 0, fontWeight: 600, color: "#ff4d4f" }}>
+                    <p style={{ margin: 0, fontWeight: 600, color: cssVar("antRed") }}>
                       המשמעות שהציר ימחק עם כל התוכן שלו מכל הצוותים במחזור
                       הקיים !!!
                     </p>
@@ -212,13 +213,13 @@ const StatPill = ({
               <div style={{ color: "red" }}>מחיקה</div>
             </Popconfirm>
           ),
-          style: { borderBottom: "1px solid #f0f0f0" },
+          style: { borderBottom: `1px solid ${cssVar("antGray4")}` },
         },
       }),
       ...(hasTemplatePermission && {
         tamplate: {
           label: "עריכת טמפלייט משימה",
-          style: { borderBottom: "1px solid #f0f0f0" },
+          style: { borderBottom: `1px solid ${cssVar("antGray4")}` },
           onClick: () => handleEditTemplate(axisId),
         },
       }),
@@ -258,7 +259,7 @@ const StatPill = ({
             style={{
               background: "transparent",
               border: "none",
-              color: "white",
+              color: cssVar("white"),
               cursor: "default",
             }}
           ></Tag>
@@ -274,7 +275,7 @@ const StatPill = ({
             style={{
               background: "transparent",
               border: "none",
-              color: "white",
+              color: cssVar("white"),
               cursor: "default",
             }}
           ></Tag>
