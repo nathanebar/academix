@@ -37,7 +37,14 @@ const LearningCarusel = ({ slides }: Props) => {
       }}
     >
       <div className={style.mainDiv}>
-        <Carousel ref={carouselRef} style={{ height: "70vh" }} dots={true}>
+        {/* rtl={false}: in RTL mode antd + react-slick opened the tutorial on its last step and
+            "הבא" went backwards. The slides' own content stays RTL (direction comes from the page). */}
+        <Carousel
+          ref={carouselRef}
+          style={{ height: "70vh" }}
+          dots={true}
+          rtl={false}
+        >
           {slides.map((slide) => (
             <div key={slide.id}>
               <div className={style.centerDiv}>
