@@ -1,5 +1,6 @@
-import { ConfigProvider, Modal } from "antd";
+import { Modal } from "antd";
 import React from "react";
+import { radius } from "../../theme/tokens";
 
 type GenericModalProps = {
   isOpen: boolean;
@@ -25,7 +26,7 @@ const GenericModal: React.FC<GenericModalProps> = ({
       footer={null}
       open={isOpen}
       width={width}
-      styles={{content:{borderRadius:'20px',height:height}}}
+      styles={{content:{borderRadius:radius["20"],height:height}}}
     >
       {title && <h4 style={{fontWeight:600}}>{title}</h4>}
       {children}
