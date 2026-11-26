@@ -1,6 +1,7 @@
 import React, { forwardRef, ReactElement } from "react";
 import { ConfigProvider, Input, InputRef } from "antd";
 import he_IL from "antd/locale/he_IL";
+import { cssVar, palette } from "../../../theme/tokens";
 
 type Props = {
   value: string | any;
@@ -32,10 +33,10 @@ const RegularInput = forwardRef<InputRef, Props>((props, ref) => {
             colorBorder:
               props.borderColor && props.hasError
                 ? props.borderColor
-                : "rgba(244, 241, 235, 1)",
+                : palette.sand100, // antd theme tokens need a real color, not var()
             activeBorderColor: "none",
             hoverBorderColor: "none",
-            colorTextPlaceholder: "rgba(94, 99, 102, 0.5)",
+            colorTextPlaceholder: "rgba(94, 99, 102, 0.5)", // TODO(tokens)
           },
         },
       }}
@@ -44,12 +45,12 @@ const RegularInput = forwardRef<InputRef, Props>((props, ref) => {
         ref={ref}
         readOnly={props.readonly ? props.readonly : false}
         style={{
-          color: "rgba(94, 99, 102, 1)",
-          borderRadius: props.borderRadius ? props.borderRadius : "40px",
+          color: "rgba(94, 99, 102, 1)", // TODO(tokens)
+          borderRadius: props.borderRadius ? props.borderRadius : "40px", // TODO(tokens)
           height: props.height,
           background:
             props.backgroundColor ||
-            (props.hasError ? "rgba(255,241,240,1)" : "rgba(244, 241, 235, 1)"),
+            (props.hasError ? cssVar("antRed1") : cssVar("sand100")),
           width: props.width,
           marginRight: props.marginRight,
           ...props.style,
