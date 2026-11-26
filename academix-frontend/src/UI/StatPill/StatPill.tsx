@@ -55,7 +55,14 @@ const StatPill = ({
   handleEditTemplate,
   onAxisNameChange,
 }: Props) => {
-  const gradient = typeof scheme === "string" ? schemaMap[scheme] : scheme;
+  // Same fallback as AxisCard (#137): hex color -> solid gradient, unknown name -> "coral".
+  const gradient =
+    (typeof scheme === "string" ? schemaMap[scheme] : scheme) ??
+    (typeof scheme === "string" && scheme.startsWith("#")
+      ? { from: scheme, to: scheme }
+      : scheme
+      ? schemaMap.coral
+      : undefined);
   const { isLocked, getIndicatorType } = useItemLockStatus();
   const shouldBeLocked = explicitLockStatus ?? isLocked(teamId ?? null);
   const { selectedPermission, permissions } = usePermissionStore();
@@ -252,7 +259,7 @@ const StatPill = ({
         return null;
       }
       return (
-        <Tooltip title="ציר שנוצר בהיררכית הקהדייה ולא ניתן לעריכה">
+        <Tooltip title="ציר שנוצר בהיררכיית הקהדייה ולא ניתן לעריכה">
           <Tag
             icon={<LockOutlined />}
             color="default"
@@ -268,7 +275,7 @@ const StatPill = ({
     }
     if (indicatorType === "team") {
       return (
-        <Tooltip title="ציר שנוצר בהירכיית הצוות">
+        <Tooltip title="ציר שנוצר בהיררכיית הצוות">
           <Tag
             icon={<TeamOutlined />}
             color="default"
@@ -317,7 +324,7 @@ const StatPill = ({
         canModify &&
         // !start &&
         activeHeaderType != "teamMember" && (
-          <Tooltip title="פריט זה נעול - נוצר בהיררכיה גבוה">
+          <Tooltip title="פריט זה נעול - נוצר בהיררכיה גבוהה">
             <LockOutlined
               style={{
                 cursor: "not-allowed",

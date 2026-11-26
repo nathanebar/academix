@@ -314,8 +314,13 @@ const AxisCard = ({
 
   start = new Date(selectedCourseBatch?.start_date) > new Date() ? false : true;
 
+  // An unknown color must not crash the page (#137): a hex color becomes a solid
+  // gradient, anything else falls back to the default "coral" scheme.
   const gradient =
-    typeof axis.color === "string" ? schemaMap[axis.color] : axis.color;
+    (typeof axis.color === "string" ? schemaMap[axis.color] : axis.color) ??
+    (typeof axis.color === "string" && axis.color.startsWith("#")
+      ? { from: axis.color, to: axis.color }
+      : schemaMap.coral);
 
   return (
     <>
