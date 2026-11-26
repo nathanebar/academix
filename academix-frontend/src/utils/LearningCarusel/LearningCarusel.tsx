@@ -86,7 +86,7 @@ const LearningCarusel = ({ slides }: Props) => {
                 <div
                   style={{
                     width: "100%",
-                    border: "1px solid rgba(128, 128, 128, 0.158)",
+                    border: "1px solid rgba(128, 128, 128, 0.158)", // TODO(tokens)
                     marginTop: "3vh",
                   }}
                 ></div>

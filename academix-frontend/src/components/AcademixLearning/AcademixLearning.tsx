@@ -2,6 +2,7 @@ import { Modal, Steps } from "antd";
 import style from "./AcademixLearning.module.css";
 import { useState } from "react";
 import LearningCarusel from "../../utils/LearningCarusel/LearningCarusel";
+import { cssVar, radius } from "../../theme/tokens";
 import {
   taskRepository,
   AxesGant,
@@ -87,7 +88,7 @@ const AcademixLearning = (props: Props) => {
       open={props.isOpen}
       onCancel={props.handleClose}
       footer={null}
-      styles={{ content: { padding: 0, borderRadius: 30 } }}
+      styles={{ content: { padding: 0, borderRadius: radius["30"] } }}
     >
       <div className={style.modal_learning_details}>
         <div className={style.modalRightDiv}>
@@ -103,7 +104,7 @@ const AcademixLearning = (props: Props) => {
                     key={sub.id}
                     onClick={() => setCurrentSubject(sub.id)}
                     style={{
-                      color: isActive ? "#2b2f3e" : "gray",
+                      color: isActive ? cssVar("navy800") : "gray", // TODO(tokens): gray
                       fontWeight: isActive ? 700 : 300,
                     }}
                   >

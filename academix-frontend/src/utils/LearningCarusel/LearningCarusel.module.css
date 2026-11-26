@@ -19,7 +19,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
+  border-radius: var(--ax-radius-lg);
   font-weight: 600;
 }
 
@@ -39,11 +39,11 @@
 .stepNumber {
   height: 2.5rem;
   width: 2.5rem;
-  border-radius: 50%;
+  border-radius: var(--ax-radius-round);
   font-size: 18px;
   font-weight: 700;
   background: lightblue;
-  color: #2b2f3e;
+  color: var(--ax-navy800);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -70,12 +70,12 @@
   flex-direction: column;
   align-items: start;
   height: 10vh;
-  background: rgba(255, 255, 0, 0.281);
+  background: rgba(255, 255, 0, 0.281); /* TODO(tokens) */
   border: 2px solid gold;
   padding-top: 5px;
   padding-bottom: 15px;
   padding-right: 15px;
-  border-radius: 20px;
+  border-radius: var(--ax-radius-20);
 }
 
 .buttonsDiv {
@@ -90,6 +90,6 @@
   width: 5vw;
 }
 .buttons:last-child {
-  background-color: #2b2f3e;
-  color: white;
+  background-color: var(--ax-navy800);
+  color: var(--ax-white);
 }
