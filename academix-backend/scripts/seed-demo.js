@@ -31,7 +31,8 @@ const STUDENTS_PER_TEAM = 6;
 const FIRST = ["נועה", "איתי", "מאיה", "יונתן", "שירה", "עומר", "תמר", "דניאל", "אור", "רוני", "ליה", "אלון", "יעל", "גיא", "הילה", "עידו"];
 const LAST = ["כהן", "לוי", "מזרחי", "פרץ", "ביטון", "אברהם", "פרידמן", "אזולאי", "דהן", "שפירא"];
 const TASKS = ["הרצאת פתיחה", "תרגיל מעשי", "קריאת חומר", "מטלת הגשה", "בוחן ביניים"];
-const COLORS = ["#1677ff", "#52c41a", "#fa8c16", "#eb2f96", "#722ed1", "#13c2c2"];
+// Gradient scheme names: the frontend looks axis/task colors up in schemaMap (src/theme/taskColors.ts).
+const COLORS = ["coral", "green", "lightBlue", "purple", "pink", "lightGreen"];
 
 let userSeq = 0;
 (async () => {
@@ -80,11 +81,13 @@ let userSeq = 0;
 
         // Course-level axes -> task groups -> tasks
         const tasks = [];
+        const axes = [];
         for (const [ai, axisName] of c.axes.entries()) {
           const axis = await m.Axis.create(
             { name: axisName, courseId: course.id, creator_id: cc.id, color: COLORS[ai % COLORS.length], repository_kind: "operational" },
             { transaction: t }
           );
+          axes.push(axis);
           for (const g of [1, 2]) {
             const group = await m.TaskGroup.create(
               { name: `${axisName} – יחידה ${g}`, axisId: axis.id, status: "operational" },
@@ -118,6 +121,13 @@ let userSeq = 0;
             { name: b.name, courseId: course.id, start_date: new Date(b.start) },
             { transaction: t }
           );
+          // Course content (AxisBoard) lists the axes of a batch from AxisBatchArchives.
+          for (const axis of axes) {
+            await m.AxisBatchArchives.create(
+              { axis_id: axis.id, course_batch_id: batch.id, repository_kind: "operational" },
+              { transaction: t }
+            );
+          }
           const seenGroups = new Set();
           for (const { task, group } of tasks) {
             await m.TaskBatchStatus.create({ taskId: task.id, course_batch_id: batch.id, status: "operational" }, { transaction: t });
