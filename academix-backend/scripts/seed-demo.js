@@ -35,6 +35,8 @@ const TASKS = ["הרצאת פתיחה", "תרגיל מעשי", "קריאת חו�
 const COLORS = ["coral", "green", "lightBlue", "purple", "pink", "lightGreen"];
 
 let userSeq = 0;
+
+const seedExtras = require("./seed-demo-extras");
 (async () => {
   if (process.env.NODE_ENV === "production") {
     console.error("seed-demo refuses to run with NODE_ENV=production");
@@ -45,11 +47,10 @@ let userSeq = 0;
   const m = db;
   const t = await db.sequelize.transaction();
   try {
-    if (await m.Domain.findOne({ where: { name: DOMAINS[0].name }, transaction: t })) {
-      console.log("Demo data already present, nothing to do.");
-      await t.rollback();
-      return;
-    }
+    // The base part (users, courses, tasks, assignments) runs once; the extras (forms, feedbacks,
+    // overlap, files) have their own check, so an older demo database gets them on a second run.
+    const baseExists = !!(await m.Domain.findOne({ where: { name: DOMAINS[0].name }, transaction: t }));
+    if (baseExists) console.log("Demo base data already present, skipping it.");
     const password = await hashPassword("1234");
     const system = await m.System.findOne({ where: { name: "Academix" }, transaction: t });
     const admin = await m.User.findOne({ where: { username: "admin" }, transaction: t });
@@ -66,7 +67,7 @@ let userSeq = 0;
       m.RoleAssignment.create({ user_id, role_code, scope_type, scope_id }, { transaction: t });
     const stats = { users: 0, teams: 0, tasks: 0, assignments: 0 };
 
-    for (const [di, d] of DOMAINS.entries()) {
+    for (const [di, d] of (baseExists ? [] : DOMAINS).entries()) {
       const domain = await m.Domain.create({ name: d.name, systemId: system.id }, { transaction: t });
       const dm = await mkUser(`domain${di + 1}`, `מנהל ${d.name}`);
       await role(dm.id, "DOMAIN_MANAGER", "domain", domain.id);
@@ -185,9 +186,10 @@ let userSeq = 0;
         }
       }
     }
-    await t.commit();
     delete stats.courseIdx;
-    console.log("Demo data created:", stats);
+    if (!baseExists) console.log("Demo base data created:", stats);
+    await seedExtras(m, t);
+    await t.commit();
   } catch (err) {
     await t.rollback().catch(() => {});
     console.error("seed-demo failed:", err.message, err.errors?.map((e) => e.message) || "");
