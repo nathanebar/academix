@@ -905,6 +905,9 @@ LEFT JOIN "Users" student ON student.id = tm_student.user_id
         'occurrence_id',    occurrence_id,
         'source',           source,
         'team_member_id',   team_member_id,
+        -- TaskAssignment.user_id = the assigned TeamMember id: lets a student find their own
+        -- assignment in a grouped team event (#87 bug 2).
+        'user_id',          user_id,
       'hoef_name',        hoef_name,
       'hoef_username',    hoef_username,
       'student_name',     student_name
