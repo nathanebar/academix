@@ -49,5 +49,12 @@ export const useFetchRangeTaskAssignement = (
       
       return data.data;
     },
+    // Wait for the selection (#87 bug 1): callers pass -1 / undefined until it is loaded, and
+    // the backend answers 400 for ".../assignedTeam/-1/undefined".
+    enabled:
+      !!startDate && !!endDate &&
+      teamId !== -1 &&
+      !!selectedCourseBatch &&
+      (!isTeamMemberView || userId !== -1),
   });
 };
