@@ -98,9 +98,17 @@ const UserTaskModal = (props: UserTaskModalProps) => {
   );
   const checklistsData = useFetchCheckListsByTaskId(props.taskId);
   const { data: task, isLoading, isError } = useTaskById(props.taskId);
+  const selectedTeamMemberId = useSelectionsStore((s) => s.selectedTeamMember?.id);
+  // A grouped team event of the calendar has a string id ("<task>_<start>_<end>") and one item
+  // per member (item.user_id = TeamMember id): use the selected member's own assignment, not
+  // Number(id), which is NaN (#87 bug 2).
+  const ownGroupItem = Array.isArray(props.task?.items)
+    ? props.task.items.find((item: any) => item.user_id === selectedTeamMemberId)
+    : undefined;
   const taskAssId =
     props.taskAssignmentId ??
     props.task?.task_assignment_id ??
+    ownGroupItem?.taskAssignmentId ??
     Number(props.task?.id);
   const [isSubmitting, setIsSubmitting] = useState<number | null>(null);
   const [isCancelling, setIsCancelling] = useState<number | null>(null);
