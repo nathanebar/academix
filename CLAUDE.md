@@ -17,7 +17,7 @@ Academix comes from a **closed university network that is cut off from the inter
 - **Node.js:** the version available on the target is not confirmed. Stay compatible with Node 20 (no APIs or syntax that need a newer Node).
 - **Document every deployment impact.** If a change adds an env var, a binary, a service, a database step or a build change, say so in the PR's "Closed-network deployment impact" section. The root owner (@nathanebar) adds it to the "Redeploying on the closed network" checklist in `README.md` / `README.he.md`.
 
-Two developers work on this repo in parallel, each with their own Claude Code session.
+Two developers own this repo and work in parallel, each with their own Claude Code session (other developers may join on the redesign-prep Epic, see §1).
 The rules below exist so that **there are never merge conflicts**. Follow them strictly.
 
 ## 1. Ownership zones
@@ -34,6 +34,12 @@ The rules below exist so that **there are never merge conflicts**. Follow them s
   - Backend: `app.js`, `models/*`, `src/controllers/task.controller.js`, `src/controllers/taskAssignment.controller.js`
   - Frontend: `src/services/ApiServices.ts`, `src/types/types.ts`, `src/routes/AppRoutes.tsx`, `package.json`
 - **Temporary exception (from 2026-11-25, while @shneorshr1 is on vacation):** @nathanebar may work in `academix-frontend/**`, **only on the issues of the redesign-prep Epic #97** (label `redesign-prep`). Each of those issues lists the exact files it may change; stay inside that list. The exception ends when @shneorshr1 is back: issues not yet started can then be reassigned, and an issue in progress keeps its single assignee until its PR is merged. All other frontend work still needs @shneorshr1.
+- **Redesign-prep issues for other developers (from 2026-11-27):** a developer who is the GitHub **assignee** of an open `redesign-prep` issue may change the files listed in that issue's **In scope** section, and nothing else.
+  - Before starting: read Epic #97 and its "Plan for new developers" comment, check that the issue's wave is open (issues of the same wave can run in parallel; the ones marked "one at a time" cannot), then assign yourself. If someone else is already assigned, pick another issue.
+  - One developer works on one Epic issue at a time, and one issue has one assignee until its PR is merged.
+  - A change needed outside the scope (a missing token, a kit prop, a bug in another file): stop, say so in the issue, and let @nathanebar open a follow-up issue. Do not edit the file.
+  - Report bugs you find in the scope in the PR description; fix them only if the issue or @nathanebar asks.
+  - Only @nathanebar merges, unless @nathanebar says otherwise in the issue.
 
 ## 2. Cross-zone changes (API contract)
 
